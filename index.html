@@ -196,17 +196,35 @@ html,body{max-width:100%;overflow-x:clip}
  .thumbs{overflow-x:auto}
 }
 @media (max-width:360px){#grid .gg{grid-template-columns:1fr}}
+
+/* ===== v5: wider flipbook, 3 per row, focus mode ===== */
+#chrome{display:contents}
+.card{container-type:inline-size}
+@container (max-width:240px){.card h3{font-size:17px}.card .row{flex-wrap:wrap}.card .row .btn{flex:1 1 100%!important}.card .row b{flex:1 1 100%}}
+@media (min-width:900px){.stage{max-width:min(1760px,98vw)}.grid2{grid-template-columns:repeat(3,minmax(0,1fr))}}
+#hot{display:none;position:fixed;top:0;left:0;right:0;height:36px;z-index:9}
+#hot::after{content:"Hover here for menu";position:absolute;top:6px;left:50%;transform:translateX(-50%);font-size:12px;color:#C9D1D6;background:rgba(24,28,32,.7);padding:2px 12px;border-radius:999px;opacity:.7}
+body.fb #chrome{display:block;position:fixed;top:0;left:0;right:0;z-index:10;background:rgba(22,26,30,.97);box-shadow:0 14px 34px rgba(0,0,0,.45);transition:opacity .3s,transform .3s}
+body.fb:not(.ch) #chrome{opacity:0;transform:translateY(-10px);pointer-events:none}
+body.fb:not(.ch) #hot{display:block}
+body.fb .bar{position:static}
+body.fb .stage{margin:40px auto 0}
+body.fb .leaf{height:max(460px,calc(100vh - 120px))}
+body.fb .dock{margin:10px auto 6px;opacity:.55;transition:opacity .25s}
+body.fb .dock:hover,body.fb .dock:focus-within{opacity:1}
+@media (prefers-reduced-motion:reduce){body.fb #chrome{transition:none}}
 </style>
 </head>
 <body>
-<header class="bar">
+<div id="chrome"><header class="bar">
   <b id="brand">The Kitchen Hub</b>
   <button id="home" type="button" class="ghost">Contents</button>
   <input id="q" type="search" placeholder="Search products" aria-label="Search products">
   <button id="mode" type="button">List view</button>
 </header>
 <nav id="tabs" aria-label="Categories"></nav>
-<section id="flt" aria-label="Filters"><select id="fp" aria-label="Power type" hidden></select><select id="fs" aria-label="Sort"><option value="">Sort: Default</option><option value="az">Name A to Z</option><option value="za">Name Z to A</option></select><label class="chk"><input type="checkbox" id="fph"> With photos</label><button type="button" id="fclr" class="ghost" hidden>Clear filters</button><span id="fcnt" aria-live="polite"></span></section>
+<section id="flt" aria-label="Filters"><select id="fp" aria-label="Power type" hidden></select><select id="fs" aria-label="Sort"><option value="">Sort: Default</option><option value="az">Name A to Z</option><option value="za">Name Z to A</option></select><label class="chk"><input type="checkbox" id="fph"> With photos</label><button type="button" id="fclr" class="ghost" hidden>Clear filters</button><span id="fcnt" aria-live="polite"></span></section></div>
+<div id="hot"></div>
 <main class="stage">
   <div id="bookwrap">
     <div class="shelf">
@@ -268,7 +286,7 @@ function build(q=""){
   pages=[{k:"cover"},{k:"toc"}];
   cats.forEach((c,ci)=>{const it=list.filter(p=>catOf(p)===c.id);if(!it.length)return;
     pages.push({k:"cat",c,ci,n:it.length,names:it.slice(0,8).map(p=>p.name)});
-    for(let i=0;i<it.length;i+=CFG.PER_PAGE)pages.push({k:"prods",ci,it:it.slice(i,i+CFG.PER_PAGE)})});
+    const pp=desk?6:CFG.PER_PAGE;for(let i=0;i<it.length;i+=pp)pages.push({k:"prods",ci,it:it.slice(i,i+pp)})});
   pages.push({k:"back"});
   $("#tabs").innerHTML=pages.map(p=>p.k==="cat"?`<button type="button" data-go="${pages.indexOf(p)}" data-ci="${p.ci}" style="--acc:${ACC[p.ci%ACC.length]}">${esc(p.c.name)}<small>${p.n}</small></button>`:"").join("");
 }
@@ -354,7 +372,7 @@ let tx=0;$("#bookwrap").addEventListener("touchstart",e=>tx=e.touches[0].clientX
 $("#bookwrap").addEventListener("touchend",e=>{const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>60)go(s+(dx<0?1:-1))});
 let t;$("#q").oninput=e=>{clearTimeout(t);t=setTimeout(()=>{build(e.target.value);s=spreadOf(e.target.value.trim()&&pages.length>3?2:0);show();renderList()},200)};
 $("#mode").onclick=()=>{listMode=!listMode;$("#bookwrap").style.display=listMode?"none":"";$("#grid").style.display=listMode?"block":"none";$("#mode").textContent=listMode?"Flipbook view":"List view"};
-addEventListener("resize",()=>{const d=innerWidth>=900;if(d!==desk){const cur=pagesOf(s).find(x=>x!=null)??0;desk=d;s=spreadOf(cur);show()}});
+addEventListener("resize",()=>{const d=innerWidth>=900;if(d!==desk){const cur=pagesOf(s).find(x=>x!=null)??0;desk=d;build($("#q").value);s=spreadOf(Math.min(cur,pages.length-1));show();renderList()}});
 
 /* ---- navigation, category colours, photo viewer ---- */
 const ACC=["#1F6BD6","#B8620F","#13806F","#B03A34","#6B4DB8","#2F7A33","#A23F70","#1D6A94","#946F0F","#4A5660","#7A4B2C","#3F6E8C"];
@@ -445,11 +463,22 @@ addEventListener("scroll",()=>{
   document.querySelectorAll("#tabs button").forEach(b=>{const on=+b.dataset.ci===a;b.classList.toggle("on",on);if(on)tb.scrollLeft=b.offsetLeft-tb.clientWidth/2+b.offsetWidth/2});
 },{passive:true});
 
+/* ---- focus mode: menus fade away while the cursor is over the flipbook ---- */
+const fmq=matchMedia("(min-width:900px) and (hover:hover)"),chromeEl=$("#chrome");
+function syncFocus(){const on=fmq.matches&&!listMode;document.body.classList.toggle("fb",on);if(on)document.body.classList.add("ch")}
+const chOn=()=>document.body.classList.add("ch");
+const chOff=()=>{if(!chromeEl.contains(document.activeElement))document.body.classList.remove("ch")};
+$("#hot").addEventListener("mouseenter",chOn);chromeEl.addEventListener("mouseenter",chOn);chromeEl.addEventListener("focusin",chOn);
+chromeEl.addEventListener("focusout",()=>setTimeout(()=>{if(!chromeEl.matches(":hover"))chOff()},60));
+$("#bookwrap").addEventListener("mouseenter",chOff);
+$("#mode").addEventListener("click",syncFocus);fmq.addEventListener("change",syncFocus);
+
 (async()=>{
   document.title=`${CFG.COMPANY} | Commercial Kitchen Equipment Catalogue`;$("#brand").textContent=CFG.COMPANY;
   const hadHash=(+(/page=(\d+)/.exec(location.hash)||[])[1]||0)>1;
   await load();fopts();build();s=hashSpread();show();renderList();qrefresh();setBH();
   if(!desk&&!hadHash)$("#mode").click();
+  syncFocus();
 })();
 </script>
 </body>

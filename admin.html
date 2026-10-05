@@ -33,6 +33,8 @@ table{width:100%;border-collapse:collapse;background:#fff}
 th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
 td img,.nop{width:52px;height:40px;object-fit:cover;background:#E3E6E8;display:block;border-radius:2px}
 .muted{color:var(--mut);font-size:13px}
+.num{color:var(--mut);font-size:13px;width:44px}
+.pager{display:flex;align-items:center;gap:8px;margin-top:10px}.pager input{width:64px;display:inline-block;padding:6px 8px}.pager select{width:auto;margin-left:auto}.pager button:disabled{opacity:.4;cursor:default}
 dialog{border:0;border-radius:6px;width:min(680px,95vw);max-height:94vh;padding:0}
 dialog::backdrop{background:rgba(20,24,28,.6)}
 form.f{padding:18px 20px}
@@ -44,7 +46,7 @@ form.f{padding:18px 20px}
 .crow{display:flex;gap:8px;margin-bottom:8px}
 #toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--steel);color:#fff;padding:10px 16px;border-radius:4px;z-index:99}
 #toast.bad{background:var(--bad)}
-@media(max-width:640px){.two{grid-template-columns:1fr}th:nth-child(3),td:nth-child(3){display:none}}
+@media(max-width:640px){.two{grid-template-columns:1fr}th:nth-child(4),td:nth-child(4){display:none}.pager{flex-wrap:wrap}}
 </style>
 </head>
 <body>
@@ -61,8 +63,9 @@ form.f{padding:18px 20px}
   <main>
     <section id="tp">
       <div class="tools"><input id="sq" type="search" placeholder="Search by name or model" aria-label="Search"><select id="sc" aria-label="Filter by category"></select><button id="add">Add product</button></div>
-      <table><thead><tr><th></th><th>Name</th><th>Category</th><th>Photos</th><th></th></tr></thead><tbody id="rows"></tbody></table>
+      <table><thead><tr><th>#</th><th></th><th>Name</th><th>Category</th><th>Photos</th><th></th></tr></thead><tbody id="rows"></tbody></table>
       <p class="muted" id="cnt"></p>
+      <div class="pager"><button class="alt" id="pf" aria-label="First page">&laquo;</button><button class="alt" id="pp">Previous</button><span>Page <input id="pg" type="number" min="1" aria-label="Page number"> of <b id="pt">1</b></span><button class="alt" id="pn">Next</button><button class="alt" id="pl" aria-label="Last page">&raquo;</button><select id="ps" aria-label="Products per page"><option value="25">25 per page</option><option value="50" selected>50 per page</option><option value="100">100 per page</option></select></div>
     </section>
     <section id="tc" hidden>
       <h2>Categories</h2><p class="muted">Deleting a category keeps its products; they move to "More equipment".</p>
@@ -94,7 +97,7 @@ form.f{padding:18px 20px}
 <script>
 const $=s=>document.querySelector(s),esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const BUCKET="product-images";
-let sb,cats=[],prods=[],cur=null,imgs=[],gone=[],csvRows=[];
+let sb,cats=[],prods=[],cur=null,imgs=[],gone=[],csvRows=[],pg=0,PS=50;
 
 function say(m,bad){const t=$("#toast");t.textContent=m;t.className=bad?"bad":"";t.hidden=false;clearTimeout(say.t);say.t=setTimeout(()=>t.hidden=true,3500)}
 const fail=e=>say(e?.message||"Something went wrong. Please try again.",true);
@@ -125,15 +128,21 @@ function draw(){drawProds();drawCats();
 function drawProds(){
   const q=$("#sq").value.trim().toLowerCase(),c=$("#sc").value;
   const l=prods.filter(p=>(!c||p.category_id===c)&&(!q||(p.name+" "+(p.model||"")).toLowerCase().includes(q)));
-  $("#rows").innerHTML=l.slice(0,200).map(p=>`<tr><td>${p.images?.[0]?`<img src="${esc(p.images[0])}" alt="">`:'<div class="nop"></div>'}</td>
+  const pc=Math.max(1,Math.ceil(l.length/PS));if(pg>=pc)pg=pc-1;const o=pg*PS;
+  $("#rows").innerHTML=l.slice(o,o+PS).map((p,i)=>`<tr><td class="num">${o+i+1}</td><td>${p.images?.[0]?`<img src="${esc(p.images[0])}" alt="">`:'<div class="nop"></div>'}</td>
   <td><b>${esc(p.name)}</b><br><span class="muted">${esc(p.model||"")}${p.active?"":" (hidden)"}</span></td><td>${esc(catName(p.category_id))}</td><td>${p.images?.length||0}</td>
-  <td><button class="alt" data-e="${p.id}">Edit</button></td></tr>`).join("")||'<tr><td colspan="5" class="muted">No products yet. Add one or import a CSV.</td></tr>';
-  $("#cnt").textContent=`${l.length} product${l.length==1?"":"s"}${l.length>200?" (showing the first 200; use search to narrow)":""}`;
+  <td><button class="alt" data-e="${p.id}">Edit</button></td></tr>`).join("")||'<tr><td colspan="6" class="muted">No products yet. Add one or import a CSV.</td></tr>';
+  $("#cnt").textContent=l.length?`Showing ${o+1} to ${Math.min(o+PS,l.length)} of ${l.length} product${l.length==1?"":"s"}`:"0 products";
+  $("#pt").textContent=pc;$("#pg").value=pg+1;$("#pf").disabled=$("#pp").disabled=pg===0;$("#pn").disabled=$("#pl").disabled=pg>=pc-1;
 }
 function drawCats(){
   $("#clist").innerHTML=cats.map(c=>`<div class="crow"><input value="${esc(c.name)}" data-n="${c.id}" aria-label="Category name"><button class="alt" data-s="${c.id}">Save</button><button class="bad" data-d="${c.id}">Delete</button></div>`).join("")||'<p class="muted">No categories yet.</p>';
 }
-$("#sq").oninput=drawProds;$("#sc").onchange=drawProds;
+$("#sq").oninput=()=>{pg=0;drawProds()};$("#sc").onchange=()=>{pg=0;drawProds()};
+const goPg=n=>{pg=Math.max(0,n);drawProds();window.scrollTo({top:0})};
+$("#pf").onclick=()=>goPg(0);$("#pp").onclick=()=>goPg(pg-1);$("#pn").onclick=()=>goPg(pg+1);$("#pl").onclick=()=>goPg(1e9);
+$("#pg").onchange=e=>goPg((parseInt(e.target.value)||1)-1);
+$("#ps").onchange=e=>{PS=+e.target.value;pg=0;drawProds()};
 document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{
   document.querySelectorAll(".tabs button").forEach(x=>x.classList.toggle("on",x===b));
   ["p","c","i"].forEach(k=>$("#t"+k).hidden=k!==b.dataset.t)});
