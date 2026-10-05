@@ -5,9 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <title>Catalogue admin | The Kitchen Hub</title>
+<link rel="icon" href="favicon.png">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--steel:#2A3036;--paper:#F2F3F1;--line:#C9CED2;--flame:#1F6BD6;--ink:#1B1F23;--mut:#5C666F;--bad:#B3261E}
+:root{--steel:#0B0B0C;--paper:#F2F3F1;--line:#C9CED2;--flame:#FDB515;--on:#111;--dimA:.4;--ink:#1B1F23;--mut:#5C666F;--bad:#B3261E}
 *{box-sizing:border-box}
 body{margin:0;background:var(--paper);color:var(--ink);font:400 15px/1.5 Barlow,system-ui,sans-serif}
 h1,h2{font-family:"Barlow Condensed",sans-serif;margin:0}
@@ -47,19 +48,40 @@ form.f{padding:18px 20px}
 #toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--steel);color:#fff;padding:10px 16px;border-radius:4px;z-index:99}
 #toast.bad{background:var(--bad)}
 @media(max-width:640px){.two{grid-template-columns:1fr}th:nth-child(4),td:nth-child(4){display:none}.pager{flex-wrap:wrap}}
+
+/* ===== v6: brand ===== */
+h3{font-family:"Barlow Condensed",sans-serif;margin:22px 0 4px;font-size:22px}
+button{color:var(--on)}
+button.alt{background:#fff;color:var(--ink)}
+button.bad{background:#fff;color:var(--bad)}
+.tabs button{color:var(--ink)}
+.top{border-bottom:3px solid var(--flame)}
+.top h1{display:flex;align-items:center;gap:12px;font-size:22px}
+.blogo{height:40px;width:auto;display:block}.top .blogo{height:36px}
+#login{padding:0;overflow:hidden;border:0;box-shadow:0 20px 50px rgba(0,0,0,.5)}
+.lhead{background:#0B0B0C;padding:18px 24px;border-bottom:3px solid var(--flame)}.lhead .blogo{height:70px;margin:0 auto}
+.lbody{padding:20px 24px 24px}
+body:has(#login:not([hidden])){background:#0B0B0C}
+body:has(#login:not([hidden]))::before{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradient(rgba(8,8,9,var(--dimA)),rgba(8,8,9,var(--dimA))),var(--wall,none) center/cover no-repeat}
+.prev{display:flex;align-items:center;justify-content:center;height:110px;margin:6px 0;border:1px solid var(--line);border-radius:4px;background:#0B0B0C;overflow:hidden}
+.prev img{max-height:92px;max-width:92%}.prev.w img{width:100%;height:100%;max-width:none;max-height:none;object-fit:cover}
+.hint{font-size:12px;color:var(--mut);margin:4px 0 0}
+.frow{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.frow input[type=file]{flex:1;min-width:180px}
 </style>
 </head>
 <body>
 <section id="login" hidden>
+  <div class="lhead"><img class="blogo" alt="Logo"></div><div class="lbody">
   <h1>Catalogue admin</h1><p class="muted">Sign in to manage products.</p>
   <label for="em">Email</label><input id="em" type="email" autocomplete="username">
   <label for="pw">Password</label><input id="pw" type="password" autocomplete="current-password">
   <p><button id="go" style="width:100%">Sign in</button></p><p id="lerr" class="muted"></p>
+  </div>
 </section>
 
 <div id="app" hidden>
-  <header class="top"><h1>The Kitchen Hub admin</h1><a href="index.html" target="_blank" style="color:#fff">View catalogue</a><button class="alt" id="out">Sign out</button></header>
-  <nav class="tabs"><button data-t="p" class="on">Products</button><button data-t="c">Categories</button><button data-t="i">Import CSV</button></nav>
+  <header class="top"><h1><img class="blogo" alt="Logo"><span>Admin</span></h1><a href="index.html" target="_blank" style="color:#fff">View catalogue</a><button class="alt" id="out">Sign out</button></header>
+  <nav class="tabs"><button data-t="p" class="on">Products</button><button data-t="c">Categories</button><button data-t="i">Import CSV</button><button data-t="s">Settings</button></nav>
   <main>
     <section id="tp">
       <div class="tools"><input id="sq" type="search" placeholder="Search by name or model" aria-label="Search"><select id="sc" aria-label="Filter by category"></select><button id="add">Add product</button></div>
@@ -76,6 +98,25 @@ form.f{padding:18px 20px}
       <p>Columns: <b>name, category, model, description, price, specs</b>. Write specs as <code>Power: 3 kW | Size: 600 mm</code>. New categories are created automatically. Add photos afterwards by editing each product.</p>
       <p><button class="alt" id="tpl">Download template</button></p>
       <input type="file" id="csv" accept=".csv,text/csv"><p id="ipre" class="muted"></p><button id="doimp" hidden>Import</button>
+    </section>
+    <section id="ts" hidden>
+      <h2>Site settings</h2><p class="muted">Save to update the customer catalogue. Customers see changes after a page refresh.</p>
+      <h3>Brand</h3>
+      <div class="two"><div><label for="s_company">Company name</label><input id="s_company" data-s placeholder="The Kitchen Hub"></div><div><label for="s_tagline">Tagline or legal name</label><input id="s_tagline" data-s></div></div>
+      <div class="two"><div><label for="s_accent">Theme colour (buttons and highlights)</label><div class="frow"><input type="color" id="s_accent" data-s style="width:64px;padding:2px"><input id="s_accent_t" maxlength="7" style="width:110px" aria-label="Colour code"></div></div>
+      <div><label for="s_dim">Wallpaper darkness: <span id="dimv"></span>%</label><input type="range" id="s_dim" data-s min="0" max="90"></div></div>
+      <label>Logo</label><div class="prev"><img id="pv_logo" alt="Logo preview"></div>
+      <div class="frow"><input type="file" accept="image/*" data-up="logo" aria-label="Upload logo"><button type="button" class="alt" data-rm="logo">Use default</button></div>
+      <p class="hint">The logo sits on a dark background. A black-lettered logo is converted to white lettering automatically.</p>
+      <label>Background wallpaper</label><div class="prev w"><img id="pv_wall" alt="Wallpaper preview"></div>
+      <div class="frow"><input type="file" accept="image/*" data-up="wallpaper" aria-label="Upload wallpaper"><button type="button" class="alt" data-rm="wallpaper">Use default</button></div>
+      <p class="hint">Wide, landscape photos work best (at least 1600 px wide). Resized automatically.</p>
+      <h3>Contact details</h3>
+      <div class="two"><div><label for="s_whatsapp">WhatsApp number (country code, digits only)</label><input id="s_whatsapp" data-s inputmode="numeric"></div><div><label for="s_email">Enquiry email</label><input id="s_email" data-s type="email"></div></div>
+      <div class="two"><div><label for="s_phone">Phone shown to customers</label><input id="s_phone" data-s></div><div><label for="s_hours">Opening hours</label><input id="s_hours" data-s></div></div>
+      <label for="s_address">Address</label><input id="s_address" data-s>
+      <label for="s_about">About text (shown on the Talk to us page)</label><textarea id="s_about" data-s></textarea>
+      <div class="acts"><button type="button" class="bad sp" id="sreset">Reset to defaults</button><button type="button" id="ssave">Save settings</button></div>
     </section>
   </main>
 </div>
@@ -103,8 +144,9 @@ function say(m,bad){const t=$("#toast");t.textContent=m;t.className=bad?"bad":""
 const fail=e=>say(e?.message||"Something went wrong. Please try again.",true);
 
 async function init(){
+  applyBrand();
   if(!CFG.SUPABASE_URL){$("#login").hidden=false;$("#lerr").textContent="Add your Supabase URL and key in config.js first.";$("#go").disabled=true;return}
-  sb=supabase.createClient(CFG.SUPABASE_URL,CFG.SUPABASE_KEY);
+  sb=supabase.createClient(CFG.SUPABASE_URL,CFG.SUPABASE_KEY);await loadSettings();applyBrand();
   const {data}=await sb.auth.getSession();data.session?start():$("#login").hidden=false;
 }
 $("#go").onclick=async()=>{
@@ -114,7 +156,7 @@ $("#go").onclick=async()=>{
 $("#pw").onkeydown=e=>{if(e.key==="Enter")$("#go").click()};
 $("#out").onclick=async()=>{await sb.auth.signOut();location.reload()};
 
-async function start(){$("#app").hidden=false;await load();draw()}
+async function start(){$("#app").hidden=false;await load();draw();await loadSettings();applyBrand();openSet()}
 async function load(){
   const c=await sb.from("categories").select("*").order("sort").order("name"),p=await sb.from("products").select("*").order("name").limit(5000);
   if(c.error||p.error)return fail(c.error||p.error);cats=c.data;prods=p.data;
@@ -145,7 +187,7 @@ $("#pg").onchange=e=>goPg((parseInt(e.target.value)||1)-1);
 $("#ps").onchange=e=>{PS=+e.target.value;pg=0;drawProds()};
 document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{
   document.querySelectorAll(".tabs button").forEach(x=>x.classList.toggle("on",x===b));
-  ["p","c","i"].forEach(k=>$("#t"+k).hidden=k!==b.dataset.t)});
+  ["p","c","i","s"].forEach(k=>$("#t"+k).hidden=k!==b.dataset.t)});
 
 /* categories */
 $("#addc").onclick=async()=>{const n=$("#newc").value.trim();if(!n)return;
@@ -233,6 +275,78 @@ $("#doimp").onclick=async()=>{
     await load();draw();say(`Imported ${out.length} products`);$("#ipre").textContent="";$("#doimp").hidden=true;$("#csv").value="";
   }catch(x){fail(x)}
   $("#doimp").disabled=false;
+};
+/* ---- settings ---- */
+const DEFB={accent:"#FDB515",dim:"40",logo:"logo.png",wallpaper:"wallpaper.jpg"};
+const KEYS=["company","tagline","accent","dim","logo","wallpaper","whatsapp","email","phone","address","hours","about"];
+let ST={},SD={};
+const val=k=>(ST[k]||"").trim()||DEFB[k]||"";
+const lum=h=>{const n=parseInt(h.slice(1),16);return((n>>16)*299+(n>>8&255)*587+(n&255)*114)/1000};
+const okc=h=>/^#[0-9a-f]{6}$/i.test(h);
+function applyBrand(){
+  const ac=okc(val("accent"))?val("accent"):DEFB.accent,r=document.documentElement.style;
+  r.setProperty("--flame",ac);r.setProperty("--on",lum(ac)>150?"#111":"#fff");
+  r.setProperty("--wall",`url("${val("wallpaper").replace(/"/g,"%22")}")`);r.setProperty("--dimA",Math.min(90,+val("dim")||0)/100);
+  document.querySelectorAll(".blogo").forEach(i=>i.src=val("logo"));
+  document.title="Catalogue admin | "+(val("company")||"The Kitchen Hub");
+}
+async function loadSettings(){try{const {data}=await sb.from("settings").select("*");ST={};(data||[]).forEach(r=>ST[r.key]=r.value)}catch(e){}}
+function drawSet(){$("#dimv").textContent=$("#s_dim").value;$("#pv_logo").src=SD.logo||DEFB.logo;$("#pv_wall").src=SD.wallpaper||DEFB.wallpaper}
+function openSet(){
+  SD={...ST};
+  document.querySelectorAll("[data-s]").forEach(el=>{const k=el.id.slice(2);el.value=ST[k]||DEFB[k]||""});
+  $("#s_accent_t").value=$("#s_accent").value;drawSet();
+}
+$("#s_accent").oninput=e=>{$("#s_accent_t").value=e.target.value};
+$("#s_accent_t").oninput=e=>{if(okc(e.target.value))$("#s_accent").value=e.target.value};
+$("#s_dim").oninput=drawSet;
+document.querySelectorAll("[data-rm]").forEach(b=>b.onclick=()=>{SD[b.dataset.rm]="";drawSet()});
+document.querySelectorAll("[data-up]").forEach(i=>i.onchange=async e=>{const f=e.target.files[0];e.target.value="";if(f)await upBrand(e.target.dataset.up,f)});
+async function shrinkTo(f,max,type,q){
+  const b=await createImageBitmap(f),k=Math.min(1,max/Math.max(b.width,b.height)),c=document.createElement("canvas");
+  c.width=Math.round(b.width*k);c.height=Math.round(b.height*k);c.getContext("2d").drawImage(b,0,0,c.width,c.height);
+  return new Promise(r=>c.toBlob(r,type,q));
+}
+async function prepLogo(f){
+  const b=await createImageBitmap(f),k=Math.min(1,900/b.width),w=Math.round(b.width*k),h=Math.round(b.height*k);
+  const c=document.createElement("canvas");c.width=w;c.height=h;const x=c.getContext("2d");
+  x.fillStyle="#fff";x.fillRect(0,0,w,h);x.drawImage(b,0,0,w,h);
+  const d=x.getImageData(0,0,w,h),p=d.data;let dark=0;
+  for(let i=0;i<p.length;i+=4)if((p[i]*299+p[i+1]*587+p[i+2]*114)/1000<110)dark++;
+  if(dark/(w*h)>.03){
+    for(let i=0;i<p.length;i+=4){
+      const m=Math.min(p[i],p[i+1],p[i+2]),a=1-m/255;
+      if(a<.01){p[i]=p[i+1]=p[i+2]=255;p[i+3]=0;continue}
+      let f3=[0,1,2].map(j=>Math.min(255,(p[i+j]-m)/a));
+      if((f3[0]*299+f3[1]*587+f3[2]*114)/1000<110)f3=[255,255,255];
+      p[i]=f3[0];p[i+1]=f3[1];p[i+2]=f3[2];p[i+3]=Math.round(a*255);
+    }
+    x.putImageData(d,0,0);
+  }else{x.clearRect(0,0,w,h);x.drawImage(b,0,0,w,h)}
+  return new Promise(r=>c.toBlob(r,"image/png"));
+}
+async function upBrand(kind,f){
+  try{
+    const blob=kind==="logo"?await prepLogo(f):await shrinkTo(f,1920,"image/jpeg",.8),path=`brand/${crypto.randomUUID()}.${kind==="logo"?"png":"jpg"}`;
+    const {error}=await sb.storage.from(BUCKET).upload(path,blob,{contentType:blob.type,cacheControl:"31536000"});if(error)throw error;
+    SD[kind]=sb.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;drawSet();say("Image uploaded. Remember to save settings.");
+  }catch(x){fail(x)}
+}
+$("#ssave").onclick=async()=>{
+  $("#ssave").disabled=true;
+  document.querySelectorAll("[data-s]").forEach(el=>SD[el.id.slice(2)]=el.value.trim());
+  const t=$("#s_accent_t").value.trim();if(okc(t))SD.accent=t;
+  SD.whatsapp=(SD.whatsapp||"").replace(/\D/g,"");
+  const old=[ST.logo,ST.wallpaper],rows=KEYS.map(k=>({key:k,value:String(SD[k]??"")}));
+  const {error}=await sb.from("settings").upsert(rows,{onConflict:"key"});
+  $("#ssave").disabled=false;if(error)return fail(error);
+  await rmFiles(old.filter(u=>u&&u!==SD.logo&&u!==SD.wallpaper));
+  await loadSettings();applyBrand();openSet();say("Settings saved");
+};
+$("#sreset").onclick=async()=>{
+  if(!confirm("Reset all settings to the defaults? Uploaded logo and wallpaper will be removed."))return;
+  const old=[ST.logo,ST.wallpaper],{error}=await sb.from("settings").delete().neq("key","");
+  if(error)return fail(error);await rmFiles(old.filter(Boolean));await loadSettings();applyBrand();openSet();say("Settings reset");
 };
 init();
 </script>

@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Kitchen Hub | Commercial Kitchen Equipment Catalogue</title>
+<link rel="icon" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -213,6 +214,30 @@ body.fb .leaf{height:max(460px,calc(100vh - 120px))}
 body.fb .dock{margin:10px auto 6px;opacity:.55;transition:opacity .25s}
 body.fb .dock:hover,body.fb .dock:focus-within{opacity:1}
 @media (prefers-reduced-motion:reduce){body.fb #chrome{transition:none}}
+
+/* ===== v6: brand theme (black + gold, wallpaper, logo) ===== */
+:root{--flame:#FDB515;--on:#111;--dimA:.4;--steel:#0F0F10;--steel2:#3A3A3D}
+body{background:#0B0B0C}
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradient(rgba(8,8,9,var(--dimA)),rgba(8,8,9,var(--dimA))),var(--wall,none) center/cover no-repeat}
+.bar{background:rgba(10,10,11,.88);border-bottom:2px solid var(--flame)}
+#brand{display:flex;align-items:center}
+#brand::before{display:none}
+#brand img{height:46px;width:auto;display:block}
+.bar button,.btn,.arrow:hover:not(:disabled),#tabs button.on{color:var(--on)}
+.btn.alt{background:#fff;color:var(--ink);border-color:var(--acc,var(--flame))}
+.btn.qb.on{background:var(--acc,var(--flame));color:var(--on)}
+#qfab{color:var(--on)}#qfab b{background:var(--on);color:var(--flame)}
+.toc a:hover{color:var(--ink);border-bottom-color:var(--flame)}
+.pg :focus-visible,dialog :focus-visible{outline-color:#111}
+.cover{background:repeating-linear-gradient(90deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px),linear-gradient(160deg,#1B1608,#090909)}
+.cover::before{background:radial-gradient(420px circle at var(--mx,72%) var(--my,22%),rgba(253,181,21,.2),transparent 62%)}
+.cover::after{-webkit-text-stroke:2px rgba(253,181,21,.12)}
+.cat{background:#0E0E0F}
+.clogo{display:block;width:min(100%,540px);height:auto;margin-bottom:16px}
+.pg>h2.t{border-bottom:3px solid var(--flame);padding-bottom:8px}
+.co{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:14px 0}.co dt{color:var(--mut)}.co dd{margin:0}.co a{color:inherit}
+.pg .sp2{margin-top:auto;font-size:12px;color:var(--mut)}
+@media (max-width:899px){#brand img{height:38px}}
 </style>
 </head>
 <body>
@@ -296,11 +321,12 @@ const card=p=>`<article class="card"><div class="ph" data-open="${esc(p.id)}" ta
 
 function pg(i){
   const p=pages[i];if(!p)return"";let h="";
-  if(p.k==="cover")h=`<h1>${esc(CFG.COMPANY)}</h1><p>${esc(CFG.TAGLINE)}</p><div class="yr">Commercial kitchen equipment catalogue, ${new Date().getFullYear()}</div>`;
+  if(p.k==="cover")h=(CFG.LOGO?`<img class="clogo" src="${esc(CFG.LOGO)}" alt="${esc(CFG.COMPANY)}">`:`<h1>${esc(CFG.COMPANY)}</h1><p>${esc(CFG.TAGLINE)}</p>`)+`<div class="yr">Commercial kitchen equipment catalogue, ${new Date().getFullYear()}</div>`;
   else if(p.k==="toc")h=`<h2 class="t">Contents</h2><nav class="toc">${pages.map((x,j)=>x.k==="cat"?`<a data-go="${j}" tabindex="0"><span>${esc(x.c.name)}</span><span>${j+1}</span></a>`:"").join("")||'<div class="msg">No products match your search.</div>'}</nav>`;
   else if(p.k==="cat")h=`<h2>${esc(p.c.name)}</h2><p>${p.n} product${p.n>1?"s":""}</p><ul>${p.names.map(n=>`<li>${esc(n)}</li>`).join("")}</ul>`;
   else if(p.k==="prods")h=`<div class="grid2">${p.it.map(card).join("")}</div>`;
-  else h=`<h2 class="t">Talk to us</h2><p>Tell us what you are building and we will help you choose the right equipment, plan the layout, and arrange delivery.</p><p><a class="btn" href="https://wa.me/${CFG.WHATSAPP}" target="_blank" rel="noopener">WhatsApp us</a> <a class="btn alt" href="mailto:${CFG.EMAIL}">${esc(CFG.EMAIL)}</a></p>`;
+  else{const rows=[["Phone",CFG.PHONE&&`<a href="tel:${esc(CFG.PHONE.replace(/[^\d+]/g,""))}">${esc(CFG.PHONE)}</a>`],["Address",CFG.ADDRESS&&esc(CFG.ADDRESS)],["Hours",CFG.HOURS&&esc(CFG.HOURS)]].filter(x=>x[1]);
+    h=`<h2 class="t">Talk to us</h2><p>${esc(CFG.ABOUT||"Tell us what you are building and we will help you choose the right equipment, plan the layout, and arrange delivery.")}</p>${rows.length?`<dl class="co">${rows.map(x=>`<dt>${x[0]}</dt><dd>${x[1]}</dd>`).join("")}</dl>`:""}<p><a class="btn" href="https://wa.me/${CFG.WHATSAPP}" target="_blank" rel="noopener">WhatsApp us</a> <a class="btn alt" href="mailto:${CFG.EMAIL}">${esc(CFG.EMAIL)}</a></p><p class="sp2">${esc(CFG.COMPANY)}${CFG.TAGLINE?" | "+esc(CFG.TAGLINE):""}</p>`}
   return `<section class="pg ${p.k}" style="--acc:${ACC[(p.ci||0)%ACC.length]}">${h}<span class="pn">${i+1}</span></section>`;
 }
 const nS=()=>desk?1+Math.ceil((pages.length-1)/2):pages.length;
@@ -375,7 +401,7 @@ $("#mode").onclick=()=>{listMode=!listMode;$("#bookwrap").style.display=listMode
 addEventListener("resize",()=>{const d=innerWidth>=900;if(d!==desk){const cur=pagesOf(s).find(x=>x!=null)??0;desk=d;build($("#q").value);s=spreadOf(Math.min(cur,pages.length-1));show();renderList()}});
 
 /* ---- navigation, category colours, photo viewer ---- */
-const ACC=["#1F6BD6","#B8620F","#13806F","#B03A34","#6B4DB8","#2F7A33","#A23F70","#1D6A94","#946F0F","#4A5660","#7A4B2C","#3F6E8C"];
+const ACC=["var(--flame)"];
 let lbI=0,lbU=[];
 const price=p=>p.price&&!/on request/i.test(p.price)?`<b>${esc(p.price)}</b>`:"";
 function sync(v){
@@ -473,8 +499,24 @@ chromeEl.addEventListener("focusout",()=>setTimeout(()=>{if(!chromeEl.matches(":
 $("#bookwrap").addEventListener("mouseenter",chOff);
 $("#mode").addEventListener("click",syncFocus);fmq.addEventListener("change",syncFocus);
 
+/* ---- brand settings (admin > Settings) ---- */
+const lum=h=>{const n=parseInt(h.slice(1),16);return((n>>16)*299+(n>>8&255)*587+(n&255)*114)/1000};
+async function brand(){
+  const S={};
+  if(CFG.SUPABASE_URL){try{(await api("settings","select=*")).forEach(r=>S[r.key]=r.value)}catch(e){}}
+  const v=(k,d)=>(S[k]||"").trim()||d;
+  CFG.COMPANY=v("company",CFG.COMPANY);CFG.TAGLINE=v("tagline",CFG.TAGLINE);CFG.EMAIL=v("email",CFG.EMAIL);
+  CFG.WHATSAPP=v("whatsapp",CFG.WHATSAPP).replace(/\D/g,"");
+  CFG.PHONE=v("phone","");CFG.ADDRESS=v("address","");CFG.HOURS=v("hours","");CFG.ABOUT=v("about","");CFG.LOGO=v("logo","logo.png");
+  let ac=v("accent","#FDB515");if(!/^#[0-9a-f]{6}$/i.test(ac))ac="#FDB515";
+  const r=document.documentElement.style;r.setProperty("--flame",ac);r.setProperty("--on",lum(ac)>150?"#111":"#fff");
+  r.setProperty("--wall",`url("${v("wallpaper","wallpaper.jpg").replace(/"/g,"%22")}")`);
+  r.setProperty("--dimA",Math.min(90,Math.max(0,+v("dim","40")||0))/100);
+}
+
 (async()=>{
-  document.title=`${CFG.COMPANY} | Commercial Kitchen Equipment Catalogue`;$("#brand").textContent=CFG.COMPANY;
+  await brand();document.title=`${CFG.COMPANY} | Commercial Kitchen Equipment Catalogue`;
+  $("#brand").innerHTML=CFG.LOGO?`<img src="${esc(CFG.LOGO)}" alt="${esc(CFG.COMPANY)}">`:esc(CFG.COMPANY);addEventListener("load",setBH);
   const hadHash=(+(/page=(\d+)/.exec(location.hash)||[])[1]||0)>1;
   await load();fopts();build();s=hashSpread();show();renderList();qrefresh();setBH();
   if(!desk&&!hadHash)$("#mode").click();
