@@ -236,14 +236,19 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;background:linear-grad
 .clogo{display:block;width:min(100%,540px);height:auto;margin-bottom:16px}
 .pg>h2.t{border-bottom:3px solid var(--flame);padding-bottom:8px}
 .co{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:14px 0}.co dt{color:var(--mut)}.co dd{margin:0}.co a{color:inherit}
+.lb dd.full{grid-column:1/-1}
 .pg .sp2{margin-top:auto;font-size:12px;color:var(--mut)}
 @media (max-width:899px){#brand img{height:38px}}
+#foot{max-width:1240px;margin:26px auto 0;padding:16px 16px 80px;display:flex;flex-wrap:wrap;gap:8px 28px;justify-content:center;color:#B9C1C7;font-size:14px;border-top:1px solid #3B434B}
+#foot:empty,body.fb #foot{display:none}
+#foot a{color:#fff;text-decoration:none;border-bottom:1px solid var(--flame)}#foot a:hover{color:var(--flame)}
+#cd .qh{display:flex;align-items:center;justify-content:space-between}#cd h2{font-size:30px}#cd .sp2{font-size:12px;color:var(--mut);margin:0}
 </style>
 </head>
 <body>
 <div id="chrome"><header class="bar">
   <b id="brand">The Kitchen Hub</b>
-  <button id="home" type="button" class="ghost">Contents</button>
+  <button id="home" type="button" class="ghost">Contents</button><button id="cbtn" type="button" class="ghost">Contact</button>
   <input id="q" type="search" placeholder="Search products" aria-label="Search products">
   <button id="mode" type="button">List view</button>
 </header>
@@ -261,6 +266,8 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;background:linear-grad
   </div>
   <div id="grid"></div>
 </main>
+<footer id="foot"></footer>
+<dialog id="cd" aria-label="Contact details"></dialog>
 <button id="qfab" type="button" hidden>Enquiry list <b id="qn">0</b></button>
 <dialog id="qd" aria-label="Enquiry list"></dialog>
 <dialog id="lb"></dialog>
@@ -316,7 +323,7 @@ function build(q=""){
   $("#tabs").innerHTML=pages.map(p=>p.k==="cat"?`<button type="button" data-go="${pages.indexOf(p)}" data-ci="${p.ci}" style="--acc:${ACC[p.ci%ACC.length]}">${esc(p.c.name)}<small>${p.n}</small></button>`:"").join("");
 }
 const card=p=>`<article class="card"><div class="ph" data-open="${esc(p.id)}" tabindex="0" role="button" aria-label="View ${esc(p.name)}">${p.images&&p.images[0]?`<img loading="lazy" src="${esc(p.images[0])}" alt="${esc(p.name)}">${p.images[1]?`<img class="alt2" loading="lazy" src="${esc(p.images[1])}" alt="">`:""}`:"No photo yet"}</div>
-<div class="info">${p.model?`<span class="plate">${esc(p.model)}</span>`:""}<h3>${esc(p.name)}</h3><p>${esc(p.description)}</p>${(p.specs||[]).length?`<ul class="sp">${p.specs.slice(0,3).map(x=>`<li>${esc(x.l)}: ${esc(x.v)}</li>`).join("")}</ul>`:""}
+<div class="info">${p.model?`<span class="plate">${esc(p.model)}</span>`:""}<h3>${esc(p.name)}</h3><p>${esc(p.description)}</p>${(p.specs||[]).length?`<ul class="sp">${p.specs.slice(0,3).map(x=>`<li>${x.l?esc(x.l)+": ":""}${esc(x.v)}</li>`).join("")}</ul>`:""}
 <div class="row">${price(p)}<a class="btn" href="${wa(p)}" target="_blank" rel="noopener">Enquire</a>${qbtn(p.id)}</div></div></article>`;
 
 function pg(i){
@@ -367,7 +374,7 @@ function open(id){
   <div class="main">${im[0]?`<img id="big" src="${esc(im[0])}" alt="${esc(p.name)}">${im.length>1?'<button type="button" class="ar l" data-lb="-1" aria-label="Previous photo">&#8249;</button><button type="button" class="ar r" data-lb="1" aria-label="Next photo">&#8250;</button>':""}<span class="ct" id="ct">1 / ${im.length}</span>`:"No photo yet"}</div>
   ${im.length>1?`<div class="thumbs">${im.map((u,i)=>`<img src="${esc(u)}" class="${i?"":"on"}" alt="Photo ${i+1}">`).join("")}</div>`:""}
   ${p.model?`<span class="plate">${esc(p.model)}</span>`:""}<h2>${esc(p.name)}</h2><p>${esc(p.description)}</p>
-  <dl>${(p.specs||[]).map(x=>`<dt>${esc(x.l)}</dt><dd>${esc(x.v)}</dd>`).join("")}</dl>
+  <dl>${(p.specs||[]).map(x=>x.l?`<dt>${esc(x.l)}</dt><dd>${esc(x.v)}</dd>`:`<dd class="full">${esc(x.v)}</dd>`).join("")}</dl>
   <div class="row">${price(p)}${qbtn(p.id)}<a class="btn" href="${wa(p)}" target="_blank" rel="noopener">Enquire on WhatsApp</a><a class="btn alt" href="${mail(p)}">Email</a></div></div>`;
   $("#lb").showModal();
 }
@@ -378,6 +385,8 @@ document.addEventListener("click",e=>{
   if(t.dataset.qm!=null){const x=Q[+t.dataset.qm];x.n=Math.max(1,x.n-1);qsave();return qlist()}
   if(t.dataset.qx!=null){Q.splice(+t.dataset.qx,1);qsave();return qrefresh()}
   if(t.id==="qc")return $("#qd").close();
+  if(t.id==="cbtn")return $("#cd").showModal();
+  if(t.id==="cc")return $("#cd").close();
   if(t.id==="qclr"){if(Q.length&&confirm("Clear the whole list?")){Q=[];qsave();qrefresh()}return}
   const o=t.closest("[data-open]");if(o)return open(o.dataset.open);
   const g=t.closest("[data-go]");if(g){
@@ -514,9 +523,18 @@ async function brand(){
   r.setProperty("--dimA",Math.min(90,Math.max(0,+v("dim","40")||0))/100);
 }
 
+function fillContact(){
+  const tel=CFG.PHONE&&`<a href="tel:${esc(CFG.PHONE.replace(/[^\d+]/g,""))}">${esc(CFG.PHONE)}</a>`,
+    wa=CFG.WHATSAPP&&`<a href="https://wa.me/${CFG.WHATSAPP}" target="_blank" rel="noopener">+${esc(CFG.WHATSAPP)}</a>`,
+    em=CFG.EMAIL&&`<a href="mailto:${esc(CFG.EMAIL)}">${esc(CFG.EMAIL)}</a>`;
+  $("#foot").innerHTML=[["Call",tel],["WhatsApp",wa],["Email",em]].filter(x=>x[1]).map(x=>`<span>${x[0]}: ${x[1]}</span>`).join("");
+  const rows=[["Phone",tel],["WhatsApp",wa],["Email",em],["Address",CFG.ADDRESS&&esc(CFG.ADDRESS)],["Hours",CFG.HOURS&&esc(CFG.HOURS)]].filter(x=>x[1]);
+  $("#cd").innerHTML=`<div class="lb"><div class="qh"><h2>Contact us</h2><button class="btn alt" id="cc" type="button">Close</button></div><p>${esc(CFG.ABOUT||"Tell us what you are building and we will help you choose the right equipment, plan the layout, and arrange delivery.")}</p><dl class="co">${rows.map(x=>`<dt>${x[0]}</dt><dd>${x[1]}</dd>`).join("")}</dl><div class="row"><a class="btn" href="https://wa.me/${CFG.WHATSAPP}" target="_blank" rel="noopener">WhatsApp us</a><a class="btn alt" href="mailto:${esc(CFG.EMAIL)}">Email us</a></div><p class="sp2">${esc(CFG.COMPANY)}${CFG.TAGLINE?" | "+esc(CFG.TAGLINE):""}</p></div>`;
+}
+
 (async()=>{
   await brand();document.title=`${CFG.COMPANY} | Commercial Kitchen Equipment Catalogue`;
-  $("#brand").innerHTML=CFG.LOGO?`<img src="${esc(CFG.LOGO)}" alt="${esc(CFG.COMPANY)}">`:esc(CFG.COMPANY);addEventListener("load",setBH);
+  $("#brand").innerHTML=CFG.LOGO?`<img src="${esc(CFG.LOGO)}" alt="${esc(CFG.COMPANY)}">`:esc(CFG.COMPANY);addEventListener("load",setBH);fillContact();
   const hadHash=(+(/page=(\d+)/.exec(location.hash)||[])[1]||0)>1;
   await load();fopts();build();s=hashSpread();show();renderList();qrefresh();setBH();
   if(!desk&&!hadHash)$("#mode").click();

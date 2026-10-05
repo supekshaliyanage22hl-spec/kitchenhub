@@ -47,7 +47,7 @@ form.f{padding:18px 20px}
 .crow{display:flex;gap:8px;margin-bottom:8px}
 #toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--steel);color:#fff;padding:10px 16px;border-radius:4px;z-index:99}
 #toast.bad{background:var(--bad)}
-@media(max-width:640px){.two{grid-template-columns:1fr}th:nth-child(4),td:nth-child(4){display:none}.pager{flex-wrap:wrap}}
+@media(max-width:640px){.two{grid-template-columns:1fr}th:nth-child(5),td:nth-child(5){display:none}.pager{flex-wrap:wrap}}
 
 /* ===== v6: brand ===== */
 h3{font-family:"Barlow Condensed",sans-serif;margin:22px 0 4px;font-size:22px}
@@ -67,6 +67,9 @@ body:has(#login:not([hidden]))::before{content:"";position:fixed;inset:0;z-index
 .prev img{max-height:92px;max-width:92%}.prev.w img{width:100%;height:100%;max-width:none;max-height:none;object-fit:cover}
 .hint{font-size:12px;color:var(--mut);margin:4px 0 0}
 .frow{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.frow input[type=file]{flex:1;min-width:180px}
+.bulk{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 12px;margin-bottom:10px;background:#FFF7DD;border:1px solid var(--flame);border-radius:6px;position:sticky;top:0;z-index:5}
+.bulk select{width:auto}.bulk input{width:140px}
+th:first-child,td:first-child{width:34px}th:first-child input,td:first-child input{width:18px;height:18px}
 </style>
 </head>
 <body>
@@ -81,11 +84,16 @@ body:has(#login:not([hidden]))::before{content:"";position:fixed;inset:0;z-index
 
 <div id="app" hidden>
   <header class="top"><h1><img class="blogo" alt="Logo"><span>Admin</span></h1><a href="index.html" target="_blank" style="color:#fff">View catalogue</a><button class="alt" id="out">Sign out</button></header>
-  <nav class="tabs"><button data-t="p" class="on">Products</button><button data-t="c">Categories</button><button data-t="i">Import CSV</button><button data-t="s">Settings</button></nav>
+  <nav class="tabs"><button data-t="p" class="on">Products</button><button data-t="c">Categories</button><button data-t="i">Import CSV</button><button data-t="b">Bulk photos</button><button data-t="s">Settings</button></nav>
   <main>
     <section id="tp">
-      <div class="tools"><input id="sq" type="search" placeholder="Search by name or model" aria-label="Search"><select id="sc" aria-label="Filter by category"></select><button id="add">Add product</button></div>
-      <table><thead><tr><th>#</th><th></th><th>Name</th><th>Category</th><th>Photos</th><th></th></tr></thead><tbody id="rows"></tbody></table>
+      <div class="tools"><input id="sq" type="search" placeholder="Search by name or model" aria-label="Search"><select id="sc" aria-label="Filter by category"></select><select id="sm" aria-label="Show"><option value="">All products</option><option value="photo">No photo</option><option value="desc">No description</option><option value="specs">No specs</option><option value="hidden">Hidden from customers</option></select><button id="add">Add product</button></div>
+      <div id="bb" class="bulk" hidden><b id="bn"></b><button class="alt" id="bsall" hidden></button>
+        <select id="bcat" aria-label="Move to category"></select><button class="alt" id="bmove">Move</button>
+        <button class="alt" id="bshow">Show</button><button class="alt" id="bhide">Hide</button>
+        <input id="bprice" placeholder="New price" aria-label="New price"><button class="alt" id="bsetp">Set price</button>
+        <button class="bad" id="bdel">Delete</button><button class="alt" id="bclr">Clear selection</button></div>
+      <table><thead><tr><th><input type="checkbox" id="sa" aria-label="Select all on this page"></th><th>#</th><th></th><th>Name</th><th>Category</th><th>Photos</th><th></th></tr></thead><tbody id="rows"></tbody></table>
       <p class="muted" id="cnt"></p>
       <div class="pager"><button class="alt" id="pf" aria-label="First page">&laquo;</button><button class="alt" id="pp">Previous</button><span>Page <input id="pg" type="number" min="1" aria-label="Page number"> of <b id="pt">1</b></span><button class="alt" id="pn">Next</button><button class="alt" id="pl" aria-label="Last page">&raquo;</button><select id="ps" aria-label="Products per page"><option value="25">25 per page</option><option value="50" selected>50 per page</option><option value="100">100 per page</option></select></div>
     </section>
@@ -98,6 +106,14 @@ body:has(#login:not([hidden]))::before{content:"";position:fixed;inset:0;z-index
       <p>Columns: <b>name, category, model, description, price, specs</b>. Write specs as <code>Power: 3 kW | Size: 600 mm</code>. New categories are created automatically. Add photos afterwards by editing each product.</p>
       <p><button class="alt" id="tpl">Download template</button></p>
       <input type="file" id="csv" accept=".csv,text/csv"><p id="ipre" class="muted"></p><button id="doimp" hidden>Import</button>
+    </section>
+    <section id="tb" hidden>
+      <h2>Bulk photo upload</h2>
+      <p>Select many photos at once. Each file is matched to a product by its <b>file name</b>, which should be the product's <b>model code</b> or its <b>exact name</b> (for example <code>KH-GR4.jpg</code>). For extra photos of the same product, end the name with -2, -3 or -4 (for example <code>KH-GR4-2.jpg</code>). A product holds up to 4 photos.</p>
+      <input type="file" id="bf" accept="image/*" multiple><p id="bpre" class="muted"></p>
+      <table id="bt" hidden><thead><tr><th>File</th><th>Matched product</th><th>Status</th></tr></thead><tbody id="brows"></tbody></table>
+      <label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="brep" style="width:auto"> Replace existing photos instead of adding to them</label>
+      <p><button id="bgo" hidden>Upload photos</button></p><p id="bprog" class="muted"></p>
     </section>
     <section id="ts" hidden>
       <h2>Site settings</h2><p class="muted">Save to update the customer catalogue. Customers see changes after a page refresh.</p>
@@ -166,16 +182,17 @@ function draw(){drawProds();drawCats();
   const opts=cats.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join("");
   const keep=$("#sc").value;$("#sc").innerHTML='<option value="">All categories</option>'+opts;$("#sc").value=keep;
   $("#fc").innerHTML='<option value="">More equipment</option>'+opts;
+  $("#bcat").innerHTML='<option value="">Move to category...</option><option value="__none">More equipment (no category)</option>'+opts;
 }
 function drawProds(){
-  const q=$("#sq").value.trim().toLowerCase(),c=$("#sc").value;
-  const l=prods.filter(p=>(!c||p.category_id===c)&&(!q||(p.name+" "+(p.model||"")).toLowerCase().includes(q)));
+  const q=$("#sq").value.trim().toLowerCase(),c=$("#sc").value,m=$("#sm").value;
+  const l=prods.filter(p=>(!c||p.category_id===c)&&(!m||MISS[m](p))&&(!q||(p.name+" "+(p.model||"")).toLowerCase().includes(q)));LF=l;
   const pc=Math.max(1,Math.ceil(l.length/PS));if(pg>=pc)pg=pc-1;const o=pg*PS;
-  $("#rows").innerHTML=l.slice(o,o+PS).map((p,i)=>`<tr><td class="num">${o+i+1}</td><td>${p.images?.[0]?`<img src="${esc(p.images[0])}" alt="">`:'<div class="nop"></div>'}</td>
+  $("#rows").innerHTML=l.slice(o,o+PS).map((p,i)=>`<tr><td><input type="checkbox" data-sel="${p.id}" ${SEL.has(p.id)?"checked":""} aria-label="Select ${esc(p.name)}"></td><td class="num">${o+i+1}</td><td>${p.images?.[0]?`<img src="${esc(p.images[0])}" alt="">`:'<div class="nop"></div>'}</td>
   <td><b>${esc(p.name)}</b><br><span class="muted">${esc(p.model||"")}${p.active?"":" (hidden)"}</span></td><td>${esc(catName(p.category_id))}</td><td>${p.images?.length||0}</td>
-  <td><button class="alt" data-e="${p.id}">Edit</button></td></tr>`).join("")||'<tr><td colspan="6" class="muted">No products yet. Add one or import a CSV.</td></tr>';
+  <td><button class="alt" data-e="${p.id}">Edit</button></td></tr>`).join("")||'<tr><td colspan="7" class="muted">No products yet. Add one or import a CSV.</td></tr>';
   $("#cnt").textContent=l.length?`Showing ${o+1} to ${Math.min(o+PS,l.length)} of ${l.length} product${l.length==1?"":"s"}`:"0 products";
-  $("#pt").textContent=pc;$("#pg").value=pg+1;$("#pf").disabled=$("#pp").disabled=pg===0;$("#pn").disabled=$("#pl").disabled=pg>=pc-1;
+  $("#pt").textContent=pc;$("#pg").value=pg+1;$("#pf").disabled=$("#pp").disabled=pg===0;$("#pn").disabled=$("#pl").disabled=pg>=pc-1;bulk();
 }
 function drawCats(){
   $("#clist").innerHTML=cats.map(c=>`<div class="crow"><input value="${esc(c.name)}" data-n="${c.id}" aria-label="Category name"><button class="alt" data-s="${c.id}">Save</button><button class="bad" data-d="${c.id}">Delete</button></div>`).join("")||'<p class="muted">No categories yet.</p>';
@@ -187,7 +204,7 @@ $("#pg").onchange=e=>goPg((parseInt(e.target.value)||1)-1);
 $("#ps").onchange=e=>{PS=+e.target.value;pg=0;drawProds()};
 document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{
   document.querySelectorAll(".tabs button").forEach(x=>x.classList.toggle("on",x===b));
-  ["p","c","i","s"].forEach(k=>$("#t"+k).hidden=k!==b.dataset.t)});
+  ["p","c","i","b","s"].forEach(k=>$("#t"+k).hidden=k!==b.dataset.t)});
 
 /* categories */
 $("#addc").onclick=async()=>{const n=$("#newc").value.trim();if(!n)return;
@@ -209,7 +226,7 @@ function openEd(id){
   const p=cur||{name:"",model:"",category_id:"",description:"",specs:[],price:"",images:[],active:true};
   $("#dt").textContent=cur?"Edit product":"Add product";
   $("#fn").value=p.name;$("#fm").value=p.model||"";$("#fc").value=p.category_id||"";$("#fd").value=p.description||"";
-  $("#fs").value=(p.specs||[]).map(x=>`${x.l}: ${x.v}`).join("\n");$("#fp").value=p.price||"";$("#fa").value=p.active?"1":"0";
+  $("#fs").value=(p.specs||[]).map(x=>x.l?`${x.l}: ${x.v}`:x.v).join("\n");$("#fp").value=p.price||"";$("#fa").value=p.active?"1":"0";
   imgs=[...(p.images||[])];$("#ff").value="";drawImgs();$("#del").hidden=!cur;$("#dlg").showModal();
 }
 $("#add").onclick=()=>openEd(null);
@@ -233,7 +250,7 @@ $("#ff").onchange=async e=>{
   e.target.value="";
 };
 const rmFiles=urls=>{const p=urls.map(u=>u.split("/"+BUCKET+"/")[1]).filter(Boolean);return p.length?sb.storage.from(BUCKET).remove(p):null};
-const parseSpecs=t=>t.split(/\n|\|/).map(x=>{const i=x.indexOf(":");return i<0?null:{l:x.slice(0,i).trim(),v:x.slice(i+1).trim()}}).filter(x=>x&&x.l);
+const parseSpecs=t=>t.split(/\n|\|/).map(x=>x.trim()).filter(Boolean).map(x=>{const m=x.match(/^(.+?)\s*(?::|：|=|\t|\s[-–—]\s)\s*(.+)$/);return m?{l:m[1].trim(),v:m[2].trim()}:{l:"",v:x}});
 $("#form").onsubmit=async e=>{
   e.preventDefault();$("#save").disabled=true;
   const row={name:$("#fn").value.trim(),model:$("#fm").value.trim(),category_id:$("#fc").value||null,description:$("#fd").value.trim(),
@@ -276,6 +293,81 @@ $("#doimp").onclick=async()=>{
   }catch(x){fail(x)}
   $("#doimp").disabled=false;
 };
+/* ---- bulk tools ---- */
+let SEL=new Set(),LF=[];
+const MISS={photo:p=>!(p.images&&p.images.length),desc:p=>!(p.description||"").trim(),specs:p=>!(p.specs&&p.specs.length),hidden:p=>!p.active};
+const chunk=(a,n)=>{const r=[];for(let i=0;i<a.length;i+=n)r.push(a.slice(i,i+n));return r};
+function bulk(){
+  const ids=new Set(prods.map(p=>p.id));[...SEL].forEach(id=>{if(!ids.has(id))SEL.delete(id)});
+  const rows=[...document.querySelectorAll("[data-sel]")];
+  $("#sa").checked=rows.length>0&&rows.every(r=>r.checked);
+  $("#bb").hidden=!SEL.size;$("#bn").textContent=`${SEL.size} selected`;
+  $("#bsall").hidden=!LF.some(p=>!SEL.has(p.id));$("#bsall").textContent=`Select all ${LF.length} matching`;
+}
+$("#sa").onchange=e=>{document.querySelectorAll("[data-sel]").forEach(r=>{r.checked=e.target.checked;e.target.checked?SEL.add(r.dataset.sel):SEL.delete(r.dataset.sel)});bulk()};
+$("#rows").addEventListener("change",e=>{const id=e.target.dataset.sel;if(id){e.target.checked?SEL.add(id):SEL.delete(id);bulk()}});
+$("#sm").onchange=()=>{pg=0;drawProds()};
+async function bupd(fields,msg){
+  const ids=[...SEL];if(!ids.length||!confirm(`${msg} for ${ids.length} product${ids.length>1?"s":""}?`))return;
+  for(const part of chunk(ids,50)){const {error}=await sb.from("products").update(fields).in("id",part);if(error)return fail(error)}
+  await load();draw();say(`Updated ${ids.length} product${ids.length>1?"s":""}`);
+}
+$("#bmove").onclick=()=>{const v=$("#bcat").value;if(!v)return say("Choose a category first",true);bupd({category_id:v==="__none"?null:v},"Move to "+$("#bcat").selectedOptions[0].text)};
+$("#bshow").onclick=()=>bupd({active:true},"Show on the catalogue");
+$("#bhide").onclick=()=>bupd({active:false},"Hide from customers");
+$("#bsetp").onclick=()=>{const v=$("#bprice").value.trim()||"Price on request";bupd({price:v},`Set the price to "${v}"`)};
+$("#bclr").onclick=()=>{SEL.clear();drawProds()};
+$("#bsall").onclick=()=>{LF.forEach(p=>SEL.add(p.id));drawProds()};
+$("#bdel").onclick=async()=>{
+  const ids=[...SEL];if(!ids.length||!confirm(`Delete ${ids.length} product${ids.length>1?"s":""} and their photos? This cannot be undone.`))return;
+  const imgs=prods.filter(p=>SEL.has(p.id)).flatMap(p=>p.images||[]);
+  for(const part of chunk(ids,50)){const {error}=await sb.from("products").delete().in("id",part);if(error)return fail(error)}
+  for(const part of chunk(imgs,100))await rmFiles(part);
+  SEL.clear();await load();draw();say(`Deleted ${ids.length} product${ids.length>1?"s":""}`);
+};
+
+/* bulk photos */
+let BM=[];
+const nk=s=>String(s||"").toLowerCase().replace(/[^a-z0-9]/g,"");
+function bmatch(f,m){
+  const stem=f.name.replace(/\.[^.]+$/,"");let n=1,ids=m.get(nk(stem));
+  if(!ids){const r=stem.match(/^(.*?)[\s_-]*\(?(\d)\)?$/);if(r){ids=m.get(nk(r[1]));n=+r[2]}}
+  if(!ids)return{st:"none"};if(ids.size>1)return{st:"many"};
+  return{st:"ok",id:[...ids][0],n};
+}
+$("#bf").onchange=e=>{
+  const m=new Map();prods.forEach(p=>[p.model,p.name].forEach(k=>{k=nk(k);if(!k)return;if(!m.has(k))m.set(k,new Set());m.get(k).add(p.id)}));
+  BM=[...e.target.files].map(f=>({f,...bmatch(f,m)}));
+  const ok=BM.filter(x=>x.st==="ok").length;
+  $("#bt").hidden=!BM.length;
+  $("#brows").innerHTML=BM.slice(0,300).map(x=>{const p=x.id&&prods.find(q=>q.id===x.id);
+    return `<tr><td>${esc(x.f.name)}</td><td>${p?esc(p.name)+(p.model?` <span class="muted">${esc(p.model)}</span>`:"")+(x.n>1?` <span class="muted">(photo ${x.n})</span>`:""):""}</td><td>${x.st==="ok"?"Ready":x.st==="many"?"Several products match":"No match"}</td></tr>`}).join("");
+  $("#bpre").textContent=BM.length?`${ok} of ${BM.length} photos matched a product${BM.length>300?" (first 300 shown)":""}.`:"";
+  $("#bgo").hidden=!ok;$("#bgo").textContent=`Upload ${ok} photo${ok==1?"":"s"}`;
+};
+$("#bgo").onclick=async()=>{
+  $("#bgo").disabled=true;const rep=$("#brep").checked,by=new Map(),total=BM.filter(x=>x.st==="ok").length;
+  BM.filter(x=>x.st==="ok").forEach(x=>{if(!by.has(x.id))by.set(x.id,[]);by.get(x.id).push(x)});
+  let done=0,skipped=0,failed=0;
+  for(const [id,list] of by){
+    list.sort((a,b)=>a.n-b.n);const p=prods.find(q=>q.id===id),old=p.images||[],room=rep?4:Math.max(0,4-old.length),urls=[];
+    skipped+=Math.max(0,list.length-room);
+    try{
+      for(const x of list.slice(0,room)){
+        $("#bprog").textContent=`Uploading ${++done} of ${total}...`;
+        const path=crypto.randomUUID()+".jpg",{error}=await sb.storage.from(BUCKET).upload(path,await shrink(x.f),{contentType:"image/jpeg",cacheControl:"31536000"});
+        if(error)throw error;urls.push(sb.storage.from(BUCKET).getPublicUrl(path).data.publicUrl);
+      }
+      if(!urls.length)continue;
+      const {error}=await sb.from("products").update({images:rep?urls:[...old,...urls]}).eq("id",id);if(error)throw error;
+      if(rep)await rmFiles(old);
+    }catch(x){failed++;fail(x)}
+  }
+  await load();draw();$("#bgo").disabled=false;$("#bgo").hidden=true;$("#bf").value="";$("#bt").hidden=true;BM=[];
+  $("#bprog").textContent=`Finished. ${failed?failed+" product(s) failed. ":""}${skipped?skipped+" photo(s) skipped because a product can hold only 4. ":""}`;
+  $("#bpre").textContent="";say("Bulk upload finished");
+};
+
 /* ---- settings ---- */
 const DEFB={accent:"#FDB515",dim:"40",logo:"logo.png",wallpaper:"wallpaper.jpg"};
 const KEYS=["company","tagline","accent","dim","logo","wallpaper","whatsapp","email","phone","address","hours","about"];
