@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Catalogue admin | The Kitchen Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--steel:#2A3036;--paper:#F2F3F1;--line:#C9CED2;--flame:#1F6BD6;--ink:#1B1F23;--mut:#5C666F;--bad:#B3261E}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 15px/1.5 Barlow,system-ui,sans-serif}
+h1,h2{font-family:"Barlow Condensed",sans-serif;margin:0}
+[hidden]{display:none!important}
+:focus-visible{outline:3px solid var(--flame);outline-offset:2px}
+input,select,textarea,button{font:inherit}
+input,select,textarea{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink)}
+textarea{min-height:90px;resize:vertical}
+label{display:block;font-weight:600;font-size:13px;margin:12px 0 4px}
+button{padding:8px 14px;border-radius:4px;border:1px solid var(--flame);background:var(--flame);color:#fff;font-weight:600;cursor:pointer}
+button.alt{background:#fff;color:var(--flame)}button.bad{background:#fff;color:var(--bad);border-color:var(--bad)}
+#login{max-width:340px;margin:12vh auto;padding:24px;background:#fff;border:1px solid var(--line);border-radius:6px}
+#login h1{font-size:32px;margin-bottom:6px}
+.top{display:flex;align-items:center;gap:12px;padding:10px 20px;background:var(--steel);color:#fff}
+.top h1{font-size:24px;margin-right:auto}
+.tabs{display:flex;gap:6px;padding:14px 20px 0}
+.tabs button{background:transparent;color:var(--ink);border-color:transparent;border-bottom:3px solid transparent;border-radius:0}
+.tabs button.on{border-bottom-color:var(--flame)}
+main{padding:16px 20px 60px;max-width:1100px;margin:0 auto}
+.tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.tools input{flex:1;min-width:160px}.tools select{width:auto}
+table{width:100%;border-collapse:collapse;background:#fff}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+td img,.nop{width:52px;height:40px;object-fit:cover;background:#E3E6E8;display:block;border-radius:2px}
+.muted{color:var(--mut);font-size:13px}
+dialog{border:0;border-radius:6px;width:min(680px,95vw);max-height:94vh;padding:0}
+dialog::backdrop{background:rgba(20,24,28,.6)}
+form.f{padding:18px 20px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.imgs{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+.imgs div{position:relative}.imgs img{width:110px;height:84px;object-fit:cover;border:1px solid var(--line);display:block}
+.imgs button{position:absolute;top:2px;right:2px;padding:0 7px;line-height:20px;background:#fff;color:var(--bad);border-color:var(--bad)}
+.acts{display:flex;gap:10px;margin-top:18px}.acts .sp{margin-right:auto}
+.crow{display:flex;gap:8px;margin-bottom:8px}
+#toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--steel);color:#fff;padding:10px 16px;border-radius:4px;z-index:99}
+#toast.bad{background:var(--bad)}
+@media(max-width:640px){.two{grid-template-columns:1fr}th:nth-child(3),td:nth-child(3){display:none}}
+</style>
+</head>
+<body>
+<section id="login" hidden>
+  <h1>Catalogue admin</h1><p class="muted">Sign in to manage products.</p>
+  <label for="em">Email</label><input id="em" type="email" autocomplete="username">
+  <label for="pw">Password</label><input id="pw" type="password" autocomplete="current-password">
+  <p><button id="go" style="width:100%">Sign in</button></p><p id="lerr" class="muted"></p>
+</section>
+
+<div id="app" hidden>
+  <header class="top"><h1>The Kitchen Hub admin</h1><a href="index.html" target="_blank" style="color:#fff">View catalogue</a><button class="alt" id="out">Sign out</button></header>
+  <nav class="tabs"><button data-t="p" class="on">Products</button><button data-t="c">Categories</button><button data-t="i">Import CSV</button></nav>
+  <main>
+    <section id="tp">
+      <div class="tools"><input id="sq" type="search" placeholder="Search by name or model" aria-label="Search"><select id="sc" aria-label="Filter by category"></select><button id="add">Add product</button></div>
+      <table><thead><tr><th></th><th>Name</th><th>Category</th><th>Photos</th><th></th></tr></thead><tbody id="rows"></tbody></table>
+      <p class="muted" id="cnt"></p>
+    </section>
+    <section id="tc" hidden>
+      <h2>Categories</h2><p class="muted">Deleting a category keeps its products; they move to "More equipment".</p>
+      <div id="clist"></div><div class="crow"><input id="newc" placeholder="New category name" aria-label="New category name"><button id="addc">Add category</button></div>
+    </section>
+    <section id="ti" hidden>
+      <h2>Import products from CSV</h2>
+      <p>Columns: <b>name, category, model, description, price, specs</b>. Write specs as <code>Power: 3 kW | Size: 600 mm</code>. New categories are created automatically. Add photos afterwards by editing each product.</p>
+      <p><button class="alt" id="tpl">Download template</button></p>
+      <input type="file" id="csv" accept=".csv,text/csv"><p id="ipre" class="muted"></p><button id="doimp" hidden>Import</button>
+    </section>
+  </main>
+</div>
+
+<dialog id="dlg"><form class="f" id="form" method="dialog">
+  <h2 id="dt">Product</h2>
+  <label for="fn">Name</label><input id="fn" required>
+  <div class="two"><div><label for="fm">Model code</label><input id="fm"></div><div><label for="fc">Category</label><select id="fc"></select></div></div>
+  <label for="fd">Description</label><textarea id="fd"></textarea>
+  <label for="fs">Specs (one per line, like Power: 3 kW)</label><textarea id="fs"></textarea>
+  <div class="two"><div><label for="fp">Price</label><input id="fp" placeholder="Price on request"></div><div><label for="fa">Visible to customers</label><select id="fa"><option value="1">Yes</option><option value="0">No (hidden)</option></select></div></div>
+  <label for="ff">Photos (up to 4, resized automatically)</label><input id="ff" type="file" accept="image/*" multiple><div class="imgs" id="imgs"></div>
+  <div class="acts"><button type="button" class="bad sp" id="del">Delete product</button><button type="button" class="alt" id="cancel">Cancel</button><button type="submit" id="save">Save product</button></div>
+</form></dialog>
+<div id="toast" hidden></div>
+
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+const $=s=>document.querySelector(s),esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const BUCKET="product-images";
+let sb,cats=[],prods=[],cur=null,imgs=[],gone=[],csvRows=[];
+
+function say(m,bad){const t=$("#toast");t.textContent=m;t.className=bad?"bad":"";t.hidden=false;clearTimeout(say.t);say.t=setTimeout(()=>t.hidden=true,3500)}
+const fail=e=>say(e?.message||"Something went wrong. Please try again.",true);
+
+async function init(){
+  if(!CFG.SUPABASE_URL){$("#login").hidden=false;$("#lerr").textContent="Add your Supabase URL and key in config.js first.";$("#go").disabled=true;return}
+  sb=supabase.createClient(CFG.SUPABASE_URL,CFG.SUPABASE_KEY);
+  const {data}=await sb.auth.getSession();data.session?start():$("#login").hidden=false;
+}
+$("#go").onclick=async()=>{
+  const {error}=await sb.auth.signInWithPassword({email:$("#em").value.trim(),password:$("#pw").value});
+  if(error)$("#lerr").textContent="Sign-in failed: "+error.message;else{$("#login").hidden=true;start()}
+};
+$("#pw").onkeydown=e=>{if(e.key==="Enter")$("#go").click()};
+$("#out").onclick=async()=>{await sb.auth.signOut();location.reload()};
+
+async function start(){$("#app").hidden=false;await load();draw()}
+async function load(){
+  const c=await sb.from("categories").select("*").order("sort").order("name"),p=await sb.from("products").select("*").order("name").limit(5000);
+  if(c.error||p.error)return fail(c.error||p.error);cats=c.data;prods=p.data;
+}
+const catName=id=>(cats.find(c=>c.id===id)||{}).name||"More equipment";
+function draw(){drawProds();drawCats();
+  const opts=cats.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join("");
+  const keep=$("#sc").value;$("#sc").innerHTML='<option value="">All categories</option>'+opts;$("#sc").value=keep;
+  $("#fc").innerHTML='<option value="">More equipment</option>'+opts;
+}
+function drawProds(){
+  const q=$("#sq").value.trim().toLowerCase(),c=$("#sc").value;
+  const l=prods.filter(p=>(!c||p.category_id===c)&&(!q||(p.name+" "+(p.model||"")).toLowerCase().includes(q)));
+  $("#rows").innerHTML=l.slice(0,200).map(p=>`<tr><td>${p.images?.[0]?`<img src="${esc(p.images[0])}" alt="">`:'<div class="nop"></div>'}</td>
+  <td><b>${esc(p.name)}</b><br><span class="muted">${esc(p.model||"")}${p.active?"":" (hidden)"}</span></td><td>${esc(catName(p.category_id))}</td><td>${p.images?.length||0}</td>
+  <td><button class="alt" data-e="${p.id}">Edit</button></td></tr>`).join("")||'<tr><td colspan="5" class="muted">No products yet. Add one or import a CSV.</td></tr>';
+  $("#cnt").textContent=`${l.length} product${l.length==1?"":"s"}${l.length>200?" (showing the first 200; use search to narrow)":""}`;
+}
+function drawCats(){
+  $("#clist").innerHTML=cats.map(c=>`<div class="crow"><input value="${esc(c.name)}" data-n="${c.id}" aria-label="Category name"><button class="alt" data-s="${c.id}">Save</button><button class="bad" data-d="${c.id}">Delete</button></div>`).join("")||'<p class="muted">No categories yet.</p>';
+}
+$("#sq").oninput=drawProds;$("#sc").onchange=drawProds;
+document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll(".tabs button").forEach(x=>x.classList.toggle("on",x===b));
+  ["p","c","i"].forEach(k=>$("#t"+k).hidden=k!==b.dataset.t)});
+
+/* categories */
+$("#addc").onclick=async()=>{const n=$("#newc").value.trim();if(!n)return;
+  const {error}=await sb.from("categories").insert({name:n,sort:cats.length});if(error)return fail(error);$("#newc").value="";await load();draw();say("Category added")};
+$("#clist").onclick=async e=>{
+  const s=e.target.dataset.s,d=e.target.dataset.d;
+  if(s){const n=document.querySelector(`[data-n="${s}"]`).value.trim();if(!n)return;
+    const {error}=await sb.from("categories").update({name:n}).eq("id",s);error?fail(error):(await load(),draw(),say("Category saved"))}
+  if(d&&confirm("Delete this category? Its products will be kept.")){
+    const {error}=await sb.from("categories").delete().eq("id",d);error?fail(error):(await load(),draw(),say("Category deleted"))}
+};
+
+/* product editor */
+function drawImgs(){
+  $("#imgs").innerHTML=imgs.map((u,i)=>`<div><img src="${esc(u)}" alt="Photo ${i+1}"><button type="button" data-r="${i}" aria-label="Remove photo ${i+1}">x</button></div>`).join("");
+}
+function openEd(id){
+  cur=id?prods.find(p=>p.id===id):null;gone=[];
+  const p=cur||{name:"",model:"",category_id:"",description:"",specs:[],price:"",images:[],active:true};
+  $("#dt").textContent=cur?"Edit product":"Add product";
+  $("#fn").value=p.name;$("#fm").value=p.model||"";$("#fc").value=p.category_id||"";$("#fd").value=p.description||"";
+  $("#fs").value=(p.specs||[]).map(x=>`${x.l}: ${x.v}`).join("\n");$("#fp").value=p.price||"";$("#fa").value=p.active?"1":"0";
+  imgs=[...(p.images||[])];$("#ff").value="";drawImgs();$("#del").hidden=!cur;$("#dlg").showModal();
+}
+$("#add").onclick=()=>openEd(null);
+$("#rows").onclick=e=>{if(e.target.dataset.e)openEd(e.target.dataset.e)};
+$("#cancel").onclick=()=>$("#dlg").close();
+$("#imgs").onclick=e=>{const i=e.target.dataset.r;if(i==null)return;gone.push(imgs[i]);imgs.splice(i,1);drawImgs()};
+async function shrink(f){
+  const b=await createImageBitmap(f),k=Math.min(1,1200/Math.max(b.width,b.height)),c=document.createElement("canvas");
+  c.width=Math.round(b.width*k);c.height=Math.round(b.height*k);c.getContext("2d").drawImage(b,0,0,c.width,c.height);
+  return new Promise(r=>c.toBlob(r,"image/jpeg",.82));
+}
+$("#ff").onchange=async e=>{
+  for(const f of [...e.target.files]){
+    if(imgs.length>=4){say("Maximum 4 photos per product",true);break}
+    try{
+      const path=crypto.randomUUID()+".jpg",blob=await shrink(f);
+      const {error}=await sb.storage.from(BUCKET).upload(path,blob,{contentType:"image/jpeg",cacheControl:"31536000"});
+      if(error)throw error;imgs.push(sb.storage.from(BUCKET).getPublicUrl(path).data.publicUrl);drawImgs();
+    }catch(x){fail(x)}
+  }
+  e.target.value="";
+};
+const rmFiles=urls=>{const p=urls.map(u=>u.split("/"+BUCKET+"/")[1]).filter(Boolean);return p.length?sb.storage.from(BUCKET).remove(p):null};
+const parseSpecs=t=>t.split(/\n|\|/).map(x=>{const i=x.indexOf(":");return i<0?null:{l:x.slice(0,i).trim(),v:x.slice(i+1).trim()}}).filter(x=>x&&x.l);
+$("#form").onsubmit=async e=>{
+  e.preventDefault();$("#save").disabled=true;
+  const row={name:$("#fn").value.trim(),model:$("#fm").value.trim(),category_id:$("#fc").value||null,description:$("#fd").value.trim(),
+    specs:parseSpecs($("#fs").value),price:$("#fp").value.trim()||"Price on request",images:imgs,active:$("#fa").value==="1"};
+  const {error}=cur?await sb.from("products").update(row).eq("id",cur.id):await sb.from("products").insert(row);
+  $("#save").disabled=false;if(error)return fail(error);
+  await rmFiles(gone);$("#dlg").close();await load();draw();say("Product saved");
+};
+$("#del").onclick=async()=>{
+  if(!confirm("Delete this product and its photos? This cannot be undone."))return;
+  const {error}=await sb.from("products").delete().eq("id",cur.id);if(error)return fail(error);
+  await rmFiles(cur.images||[]);$("#dlg").close();await load();draw();say("Product deleted");
+};
+
+/* CSV import */
+function parseCSV(t){const rows=[];let r=[],c="",q=false;
+  for(let i=0;i<t.length;i++){const ch=t[i];
+    if(q){if(ch=='"'){if(t[i+1]=='"'){c+='"';i++}else q=false}else c+=ch}
+    else if(ch=='"')q=true;else if(ch===","){r.push(c);c=""}
+    else if(ch==="\n"||ch==="\r"){if(ch==="\r"&&t[i+1]==="\n")i++;r.push(c);c="";if(r.some(x=>x.trim()))rows.push(r);r=[]}else c+=ch}
+  r.push(c);if(r.some(x=>x.trim()))rows.push(r);return rows}
+$("#tpl").onclick=()=>{const b=new Blob(["name,category,model,description,price,specs\nPlanetary Mixer 20 L,Food Preparation,KH-PM20,Three speeds with a stainless bowl,Price on request,Bowl: 20 L | Power: 750 W\n"],{type:"text/csv"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="products-template.csv";a.click()};
+$("#csv").onchange=async e=>{
+  const f=e.target.files[0];if(!f)return;const rows=parseCSV(await f.text());
+  const h=rows.shift().map(x=>x.trim().toLowerCase());
+  if(!h.includes("name")){$("#ipre").textContent="The first row must be a header that includes a 'name' column.";$("#doimp").hidden=true;return}
+  csvRows=rows.map(r=>Object.fromEntries(h.map((k,i)=>[k,(r[i]||"").trim()]))).filter(r=>r.name);
+  $("#ipre").textContent=`Ready to import ${csvRows.length} products.`;$("#doimp").hidden=!csvRows.length;
+};
+$("#doimp").onclick=async()=>{
+  $("#doimp").disabled=true;
+  try{
+    const have=new Set(cats.map(c=>c.name.toLowerCase())),need=[...new Set(csvRows.map(r=>r.category).filter(Boolean))].filter(n=>!have.has(n.toLowerCase()));
+    if(need.length){const {error}=await sb.from("categories").insert(need.map((name,i)=>({name,sort:cats.length+i})));if(error)throw error}
+    await load();const id=n=>(cats.find(c=>c.name.toLowerCase()===(n||"").toLowerCase())||{}).id||null;
+    const out=csvRows.map(r=>({name:r.name,category_id:id(r.category),model:r.model||"",description:r.description||"",price:r.price||"Price on request",specs:parseSpecs(r.specs||""),images:[],active:true}));
+    for(let i=0;i<out.length;i+=100){const {error}=await sb.from("products").insert(out.slice(i,i+100));if(error)throw error}
+    await load();draw();say(`Imported ${out.length} products`);$("#ipre").textContent="";$("#doimp").hidden=true;$("#csv").value="";
+  }catch(x){fail(x)}
+  $("#doimp").disabled=false;
+};
+init();
+</script>
+</body>
+</html>

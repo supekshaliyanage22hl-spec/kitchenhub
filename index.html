@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Kitchen Hub | Commercial Kitchen Equipment Catalogue</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--steel:#2A3036;--steel2:#4A545D;--paper:#F2F3F1;--plate:#DDE1E3;--line:#C9CED2;--flame:#1F6BD6;--ink:#1B1F23;--mut:#5C666F}
+*{box-sizing:border-box}
+body{margin:0;background:#E4E7E8;color:var(--ink);font:400 15px/1.5 Barlow,system-ui,sans-serif}
+h1,h2,h3{font-family:"Barlow Condensed",Impact,sans-serif;margin:0;line-height:1.05}
+.bar{position:sticky;top:0;z-index:5;display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 16px;background:var(--steel);color:#fff}
+.bar b{font:700 22px "Barlow Condensed",sans-serif;margin-right:auto;letter-spacing:.02em}
+.bar input,.bar select,.bar button{font:inherit;padding:7px 10px;border-radius:4px;border:1px solid var(--steel2);background:#fff;color:var(--ink)}
+.bar button{background:var(--flame);border-color:var(--flame);color:#fff;cursor:pointer}
+.bar input{width:180px}
+:focus-visible{outline:3px solid var(--flame);outline-offset:2px}
+.stage{max-width:1100px;margin:18px auto;padding:0 12px}
+.book{display:flex;justify-content:center;perspective:2400px}
+.leaf{width:50%;height:clamp(540px,78vh,720px);background:var(--paper);overflow:hidden}
+#L{border-radius:6px 0 0 6px;box-shadow:inset -14px 0 18px -14px rgba(0,0,0,.25),0 6px 20px rgba(0,0,0,.18)}
+#R{border-radius:0 6px 6px 0;box-shadow:inset 14px 0 18px -14px rgba(0,0,0,.25),0 6px 20px rgba(0,0,0,.18)}
+.leaf:empty{background:transparent;box-shadow:none}
+.pg{position:relative;height:100%;padding:20px 20px 34px;display:flex;flex-direction:column}
+.pn{position:absolute;bottom:12px;left:0;right:0;text-align:center;font-size:12px;color:var(--mut)}
+.cover,.cat{background:var(--steel);color:#fff;display:flex;flex-direction:column;justify-content:flex-end}
+.cover h1{font-size:clamp(54px,8vw,92px);font-weight:700}
+.cover p{margin:10px 0 0;color:#B9C1C7;max-width:28ch}
+.cover .yr{margin-top:34px;border-top:2px solid var(--flame);padding-top:10px;color:#B9C1C7;font-size:13px}
+.cat h2{font-size:clamp(44px,6vw,70px);font-weight:700}
+.cat p{color:#B9C1C7;margin:8px 0 0}.cat ul{margin:22px 0 28px;padding:0;list-style:none;color:#B9C1C7;font-size:14px}.cat li{padding:5px 0;border-top:1px solid #3B434B}.sp{margin:0;padding:0;list-style:none;font-size:12px;color:var(--mut)}
+.cover .pn,.cat .pn{color:#8A949C}
+.pg>h2.t{font-size:34px;margin-bottom:14px}
+.toc a{display:flex;gap:8px;padding:14px 0;font-size:19px;border-bottom:1px dotted var(--line);color:inherit;text-decoration:none;cursor:pointer}
+.toc a span:first-child{flex:1}
+.toc a:hover{color:var(--flame)}
+.grid2{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:12px}
+.card{background:#fff;border:1px solid var(--line);display:flex;flex-direction:column;min-width:0;min-height:0;overflow:hidden}
+.ph{flex:1;min-height:90px;background:linear-gradient(135deg,#E6E9EA,#CDD3D6);display:grid;place-items:center;color:var(--mut);font-size:12px;cursor:zoom-in;overflow:hidden}
+.ph img{width:100%;height:100%;object-fit:contain;display:block}
+.info{padding:10px 12px 12px;display:flex;flex-direction:column;gap:5px;flex:none}
+.plate{align-self:flex-start;font:600 12px "Barlow Condensed",sans-serif;letter-spacing:.06em;background:var(--plate);border:1px solid #AEB5BA;padding:1px 7px;border-radius:2px}
+.card h3{font-size:20px;font-weight:600}
+.card p{margin:0;font-size:13px;color:var(--mut);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.row{margin-top:auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.row b{font-size:14px;margin-right:auto}
+.btn{font:600 13px Barlow,sans-serif;padding:6px 11px;border-radius:4px;text-decoration:none;border:1px solid var(--flame);background:var(--flame);color:#fff;cursor:pointer}
+.btn.alt{background:#fff;color:var(--flame)}
+.nav{display:flex;justify-content:center;align-items:center;gap:14px;margin:14px 0}
+.nav button{font:600 15px Barlow,sans-serif;padding:8px 18px;border:1px solid var(--steel);background:#fff;border-radius:4px;cursor:pointer}
+.nav button:disabled{opacity:.4;cursor:default}
+#grid{display:none}
+#grid h2{font-size:30px;margin:24px 0 10px}
+#grid .gg{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.msg{padding:40px;text-align:center;color:var(--mut)}
+dialog{border:0;border-radius:6px;padding:0;width:min(760px,94vw);max-height:92vh}
+dialog::backdrop{background:rgba(20,24,28,.7)}
+.lb{padding:18px;display:grid;gap:12px}
+.lb .main{aspect-ratio:4/3;background:#EEF0F1;display:grid;place-items:center}
+.lb .main img{max-width:100%;max-height:100%}
+.thumbs{display:flex;gap:8px}
+.thumbs img{width:64px;height:48px;object-fit:cover;border:2px solid transparent;cursor:pointer;background:#EEF0F1}
+.thumbs img.on{border-color:var(--flame)}
+.lb dl{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:0}
+.lb dt{color:var(--mut)}.lb dd{margin:0}
+.x{justify-self:end}
+.book{position:relative}
+.turn{position:absolute;top:0;width:50%;height:100%;z-index:3;transform-style:preserve-3d;transition:transform .8s cubic-bezier(.45,.05,.25,1);will-change:transform;pointer-events:none}
+.turn.fw{left:50%;transform-origin:left center}.turn.bw{left:0;transform-origin:right center}
+.turn .f,.turn .b{position:absolute;inset:0;overflow:hidden;background:var(--paper);backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.turn .b{transform:rotateY(180deg)}
+.turn .f::after,.turn .b::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(to right,rgba(0,0,0,.2),transparent 28%)}
+.turn.bw .f::after{background:linear-gradient(to left,rgba(0,0,0,.2),transparent 28%)}
+.fadeout{animation:fo .2s forwards}.fadein{animation:fi .25s}
+@keyframes fo{to{opacity:0}}@keyframes fi{from{opacity:0}}
+@media (max-width:899px){#L{display:none}.leaf{width:100%;overflow:auto;border-radius:6px!important}.pg{height:auto;min-height:100%}.grid2{grid-template-columns:1fr;grid-template-rows:none}.ph{flex:none;aspect-ratio:4/3}.bar input{width:100%;order:5}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<header class="bar">
+  <b id="brand">The Kitchen Hub</b>
+  <select id="catsel" aria-label="Jump to category"></select>
+  <input id="q" type="search" placeholder="Search products" aria-label="Search products">
+  <button id="mode" type="button">List view</button>
+</header>
+<main class="stage">
+  <div id="bookwrap">
+    <div class="book"><div class="leaf" id="L"></div><div class="leaf" id="R"></div></div>
+    <div class="nav"><button id="prev">Previous</button><span id="pos"></span><button id="next">Next</button></div>
+  </div>
+  <div id="grid"></div>
+</main>
+<dialog id="lb"></dialog>
+
+<script src="config.js"></script>
+<script>
+
+const DEMO={cats:[{id:"c1",name:"Cooking Equipment"},{id:"c2",name:"Refrigeration"},{id:"c3",name:"Food Preparation"}],
+prods:[
+{id:"1",category_id:"c1",name:"4-Burner Gas Range with Oven",model:"KH-GR4",description:"Heavy-duty stainless steel range with cast iron burners and a full-size oven. Built for busy hotel kitchens.",specs:[{l:"Burners",v:"4"},{l:"Power",v:"Gas"},{l:"Size",v:"900 x 800 x 900 mm"}],price:"Price on request",images:[]},
+{id:"2",category_id:"c1",name:"Double Basket Deep Fryer",model:"KH-DF2",description:"Twin 12 L tanks with independent thermostats and a safety cut-off.",specs:[{l:"Capacity",v:"2 x 12 L"},{l:"Power",v:"Electric 6 kW"}],price:"Price on request",images:[]},
+{id:"3",category_id:"c1",name:"Flat Top Griddle",model:"KH-GT6",description:"Polished steel plate with even heat distribution for breakfast and grill service.",specs:[{l:"Plate",v:"600 mm"}],price:"Price on request",images:[]},
+{id:"4",category_id:"c1",name:"Combi Oven 6 Tray",model:"KH-CO6",description:"Steam, convection, and combination modes with a programmable touch panel.",specs:[{l:"Trays",v:"6 x GN 1/1"}],price:"Price on request",images:[]},
+{id:"5",category_id:"c2",name:"Upright Chiller 2 Door",model:"KH-UC2",description:"Stainless steel body with digital control and auto-defrost.",specs:[{l:"Volume",v:"1200 L"},{l:"Temp",v:"0 to 8 C"}],price:"Price on request",images:[]},
+{id:"6",category_id:"c2",name:"Under-counter Freezer",model:"KH-UF1",description:"Compact freezer that fits beneath a standard prep counter.",specs:[{l:"Volume",v:"300 L"}],price:"Price on request",images:[]},
+{id:"7",category_id:"c3",name:"Planetary Mixer 20 L",model:"KH-PM20",description:"Three speeds with a stainless bowl, hook, whisk, and beater.",specs:[{l:"Bowl",v:"20 L"}],price:"Price on request",images:[]},
+{id:"8",category_id:"c3",name:"Meat Slicer 300 mm",model:"KH-MS30",description:"Belt-driven slicer with an adjustable thickness gauge and blade guard.",specs:[{l:"Blade",v:"300 mm"}],price:"Price on request",images:[]}
+]};
+
+const $=s=>document.querySelector(s),L=$("#L"),R=$("#R");
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const reduce=matchMedia("(prefers-reduced-motion:reduce)").matches;
+let DATA={cats:[],prods:[]},pages=[],cats=[],s=0,desk=innerWidth>=900,busy=false,list=[],listMode=false;
+
+async function api(t,q){
+  const r=await fetch(`${CFG.SUPABASE_URL}/rest/v1/${t}?${q}`,{headers:{apikey:CFG.SUPABASE_KEY,Authorization:"Bearer "+CFG.SUPABASE_KEY}});
+  if(!r.ok)throw new Error(r.status);return r.json();
+}
+async function load(){
+  if(!CFG.SUPABASE_URL){DATA=DEMO;return}
+  try{DATA={cats:await api("categories","select=*&order=sort,name"),prods:await api("products","select=*&order=sort,name")}}
+  catch(e){L.innerHTML="";R.innerHTML='<div class="msg">The catalogue could not be loaded. Please try again shortly.</div>';throw e}
+}
+const catOf=p=>DATA.cats.some(c=>c.id===p.category_id)?p.category_id:"_";
+const wa=p=>`https://wa.me/${CFG.WHATSAPP}?text=${encodeURIComponent("Hi, I'd like to enquire about: "+p.name+(p.model?" ("+p.model+")":""))}`;
+const mail=p=>`mailto:${CFG.EMAIL}?subject=${encodeURIComponent("Enquiry: "+p.name)}&body=${encodeURIComponent("Hi, please send details and a quote for: "+p.name+(p.model?" ("+p.model+")":""))}`;
+
+function build(q=""){
+  q=q.trim().toLowerCase();
+  list=DATA.prods.filter(p=>!q||[p.name,p.model,p.description].join(" ").toLowerCase().includes(q));
+  cats=DATA.cats.slice();
+  if(list.some(p=>catOf(p)==="_"))cats.push({id:"_",name:"More equipment"});
+  pages=[{k:"cover"},{k:"toc"}];
+  cats.forEach(c=>{const it=list.filter(p=>catOf(p)===c.id);if(!it.length)return;
+    pages.push({k:"cat",c,n:it.length,names:it.slice(0,8).map(p=>p.name)});
+    for(let i=0;i<it.length;i+=CFG.PER_PAGE)pages.push({k:"prods",it:it.slice(i,i+CFG.PER_PAGE)})});
+  pages.push({k:"back"});
+  $("#catsel").innerHTML='<option value="">Jump to category</option>'+pages.map((p,i)=>p.k==="cat"?`<option value="${i}">${esc(p.c.name)}</option>`:"").join("");
+}
+const card=p=>`<article class="card"><div class="ph" data-open="${esc(p.id)}" tabindex="0" role="button" aria-label="View ${esc(p.name)}">${p.images&&p.images[0]?`<img loading="lazy" src="${esc(p.images[0])}" alt="${esc(p.name)}">`:"No photo yet"}</div>
+<div class="info">${p.model?`<span class="plate">${esc(p.model)}</span>`:""}<h3>${esc(p.name)}</h3><p>${esc(p.description)}</p>${(p.specs||[]).length?`<ul class="sp">${p.specs.slice(0,3).map(x=>`<li>${esc(x.l)}: ${esc(x.v)}</li>`).join("")}</ul>`:""}
+<div class="row"><b>${esc(p.price||"Price on request")}</b><a class="btn" href="${wa(p)}" target="_blank" rel="noopener">Enquire</a><a class="btn alt" href="${mail(p)}">Email</a></div></div></article>`;
+
+function pg(i){
+  const p=pages[i];if(!p)return"";let h="";
+  if(p.k==="cover")h=`<h1>${esc(CFG.COMPANY)}</h1><p>${esc(CFG.TAGLINE)}</p><div class="yr">Commercial kitchen equipment catalogue, ${new Date().getFullYear()}</div>`;
+  else if(p.k==="toc")h=`<h2 class="t">Contents</h2><nav class="toc">${pages.map((x,j)=>x.k==="cat"?`<a data-go="${j}" tabindex="0"><span>${esc(x.c.name)}</span><span>${j+1}</span></a>`:"").join("")||'<div class="msg">No products match your search.</div>'}</nav>`;
+  else if(p.k==="cat")h=`<h2>${esc(p.c.name)}</h2><p>${p.n} product${p.n>1?"s":""}</p><ul>${p.names.map(n=>`<li>${esc(n)}</li>`).join("")}</ul>`;
+  else if(p.k==="prods")h=`<div class="grid2">${p.it.map(card).join("")}</div>`;
+  else h=`<h2 class="t">Talk to us</h2><p>Tell us what you are building and we will help you choose the right equipment, plan the layout, and arrange delivery.</p><p><a class="btn" href="https://wa.me/${CFG.WHATSAPP}" target="_blank" rel="noopener">WhatsApp us</a> <a class="btn alt" href="mailto:${CFG.EMAIL}">${esc(CFG.EMAIL)}</a></p>`;
+  return `<section class="pg ${p.k}">${h}<span class="pn">${i+1}</span></section>`;
+}
+const nS=()=>desk?1+Math.ceil((pages.length-1)/2):pages.length;
+const spreadOf=i=>desk?(i===0?0:Math.ceil(i/2)):i;
+const pagesOf=n=>desk?(n===0?[null,0]:[2*n-1,2*n<pages.length?2*n:null]):[null,n];
+function show(){
+  const [a,b]=pagesOf(s);
+  L.innerHTML=a==null?"":pg(a);R.innerHTML=b==null?"":pg(b);L.scrollTop=R.scrollTop=0;
+  const v=[a,b].filter(x=>x!=null).map(x=>x+1);
+  $("#pos").textContent=`Page ${v.join("–")} of ${pages.length}`;
+  $("#prev").disabled=s===0;$("#next").disabled=s>=nS()-1;
+}
+function go(n){
+  n=Math.max(0,Math.min(nS()-1,n));if(n===s||busy)return;
+  if(reduce){s=n;show();return}
+  if(!desk){busy=true;R.classList.add("fadeout");
+    setTimeout(()=>{R.classList.remove("fadeout");s=n;show();R.classList.add("fadein");setTimeout(()=>{R.classList.remove("fadein");busy=false},260)},200);return}
+  const d=n>s?1:-1,o=pagesOf(s),w=pagesOf(n),bk=document.querySelector(".book"),t=document.createElement("div");
+  const front=d>0?o[1]:o[0],back=d>0?w[0]:w[1];
+  t.className="turn "+(d>0?"fw":"bw");
+  t.innerHTML=`<div class="f">${front==null?"":pg(front)}</div><div class="b">${back==null?"":pg(back)}</div>`;
+  if(d>0)R.innerHTML=w[1]==null?"":pg(w[1]);else L.innerHTML=w[0]==null?"":pg(w[0]);
+  busy=true;bk.appendChild(t);void t.offsetWidth;
+  let done=false;const end=()=>{if(done)return;done=true;t.remove();s=n;show();busy=false};
+  t.addEventListener("transitionend",end,{once:true});setTimeout(end,1100);
+  t.style.transform=`rotateY(${d>0?-180:180}deg)`;
+}
+function renderList(){
+  $("#grid").innerHTML=cats.map(c=>{const it=list.filter(p=>catOf(p)===c.id);return it.length?`<h2>${esc(c.name)}</h2><div class="gg">${it.map(card).join("")}</div>`:""}).join("")||'<div class="msg">No products match your search.</div>';
+}
+function open(id){
+  const p=DATA.prods.find(x=>x.id===id);if(!p)return;
+  const im=p.images||[];
+  $("#lb").innerHTML=`<div class="lb"><button class="btn alt x" id="cl">Close</button>
+  <div class="main">${im[0]?`<img id="big" src="${esc(im[0])}" alt="${esc(p.name)}">`:"No photo yet"}</div>
+  ${im.length>1?`<div class="thumbs">${im.map((u,i)=>`<img src="${esc(u)}" class="${i?"":"on"}" alt="Photo ${i+1}">`).join("")}</div>`:""}
+  ${p.model?`<span class="plate">${esc(p.model)}</span>`:""}<h2>${esc(p.name)}</h2><p>${esc(p.description)}</p>
+  <dl>${(p.specs||[]).map(x=>`<dt>${esc(x.l)}</dt><dd>${esc(x.v)}</dd>`).join("")}</dl>
+  <div class="row"><b>${esc(p.price||"Price on request")}</b><a class="btn" href="${wa(p)}" target="_blank" rel="noopener">Enquire on WhatsApp</a><a class="btn alt" href="${mail(p)}">Email</a></div></div>`;
+  $("#lb").showModal();
+}
+document.addEventListener("click",e=>{
+  const o=e.target.closest("[data-open]");if(o)return open(o.dataset.open);
+  const g=e.target.closest("[data-go]");if(g)return go(spreadOf(+g.dataset.go));
+  if(e.target.id==="cl")$("#lb").close();
+  if(e.target.matches(".thumbs img")){$("#big").src=e.target.src;document.querySelectorAll(".thumbs img").forEach(i=>i.classList.toggle("on",i===e.target))}
+});
+document.addEventListener("keydown",e=>{
+  if((e.key==="Enter"||e.key===" ")&&e.target.matches("[data-open],[data-go]")){e.preventDefault();e.target.click();return}
+  if(e.target.matches("input,select")||$("#lb").open)return;
+  if(e.key==="ArrowRight")go(s+1);if(e.key==="ArrowLeft")go(s-1)});
+$("#next").onclick=()=>go(s+1);$("#prev").onclick=()=>go(s-1);
+$("#catsel").onchange=e=>{if(e.target.value!==""){if(listMode)$("#mode").click();go(spreadOf(+e.target.value))}};
+let tx=0;$("#bookwrap").addEventListener("touchstart",e=>tx=e.touches[0].clientX,{passive:true});
+$("#bookwrap").addEventListener("touchend",e=>{const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>60)go(s+(dx<0?1:-1))});
+let t;$("#q").oninput=e=>{clearTimeout(t);t=setTimeout(()=>{build(e.target.value);s=0;show();renderList()},200)};
+$("#mode").onclick=()=>{listMode=!listMode;$("#bookwrap").style.display=listMode?"none":"";$("#grid").style.display=listMode?"block":"none";$("#mode").textContent=listMode?"Flipbook view":"List view"};
+addEventListener("resize",()=>{const d=innerWidth>=900;if(d!==desk){const cur=pagesOf(s).find(x=>x!=null)??0;desk=d;s=spreadOf(cur);show()}});
+
+(async()=>{
+  document.title=`${CFG.COMPANY} | Commercial Kitchen Equipment Catalogue`;$("#brand").textContent=CFG.COMPANY;
+  await load();build();show();renderList();
+})();
+</script>
+</body>
+</html>
