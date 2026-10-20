@@ -114,6 +114,7 @@ th:first-child,td:first-child{width:34px}th:first-child input,td:first-child inp
       <table id="bt" hidden><thead><tr><th>File</th><th>Matched product</th><th>Status</th></tr></thead><tbody id="brows"></tbody></table>
       <label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="brep" style="width:auto"> Replace existing photos instead of adding to them</label>
       <p><button id="bgo" hidden>Upload photos</button></p><p id="bprog" class="muted"></p>
+      <h3>Speed up existing photos</h3><p class="muted">New uploads get small thumbnails automatically. Run this once to create them for photos you uploaded earlier.</p><p><button class="alt" id="mkth">Create thumbnails</button> <span id="thp" class="muted"></span></p>
     </section>
     <section id="ts" hidden>
       <h2>Site settings</h2><p class="muted">Save to update the customer catalogue. Customers see changes after a page refresh.</p>
@@ -242,14 +243,23 @@ $("#ff").onchange=async e=>{
   for(const f of [...e.target.files]){
     if(imgs.length>=4){say("Maximum 4 photos per product",true);break}
     try{
-      const path=crypto.randomUUID()+".jpg",blob=await shrink(f);
-      const {error}=await sb.storage.from(BUCKET).upload(path,blob,{contentType:"image/jpeg",cacheControl:"31536000"});
-      if(error)throw error;imgs.push(sb.storage.from(BUCKET).getPublicUrl(path).data.publicUrl);drawImgs();
+      imgs.push(await upImg(f));drawImgs();
     }catch(x){fail(x)}
   }
   e.target.value="";
 };
-const rmFiles=urls=>{const p=urls.map(u=>u.split("/"+BUCKET+"/")[1]).filter(Boolean);return p.length?sb.storage.from(BUCKET).remove(p):null};
+const rmFiles=urls=>{const p=urls.map(u=>u.split("/"+BUCKET+"/")[1]).filter(Boolean),p2=p.concat(p.filter(x=>!x.startsWith("brand/")).map(x=>"t/"+x));return p.length?sb.storage.from(BUCKET).remove(p2):null};
+async function upImg(f){
+  const name=crypto.randomUUID()+".jpg",o={contentType:"image/jpeg",cacheControl:"31536000"};
+  let r=await sb.storage.from(BUCKET).upload(name,await shrink(f),o);if(r.error)throw r.error;
+  r=await sb.storage.from(BUCKET).upload("t/"+name,await shrinkTo(f,480,"image/jpeg",.78),o);if(r.error)throw r.error;
+  return sb.storage.from(BUCKET).getPublicUrl(name).data.publicUrl;
+}
+$("#mkth").onclick=async()=>{
+  const us=[...new Set(prods.flatMap(p=>p.images||[]))].filter(u=>u.includes("/"+BUCKET+"/")&&!u.includes("/brand/"));let n=0,bad=0;$("#mkth").disabled=true;
+  for(const u of us){try{const t=await shrinkTo(await (await fetch(u)).blob(),480,"image/jpeg",.78),{error}=await sb.storage.from(BUCKET).upload("t/"+u.split("/"+BUCKET+"/")[1],t,{contentType:"image/jpeg",cacheControl:"31536000",upsert:true});if(error)throw error}catch(x){bad++}$("#thp").textContent=`${++n} of ${us.length}`}
+  $("#mkth").disabled=false;$("#thp").textContent=`Done. ${bad?bad+" failed.":"All thumbnails created."}`;say("Thumbnails finished",!!bad);
+};
 const parseSpecs=t=>t.split(/\n|\|/).map(x=>x.trim()).filter(Boolean).map(x=>{const m=x.match(/^(.+?)\s*(?::|：|=|\t|\s[-–—]\s)\s*(.+)$/);return m?{l:m[1].trim(),v:m[2].trim()}:{l:"",v:x}});
 $("#form").onsubmit=async e=>{
   e.preventDefault();$("#save").disabled=true;
@@ -355,8 +365,7 @@ $("#bgo").onclick=async()=>{
     try{
       for(const x of list.slice(0,room)){
         $("#bprog").textContent=`Uploading ${++done} of ${total}...`;
-        const path=crypto.randomUUID()+".jpg",{error}=await sb.storage.from(BUCKET).upload(path,await shrink(x.f),{contentType:"image/jpeg",cacheControl:"31536000"});
-        if(error)throw error;urls.push(sb.storage.from(BUCKET).getPublicUrl(path).data.publicUrl);
+        urls.push(await upImg(x.f));
       }
       if(!urls.length)continue;
       const {error}=await sb.from("products").update({images:rep?urls:[...old,...urls]}).eq("id",id);if(error)throw error;

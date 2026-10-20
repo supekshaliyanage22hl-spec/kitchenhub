@@ -290,6 +290,39 @@ dialog::backdrop{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .turn.bw .f::after,.turn.bw .b::after{background:linear-gradient(to left,rgba(0,0,0,.38),rgba(0,0,0,.08) 42%,transparent 72%)}
 @keyframes sh{0%,100%{opacity:.5}50%{opacity:1}}
 @media (max-width:899px){.leaf::after,.book::before{display:none}#L,#R{box-shadow:0 10px 30px rgba(0,0,0,.45)}}
+
+/* ===== v8: hero, reveals, fly-to-list, skeleton, suggestions ===== */
+#hero{max-width:1240px;margin:0 auto;padding:46px 16px 30px;color:#fff}
+#hero h1{font-size:clamp(38px,6vw,72px);font-weight:700;max-width:20ch;text-shadow:0 2px 24px rgba(0,0,0,.6);animation:hin .7s both}
+#hero p{max-width:46ch;margin:16px 0 22px;color:#CBD1D6;font-size:17px;animation:hin .7s .12s both}
+#hero .hb{display:flex;gap:10px;flex-wrap:wrap;animation:hin .7s .22s both}
+#hero .btn{padding:11px 20px;font-size:15px}
+@keyframes hin{from{opacity:0;translate:0 14px}}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px;margin-top:34px}
+.tile{display:flex;flex-direction:column;padding:0;text-align:left;font:inherit;color:#fff;cursor:pointer;border-radius:8px;overflow:hidden;background:rgba(18,18,20,.72);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.12);border-top:3px solid var(--flame)}
+.tile:hover{transform:translateY(-4px);box-shadow:0 16px 34px rgba(0,0,0,.5),0 0 26px var(--glow)}
+.tile .ti{position:relative;aspect-ratio:4/3;background:radial-gradient(120% 90% at 50% 35%,#fff 0,#fff 38%,#E9ECED 100%)}
+.tile .ti img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:8%;mix-blend-mode:multiply;transition:transform .4s}
+.tile:hover .ti img{transform:scale(1.06)}
+.tile .tl{position:absolute;inset:0;display:grid;place-items:center;font:700 90px "Barlow Condensed",sans-serif;color:rgba(253,181,21,.3)}
+.tile .tn{padding:10px 12px 12px}.tile b{display:block;font:600 22px "Barlow Condensed",sans-serif}.tile small{color:#B4BBC1}
+.rv{opacity:0;translate:0 18px;transition:opacity .5s,translate .5s,transform .25s,box-shadow .25s;transition-delay:var(--d,0s),var(--d,0s),0s,0s}
+.rv.in{opacity:1;translate:0 0}
+@media (prefers-reduced-motion:reduce){.rv{opacity:1;translate:none}}
+.fly{position:fixed;z-index:60;width:28px;height:28px;border-radius:50%;background:var(--flame);box-shadow:0 0 18px var(--glow);pointer-events:none}
+.bump{animation:bump .4s}@keyframes bump{40%{transform:scale(1.18)}}
+.sk{gap:14px;justify-content:flex-end;background:#101012}
+.sk i{display:block;height:18px;border-radius:4px;background:linear-gradient(90deg,#1c1c20 25%,#2e2e35 50%,#1c1c20 75%) 0 0/200% 100%;animation:shm 1.4s linear infinite}
+.sk i:nth-child(1){height:64px;width:70%}.sk i:nth-child(2){width:45%}.sk i:nth-child(3){width:60%}
+@keyframes shm{to{background-position:-200% 0}}
+#sug{position:fixed;z-index:40;background:rgba(16,16,18,.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.14);border-top:2px solid var(--flame);border-radius:8px;box-shadow:0 18px 40px rgba(0,0,0,.55),0 0 24px var(--glow);overflow:hidden}
+.si{display:flex;gap:10px;align-items:center;padding:8px 10px;cursor:pointer;color:#fff}
+.si.on,.si:hover{background:rgba(255,255,255,.1)}
+.si .st{width:46px;height:36px;flex:none;background:#fff;border-radius:3px;overflow:hidden}
+.si .st img{width:100%;height:100%;object-fit:contain;mix-blend-mode:multiply}
+.si b{display:block;font-weight:600}.si .sm{display:flex;gap:10px;font-size:12px;color:#B4BBC1}
+#sug mark{background:var(--flame);color:var(--on);border-radius:2px;padding:0 1px}
+.sn{padding:12px;color:#B4BBC1}
 </style>
 </head>
 <body>
@@ -303,10 +336,11 @@ dialog::backdrop{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 <section id="flt" aria-label="Filters"><select id="fp" aria-label="Power type" hidden></select><select id="fs" aria-label="Sort"><option value="">Sort: Default</option><option value="az">Name A to Z</option><option value="za">Name Z to A</option></select><label class="chk"><input type="checkbox" id="fph"> With photos</label><button type="button" id="fclr" class="ghost" hidden>Clear filters</button><span id="fcnt" aria-live="polite"></span></section></div>
 <div id="hot"></div>
 <main class="stage">
+  <section id="hero"><h1>Commercial kitchen equipment for hotels, restaurants and cafés</h1><p>Flip through the catalogue like a brochure, or search for exactly what you need.</p><div class="hb"><button type="button" class="btn" id="hb1">Browse the catalogue</button><a class="btn alt" id="hwa" target="_blank" rel="noopener">Ask on WhatsApp</a></div><div class="tiles" id="tiles"></div></section>
   <div id="bookwrap">
     <div class="shelf">
       <button class="arrow" id="aL" aria-label="Previous page">&#8249;</button>
-      <div class="book"><div class="leaf" id="L"></div><div class="leaf" id="R"></div></div>
+      <div class="book closed"><div class="leaf" id="L"></div><div class="leaf" id="R"><section class="pg sk" aria-label="Loading catalogue"><i></i><i></i><i></i></section></div></div>
       <button class="arrow" id="aR" aria-label="Next page">&#8250;</button>
     </div>
     <div class="dock"><button id="prev">Previous</button><button id="first" type="button">Cover</button><input type="range" id="sl" min="1" max="1" value="1" aria-label="Go to page"><span id="pos"></span><button id="next">Next</button></div>
@@ -343,10 +377,10 @@ async function api(t,q){
   const r=await fetch(`${CFG.SUPABASE_URL}/rest/v1/${t}?${q}`,{headers:{apikey:CFG.SUPABASE_KEY,Authorization:"Bearer "+CFG.SUPABASE_KEY}});
   if(!r.ok)throw new Error(r.status);return r.json();
 }
-async function load(){
+async function load(bg){
   if(!CFG.SUPABASE_URL){DATA=DEMO;return}
-  try{DATA={cats:await api("categories","select=*&order=sort,name"),prods:await api("products","select=*&order=sort,name")}}
-  catch(e){L.innerHTML="";R.innerHTML='<div class="msg">The catalogue could not be loaded. Please try again shortly.</div>';throw e}
+  try{DATA={cats:await api("categories","select=*&order=sort,name"),prods:await api("products","select=*&order=sort,name")};try{localStorage.setItem("khc1",JSON.stringify(DATA))}catch(e){}}
+  catch(e){if(bg)throw e;L.innerHTML="";R.innerHTML='<div class="msg">The catalogue could not be loaded. Please try again shortly.</div>';throw e}
 }
 const catOf=p=>DATA.cats.some(c=>c.id===p.category_id)?p.category_id:"_";
 const wa=p=>`https://wa.me/${CFG.WHATSAPP}?text=${encodeURIComponent("Hi, I'd like to enquire about: "+p.name+(p.model?" ("+p.model+")":""))}`;
@@ -369,7 +403,7 @@ function build(q=""){
   pages.push({k:"back"});
   $("#tabs").innerHTML=pages.map(p=>p.k==="cat"?`<button type="button" data-go="${pages.indexOf(p)}" data-ci="${p.ci}" style="--acc:${ACC[p.ci%ACC.length]}">${esc(p.c.name)}<small>${p.n}</small></button>`:"").join("");
 }
-const card=p=>`<article class="card"><div class="ph" data-open="${esc(p.id)}" tabindex="0" role="button" aria-label="View ${esc(p.name)}">${p.images&&p.images[0]?`<img loading="lazy" src="${esc(p.images[0])}" alt="${esc(p.name)}">${p.images[1]?`<img class="alt2" loading="lazy" src="${esc(p.images[1])}" alt="">`:""}`:"No photo yet"}</div>
+const card=p=>`<article class="card"><div class="ph" data-open="${esc(p.id)}" tabindex="0" role="button" aria-label="View ${esc(p.name)}">${p.images&&p.images[0]?`${timg(p.images[0],p.name)}${p.images[1]?`${timg(p.images[1],"","class=\"alt2\"")}`:""}`:"No photo yet"}</div>
 <div class="info">${p.model?`<span class="plate">${esc(p.model)}</span>`:""}<h3>${esc(p.name)}</h3><p>${esc(p.description)}</p>${(p.specs||[]).length?`<ul class="sp">${p.specs.slice(0,3).map(x=>`<li>${x.l?esc(x.l)+": ":""}${esc(x.v)}</li>`).join("")}</ul>`:""}
 <div class="row">${price(p)}<a class="btn" href="${wa(p)}" target="_blank" rel="noopener">Enquire</a>${qbtn(p.id)}</div></div></article>`;
 
@@ -391,7 +425,7 @@ function show(){
   L.innerHTML=a==null?"":pg(a);R.innerHTML=b==null?"":pg(b);L.scrollTop=R.scrollTop=0;document.querySelector(".book").classList.toggle("closed",desk&&s===0);
   const v=[a,b].filter(x=>x!=null).map(x=>x+1);
   $("#pos").textContent=`Page ${v.join("–")} of ${pages.length}`;
-  $("#prev").disabled=$("#aL").disabled=s===0;$("#next").disabled=$("#aR").disabled=s>=nS()-1;sync(v);
+  $("#prev").disabled=$("#aL").disabled=s===0;$("#next").disabled=$("#aR").disabled=s>=nS()-1;sync(v);pre();
 }
 function go(n){
   n=Math.max(0,Math.min(nS()-1,n));if(n===s||busy)return;
@@ -411,7 +445,7 @@ function go(n){
 }
 function renderList(){
   $("#grid").innerHTML=cats.map((c,i)=>{const it=list.filter(p=>catOf(p)===c.id);return it.length?`<h2 id="cs${i}">${esc(c.name)}</h2><div class="gg">${it.map(card).join("")}</div>`:""}).join("")||'<div class="msg">No products match your search or filters.</div>';
-  $("#fcnt").textContent=`${list.length} of ${DATA.prods.length} products`;
+  $("#fcnt").textContent=`${list.length} of ${DATA.prods.length} products`;$("#grid").querySelectorAll(".card").forEach(c=>c.classList.add("rv"));reveal($("#grid"));
   $("#fclr").hidden=!(F.pw||F.sort||F.ph||$("#q").value.trim());
 }
 function open(id){
@@ -426,7 +460,7 @@ function open(id){
   $("#lb").showModal();
 }
 document.addEventListener("click",e=>{
-  const t=e.target,qb=t.closest("[data-q]");if(qb)return qtoggle(qb.dataset.q);
+  const t=e.target,qb=t.closest("[data-q]");if(qb){const had=inQ(qb.dataset.q);qtoggle(qb.dataset.q);if(!had&&!reduce)fly(qb);return}
   if(t.closest("#qfab"))return qopen();
   if(t.dataset.qp!=null){const x=Q[+t.dataset.qp];x.n=Math.min(999,x.n+1);qsave();return qlist()}
   if(t.dataset.qm!=null){const x=Q[+t.dataset.qm];x.n=Math.max(1,x.n-1);qsave();return qlist()}
@@ -559,7 +593,9 @@ $("#mode").addEventListener("click",syncFocus);fmq.addEventListener("change",syn
 const lum=h=>{const n=parseInt(h.slice(1),16);return((n>>16)*299+(n>>8&255)*587+(n&255)*114)/1000};
 async function brand(){
   const S={};
-  if(CFG.SUPABASE_URL){try{(await api("settings","select=*")).forEach(r=>S[r.key]=r.value)}catch(e){}}
+  if(CFG.SUPABASE_URL){let c=null;try{c=JSON.parse(localStorage.getItem("khs1"))}catch(e){}
+    const f=api("settings","select=*").then(r=>{const o={};r.forEach(x=>o[x.key]=x.value);try{localStorage.setItem("khs1",JSON.stringify(o))}catch(e){}return o});f.catch(()=>{});
+    try{Object.assign(S,c||await f)}catch(e){}}
   const v=(k,d)=>(S[k]||"").trim()||d;
   CFG.COMPANY=v("company",CFG.COMPANY);CFG.TAGLINE=v("tagline",CFG.TAGLINE);CFG.EMAIL=v("email",CFG.EMAIL);
   CFG.WHATSAPP=v("whatsapp",CFG.WHATSAPP).replace(/\D/g,"");
@@ -579,13 +615,56 @@ function fillContact(){
   $("#cd").innerHTML=`<div class="lb"><div class="qh"><h2>Contact us</h2><button class="btn alt" id="cc" type="button">Close</button></div><p>${esc(CFG.ABOUT||"Tell us what you are building and we will help you choose the right equipment, plan the layout, and arrange delivery.")}</p><dl class="co">${rows.map(x=>`<dt>${x[0]}</dt><dd>${x[1]}</dd>`).join("")}</dl><div class="row"><a class="btn" href="https://wa.me/${CFG.WHATSAPP}" target="_blank" rel="noopener">WhatsApp us</a><a class="btn alt" href="mailto:${esc(CFG.EMAIL)}">Email us</a></div><p class="sp2">${esc(CFG.COMPANY)}${CFG.TAGLINE?" | "+esc(CFG.TAGLINE):""}</p></div>`;
 }
 
+const th=u=>/\/product-images\//.test(u)&&!/\/brand\//.test(u)?u.replace(/\/([^\/]+)$/,"/t/$1"):u;
+const timg=(u,a,c)=>`<img ${c||""} loading="lazy" src="${esc(th(u))}" data-f="${esc(u)}" onerror="this.onerror=null;this.src=this.dataset.f" alt="${esc(a||"")}">`;
+const cget=()=>{try{const c=JSON.parse(localStorage.getItem("khc1"));return c&&c.cats&&c.prods?c:null}catch(e){return null}};
+function pre(){[s+1,s+2].forEach(n=>{if(n>=nS())return;pagesOf(n).forEach(i=>{const p=i!=null&&pages[i];if(p&&p.k==="prods")p.it.forEach(x=>{if(x.images&&x.images[0])new Image().src=th(x.images[0])})})})}
+const io="IntersectionObserver"in window&&!reduce?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{rootMargin:"0px 0px -6% 0px"}):null;
+function reveal(r){r.querySelectorAll(".rv:not(.in)").forEach((el,i)=>{if(!io)return el.classList.add("in");el.style.setProperty("--d",Math.min(i%6,5)*.06+"s");io.observe(el)})}
+function renderHero(){
+  $("#tiles").innerHTML=cats.map((c,i)=>{const it=DATA.prods.filter(p=>catOf(p)===c.id);if(!it.length)return"";const ph=it.find(p=>p.images&&p.images[0]);
+    return `<button type="button" class="tile rv" data-ci="${i}"><div class="ti">${ph?timg(ph.images[0],c.name):`<span class="tl">${esc(c.name.charAt(0))}</span>`}</div><div class="tn"><b>${esc(c.name)}</b><small>${it.length} product${it.length>1?"s":""}</small></div></button>`}).join("");
+  reveal($("#tiles"));
+}
+$("#hero").addEventListener("click",e=>{const b=e.target.closest("#hb1,.tile");if(!b)return;const ci=b.dataset.ci,sm={behavior:reduce?"auto":"smooth"};
+  if(listMode){const h=ci!=null&&$("#cs"+ci);(h||$("#grid")).scrollIntoView(sm);return}
+  const j=ci!=null?pages.findIndex(p=>p.k==="cat"&&p.ci===+ci):-1;go(spreadOf(j>=0?j:1));$("#bookwrap").scrollIntoView(sm)});
+function fly(el){const f=$("#qfab");if(!f||f.hidden)return;const a=el.getBoundingClientRect(),b=f.getBoundingClientRect(),d=document.createElement("div");
+  d.className="fly";d.style.left=a.left+a.width/2-14+"px";d.style.top=a.top+a.height/2-14+"px";document.body.appendChild(d);
+  d.animate([{transform:"translate(0,0) scale(1)",opacity:1},{transform:`translate(${b.left+b.width/2-a.left-a.width/2}px,${b.top+b.height/2-a.top-a.height/2}px) scale(.3)`,opacity:.4}],{duration:650,easing:"cubic-bezier(.5,-.2,.7,1)"}).onfinish=()=>{d.remove();f.classList.remove("bump");void f.offsetWidth;f.classList.add("bump")}}
+/* search suggestions */
+const sug=document.createElement("div");sug.id="sug";sug.setAttribute("role","listbox");sug.hidden=true;document.body.appendChild(sug);let sa=-1,sl=[];
+const hl=(t,w)=>{t=String(t||"");if(!w.length)return esc(t);const re=new RegExp("("+w.map(x=>x.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")).join("|")+")","ig");return t.split(re).map((x,i)=>i%2?`<mark>${esc(x)}</mark>`:esc(x)).join("")};
+function suggest(){
+  const w=$("#q").value.trim().toLowerCase().split(/\s+/).filter(Boolean);if(!w.length){sug.hidden=true;return}
+  const sc=p=>{const n=(p.name||"").toLowerCase(),m=(p.model||"").toLowerCase();return w.reduce((a,x)=>a+(n.startsWith(x)?3:n.includes(x)||m.includes(x)?2:0),0)};
+  sl=DATA.prods.filter(p=>{const t=txt(p);return w.every(x=>t.includes(x))}).sort((a,b)=>sc(b)-sc(a)).slice(0,6);sa=-1;
+  sug.innerHTML=sl.length?sl.map((p,i)=>`<div class="si" role="option" data-sg="${i}"><div class="st">${p.images&&p.images[0]?timg(p.images[0]):""}</div><div><b>${hl(p.name,w)}</b><div class="sm"><span>${hl(p.model||"",w)}</span><span>${esc(catNm(p))}</span></div></div></div>`).join(""):'<div class="sn">No products match. Try fewer words.</div>';
+  const r=$("#q").getBoundingClientRect(),W=Math.min(Math.max(r.width,320),innerWidth-16);
+  sug.style.left=Math.max(8,Math.min(r.left,innerWidth-W-8))+"px";sug.style.top=r.bottom+6+"px";sug.style.width=W+"px";sug.hidden=false;
+}
+const sMark=()=>sug.querySelectorAll(".si").forEach((e,i)=>{e.classList.toggle("on",i===sa);e.setAttribute("aria-selected",i===sa)});
+const sPick=id=>{sug.hidden=true;open(id)};
+$("#q").addEventListener("input",suggest);
+$("#q").addEventListener("keydown",e=>{if(sug.hidden||!sl.length)return;
+  if(e.key==="ArrowDown"||e.key==="ArrowUp"){e.preventDefault();sa=(sa+(e.key==="ArrowDown"?1:-1)+sl.length)%sl.length;sMark()}
+  else if(e.key==="Enter"&&sa>=0){e.preventDefault();sPick(sl[sa].id)}else if(e.key==="Escape")sug.hidden=true});
+$("#q").addEventListener("blur",()=>setTimeout(()=>sug.hidden=true,120));
+sug.addEventListener("mousedown",e=>{e.preventDefault();const i=e.target.closest("[data-sg]");if(i)sPick(sl[+i.dataset.sg].id)});
+addEventListener("scroll",()=>{sug.hidden=true},{passive:true});
+
 (async()=>{
   await brand();document.title=`${CFG.COMPANY} | Commercial Kitchen Equipment Catalogue`;
   $("#brand").innerHTML=CFG.LOGO?`<img src="${esc(CFG.LOGO)}" alt="${esc(CFG.COMPANY)}">`:esc(CFG.COMPANY);addEventListener("load",setBH);fillContact();
   const hadHash=(+(/page=(\d+)/.exec(location.hash)||[])[1]||0)>1;
-  await load();fopts();build();s=hashSpread();show();renderList();qrefresh();setBH();
+  $("#hwa").href=`https://wa.me/${CFG.WHATSAPP}`;
+  const c0=cget(),old=JSON.stringify(c0);let fresh=null;
+  if(c0&&CFG.SUPABASE_URL){DATA=c0;fresh=load(true)}else await load();
+  fopts();build();s=hashSpread();show();renderList();renderHero();qrefresh();setBH();
+  if(fresh)fresh.then(()=>{if(JSON.stringify(DATA)===old)return;const cs=s;fopts();build($("#q").value);s=Math.min(cs,nS()-1);show();renderList();renderHero();qrefresh()}).catch(()=>{});
   if(!desk&&!hadHash)$("#mode").click();
   syncFocus();
+  if(hadHash&&!listMode)$("#bookwrap").scrollIntoView();
 })();
 </script>
 </body>
