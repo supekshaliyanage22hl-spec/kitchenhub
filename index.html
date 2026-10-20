@@ -243,6 +243,53 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;background:linear-grad
 #foot:empty,body.fb #foot{display:none}
 #foot a{color:#fff;text-decoration:none;border-bottom:1px solid var(--flame)}#foot a:hover{color:var(--flame)}
 #cd .qh{display:flex;align-items:center;justify-content:space-between}#cd h2{font-size:30px}#cd .sp2{font-size:12px;color:var(--mut);margin:0}
+
+/* ===== v7: dark premium showroom, studio frames, chips, quick view, realistic flipbook ===== */
+:root{--glow:color-mix(in srgb,var(--flame) 45%,transparent);--tex:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35  0 0 0 0 .3  0 0 0 0 .25  0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url%28%23n%29'/%3E%3C/svg%3E")}
+.bar{background:rgba(12,12,13,.62);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);box-shadow:0 1px 26px color-mix(in srgb,var(--flame) 16%,transparent)}
+body.fb #chrome{background:rgba(14,14,15,.8);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+#tabs button{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.16);backdrop-filter:blur(8px)}
+#tabs button.on{background:var(--flame);box-shadow:0 0 20px var(--glow)}
+.arrow,.dock button,.bar .ghost,#flt select,#flt .ghost{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.18);backdrop-filter:blur(8px)}
+.arrow:hover:not(:disabled){box-shadow:0 0 24px var(--glow)}
+.dock button:hover:not(:disabled),.bar .ghost:hover{box-shadow:0 0 16px var(--glow)}
+.btn{transition:transform .2s,box-shadow .2s}
+.btn:hover{transform:translateY(-1px);box-shadow:0 0 18px var(--glow)}
+dialog{border-radius:10px;border-top:4px solid var(--flame);box-shadow:0 30px 90px rgba(0,0,0,.65),0 0 40px var(--glow)}
+dialog::backdrop{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.ph,.lb .main{background:radial-gradient(120% 90% at 50% 35%,#fff 0,#fff 38%,#E9ECED 100%)}
+.ph::before,.lb .main::before{content:"";position:absolute;left:20%;right:20%;bottom:8%;height:7%;background:radial-gradient(ellipse at center,rgba(0,0,0,.28),transparent 70%);filter:blur(5px);z-index:0}
+.ph img,.lb .main img{z-index:1;padding:7%;mix-blend-mode:multiply}
+.lb .main img{padding:4%}
+.ph::after{content:"Quick view";position:absolute;left:50%;bottom:12px;transform:translate(-50%,8px);z-index:2;background:rgba(14,14,15,.84);backdrop-filter:blur(6px);color:#fff;font:600 12px Barlow,sans-serif;letter-spacing:.04em;padding:6px 14px;border-radius:999px;border:1px solid var(--flame);opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;white-space:nowrap}
+.card:hover .ph::after,.ph:focus-visible::after{opacity:1;transform:translate(-50%,0)}
+@media (hover:none){.ph::after{display:none}}
+.card .sp{display:flex;flex-wrap:wrap;gap:4px;max-height:24px;overflow:hidden}
+.card .sp li{white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis;padding:1px 9px;border:1px solid color-mix(in srgb,var(--acc,var(--flame)) 55%,#C9CED2);border-radius:999px;background:color-mix(in srgb,var(--acc,var(--flame)) 10%,#fff);color:#2C343B;font-size:11.5px;font-weight:500}
+#grid .card .sp{max-height:none}
+#grid .card{background:rgba(18,18,20,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-color:rgba(255,255,255,.1);color:#fff}
+#grid .card h3{color:#fff}#grid .card p{color:#B4BBC1}
+#grid .card .sp li{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.2);color:#E6E9EB}
+#grid .card .plate{background:rgba(255,255,255,.08);color:#fff}
+#grid .card .btn.alt{background:transparent;color:#fff;border-color:rgba(255,255,255,.35)}
+#grid .card .btn.qb.on{background:var(--flame);color:var(--on);border-color:var(--flame)}
+#grid .card:hover{box-shadow:0 16px 36px rgba(0,0,0,.55),0 0 26px var(--glow)}
+.leaf,.turn .f,.turn .b{background-color:var(--paper);background-image:var(--tex)}
+.leaf:empty{background:transparent}
+.leaf{position:relative}
+.leaf::after{content:"";position:absolute;top:0;bottom:0;width:15%;z-index:2;pointer-events:none}
+#L::after{right:0;background:linear-gradient(to left,rgba(0,0,0,.34),rgba(0,0,0,.1) 38%,transparent)}
+#R::after{left:0;background:linear-gradient(to right,rgba(0,0,0,.34),rgba(0,0,0,.1) 38%,transparent)}
+.leaf:empty::after{display:none}
+#L{box-shadow:-1px 0 0 rgba(255,255,255,.7),-3px 1px 0 #E6E6E1,-5px 2px 0 #D6D6CF,-7px 3px 0 #C4C4BD,0 20px 44px rgba(0,0,0,.5)}
+#R{box-shadow:1px 0 0 rgba(255,255,255,.7),3px 1px 0 #E6E6E1,5px 2px 0 #D6D6CF,7px 3px 0 #C4C4BD,0 20px 44px rgba(0,0,0,.5)}
+#L:empty,#R:empty{box-shadow:none}
+.book::before{content:"";position:absolute;left:3%;right:3%;bottom:-20px;height:34px;background:radial-gradient(ellipse at center,rgba(0,0,0,.6),transparent 70%);filter:blur(9px);z-index:-1;pointer-events:none}
+.turn .f,.turn .b{box-shadow:0 0 34px rgba(0,0,0,.35)}
+.turn .f::after,.turn .b::after{background:linear-gradient(to right,rgba(0,0,0,.38),rgba(0,0,0,.08) 42%,transparent 72%);animation:sh .8s ease-in-out}
+.turn.bw .f::after,.turn.bw .b::after{background:linear-gradient(to left,rgba(0,0,0,.38),rgba(0,0,0,.08) 42%,transparent 72%)}
+@keyframes sh{0%,100%{opacity:.5}50%{opacity:1}}
+@media (max-width:899px){.leaf::after,.book::before{display:none}#L,#R{box-shadow:0 10px 30px rgba(0,0,0,.45)}}
 </style>
 </head>
 <body>
