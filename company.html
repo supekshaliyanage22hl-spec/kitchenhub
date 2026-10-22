@@ -69,6 +69,12 @@ footer a{color:#fff}
 .rv.in{opacity:1;translate:0 0}
 @media (max-width:760px){nav a:not(.btn){display:none}.sg{grid-template-columns:1fr 1fr}.sg div:nth-child(3){border-left:0}.sg div:nth-child(n+3){border-top:1px solid rgba(255,255,255,.1)}.g2{grid-template-columns:1fr}section{padding:54px 0}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;translate:none}html{scroll-behavior:auto}}
+
+/* category photo fills the whole card, name overlaid, hover zoom kept */
+.tile .ti{overflow:hidden}
+.tile .ti img.fill{padding:0;object-fit:cover;mix-blend-mode:normal}
+.tile.full .tn{position:absolute;left:0;right:0;bottom:0;padding:48px 14px 14px;background:linear-gradient(to top,rgba(0,0,0,.88),rgba(0,0,0,.5) 55%,transparent);text-shadow:0 1px 8px rgba(0,0,0,.6)}
+.tile.full .tn small{color:#D5DBDF}
 </style>
 </head>
 <body>
@@ -148,10 +154,10 @@ function fl(){
   $("#fe").href=`mailto:${v("email")}?subject=${encodeURIComponent("Enquiry from the website")}&body=${encodeURIComponent(t)}`;
 }
 ["#fn","#fp","#fm"].forEach(s=>$(s).addEventListener("input",fl));
-const tile=(n,s,u)=>`<a class="tile rv" href="index.html"><div class="ti">${u?`<img loading="lazy" src="${esc(th(u))}" onerror="this.onerror=null;this.src=this.dataset.f" data-f="${esc(u)}" alt="">`:`<span class="tl">${esc(n.charAt(0))}</span>`}</div><div class="tn"><b>${esc(n)}</b>${s?`<small>${s}</small>`:""}</div></a>`;
+const tile=(n,s,u,full)=>`<a class="tile rv${full?" full":""}" href="index.html"><div class="ti">${u?`<img ${full?'class="fill" ':""}loading="lazy" src="${esc(th(u))}" onerror="this.onerror=null;this.src=this.dataset.f" data-f="${esc(u)}" alt="">`:`<span class="tl">${esc(n.charAt(0))}</span>`}</div><div class="tn"><b>${esc(n)}</b>${s?`<small>${s}</small>`:""}</div></a>`;
 function tiles(c,p){
   let h="";
-  if(c&&p)c.forEach(k=>{const it=p.filter(x=>x.category_id===k.id);if(!it.length)return;const ph=it.find(x=>x.images&&x.images[0]);h+=tile(k.name,it.length+(it.length>1?" products":" product"),k.image||(ph&&ph.images[0]))});
+  if(c&&p)c.forEach(k=>{const it=p.filter(x=>x.category_id===k.id);if(!it.length)return;const ph=it.find(x=>x.images&&x.images[0]);h+=tile(k.name,it.length+(it.length>1?" products":" product"),k.image||(ph&&ph.images[0]),!!k.image)});
   if(!h)h=["Commercial kitchen equipment","Bakery equipment","Cutlery and tableware","Kitchen interiors"].map(n=>tile(n,"")).join("");
   $("#tiles").innerHTML=h;rv($("#tiles"));
 }
