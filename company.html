@@ -120,20 +120,25 @@ const api=(t,q)=>fetch(`${CFG.SUPABASE_URL}/rest/v1/${t}?${q}`,{headers:{apikey:
 const th=u=>/\/product-images\//.test(u)&&!/\/brand\//.test(u)?u.replace(/\/([^\/]+)$/,"/t/$1"):u;
 const io="IntersectionObserver"in window&&!reduce?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{rootMargin:"0px 0px -6% 0px"}):null;
 const rv=r=>r.querySelectorAll(".rv:not(.in)").forEach((el,i)=>{if(!io)return el.classList.add("in");el.style.setProperty("--d",Math.min(i%6,5)*.07+"s");io.observe(el)});
+const coord=()=>/^-?\d+(\.\d+)?\s*,\s*-?\d+(\.\d+)?$/.test(v("map").trim());
+const dq=()=>coord()?v("map").replace(/\s/g,""):(v("map").trim()&&!/[<>]/.test(v("map"))?v("map").trim():v("address")+", Sri Lanka");
+function mapSrc(){const m=v("map").trim(),f=m.match(/src="([^"]+)"/),e=f?f[1].replace(/&amp;/g,"&"):m;
+  if(/^https:\/\/www\.google\.com\/maps/.test(e)&&/embed/.test(e))return e;
+  return `https://www.google.com/maps?q=${encodeURIComponent(dq())}&z=17&output=embed`}
 function apply(){
   let ac=v("accent");if(!/^#[0-9a-f]{6}$/i.test(ac))ac=D.accent;const r=document.documentElement.style;
   r.setProperty("--flame",ac);r.setProperty("--on",lum(ac)>150?"#111":"#fff");
   r.setProperty("--wall",`url("${v("wallpaper").replace(/"/g,"%22")}")`);r.setProperty("--dimA",Math.min(90,Math.max(0,+v("dim")))/100);
   document.querySelectorAll("[data-logo]").forEach(i=>{if(i.getAttribute("src")!==v("logo"))i.src=v("logo")});
   const co=v("company")||CFG.COMPANY,tels=v("phone").split(/[|,\/]/).map(x=>x.trim()).filter(Boolean),w=wa(),rows=[
-    ["Address",`${esc(v("address"))} <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(v("address")+", Sri Lanka")}" target="_blank" rel="noopener">Directions</a>`],
+    ["Address",`${esc(v("address"))} <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(dq())}" target="_blank" rel="noopener">Directions</a>`],
     ["Phone",tels.map(t=>`<a href="tel:${esc(t.replace(/[^\d+]/g,""))}">${esc(t)}</a>`).join("<br>")],
     ["WhatsApp",w&&`<a href="https://wa.me/${w}" target="_blank" rel="noopener">+${esc(w)}</a>`],
     ["Email",`<a href="mailto:${esc(v("email"))}">${esc(v("email"))}</a>`],
     ["Hours",v("hours")&&esc(v("hours"))],
     ["Facebook",'<a href="https://www.facebook.com/kitchenhubbranch" target="_blank" rel="noopener">facebook.com/kitchenhubbranch</a>']].filter(x=>x[1]);
   $("#cl").innerHTML=rows.map(x=>`<dt>${x[0]}</dt><dd>${x[1]}</dd>`).join("");
-  const u=`https://www.google.com/maps?q=${encodeURIComponent(v("address")+", Sri Lanka")}&output=embed`;if($("#map").getAttribute("src")!==u)$("#map").src=u;
+  const u=mapSrc();if($("#map").getAttribute("src")!==u)$("#map").src=u;
   $("#ft").textContent=`© ${new Date().getFullYear()} ${co}${v("tagline")?" | "+v("tagline"):CFG.TAGLINE?" | "+CFG.TAGLINE:""}`;
   document.title=`${co} | Kitchen equipment, bakery tools and interiors in Unawatuna`;fl();
 }
@@ -146,7 +151,7 @@ function fl(){
 const tile=(n,s,u)=>`<a class="tile rv" href="index.html"><div class="ti">${u?`<img loading="lazy" src="${esc(th(u))}" onerror="this.onerror=null;this.src=this.dataset.f" data-f="${esc(u)}" alt="">`:`<span class="tl">${esc(n.charAt(0))}</span>`}</div><div class="tn"><b>${esc(n)}</b>${s?`<small>${s}</small>`:""}</div></a>`;
 function tiles(c,p){
   let h="";
-  if(c&&p)c.forEach(k=>{const it=p.filter(x=>x.category_id===k.id);if(!it.length)return;const ph=it.find(x=>x.images&&x.images[0]);h+=tile(k.name,it.length+(it.length>1?" products":" product"),ph&&ph.images[0])});
+  if(c&&p)c.forEach(k=>{const it=p.filter(x=>x.category_id===k.id);if(!it.length)return;const ph=it.find(x=>x.images&&x.images[0]);h+=tile(k.name,it.length+(it.length>1?" products":" product"),k.image||(ph&&ph.images[0]))});
   if(!h)h=["Commercial kitchen equipment","Bakery equipment","Cutlery and tableware","Kitchen interiors"].map(n=>tile(n,"")).join("");
   $("#tiles").innerHTML=h;rv($("#tiles"));
 }

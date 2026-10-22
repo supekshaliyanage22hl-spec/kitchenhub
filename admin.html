@@ -132,6 +132,7 @@ th:first-child,td:first-child{width:34px}th:first-child input,td:first-child inp
       <div class="two"><div><label for="s_whatsapp">WhatsApp number (country code, digits only)</label><input id="s_whatsapp" data-s inputmode="numeric"></div><div><label for="s_email">Enquiry email</label><input id="s_email" data-s type="email"></div></div>
       <div class="two"><div><label for="s_phone">Phone shown to customers</label><input id="s_phone" data-s></div><div><label for="s_hours">Opening hours</label><input id="s_hours" data-s></div></div>
       <label for="s_address">Address</label><input id="s_address" data-s>
+      <label for="s_map">Map location (coordinates or Google Maps embed code)</label><input id="s_map" data-s placeholder="6.0108, 80.2496"><p class="hint">In Google Maps, right-click your shop and click the coordinates to copy them, then paste here. Or use Share, Embed a map, and paste the whole code.</p>
       <label for="s_about">About text (shown on the Talk to us page)</label><textarea id="s_about" data-s></textarea>
       <div class="acts"><button type="button" class="bad sp" id="sreset">Reset to defaults</button><button type="button" id="ssave">Save settings</button></div>
     </section>
@@ -196,7 +197,7 @@ function drawProds(){
   $("#pt").textContent=pc;$("#pg").value=pg+1;$("#pf").disabled=$("#pp").disabled=pg===0;$("#pn").disabled=$("#pl").disabled=pg>=pc-1;bulk();
 }
 function drawCats(){
-  $("#clist").innerHTML=cats.map(c=>`<div class="crow"><input value="${esc(c.name)}" data-n="${c.id}" aria-label="Category name"><button class="alt" data-s="${c.id}">Save</button><button class="bad" data-d="${c.id}">Delete</button></div>`).join("")||'<p class="muted">No categories yet.</p>';
+  $("#clist").innerHTML=cats.map(c=>`<div class="crow" style="align-items:center;flex-wrap:wrap">${c.image?`<img src="${esc(c.image)}" alt="" style="width:52px;height:40px;object-fit:cover;border-radius:2px">`:'<div class="nop"></div>'}<input value="${esc(c.name)}" data-n="${c.id}" aria-label="Category name" style="flex:1;min-width:140px"><input type="file" accept="image/*" data-cf="${c.id}" style="width:170px" aria-label="Photo for ${esc(c.name)}"><button class="alt" data-s="${c.id}">Save</button>${c.image?`<button class="alt" data-ri="${c.id}">Remove photo</button>`:""}<button class="bad" data-d="${c.id}">Delete</button></div>`).join("")||'<p class="muted">No categories yet.</p>';
 }
 $("#sq").oninput=()=>{pg=0;drawProds()};$("#sc").onchange=()=>{pg=0;drawProds()};
 const goPg=n=>{pg=Math.max(0,n);drawProds();window.scrollTo({top:0})};
@@ -211,13 +212,17 @@ document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{
 $("#addc").onclick=async()=>{const n=$("#newc").value.trim();if(!n)return;
   const {error}=await sb.from("categories").insert({name:n,sort:cats.length});if(error)return fail(error);$("#newc").value="";await load();draw();say("Category added")};
 $("#clist").onclick=async e=>{
-  const s=e.target.dataset.s,d=e.target.dataset.d;
+  const s=e.target.dataset.s,d=e.target.dataset.d,ri=e.target.dataset.ri;
+  if(ri){const c=cats.find(x=>x.id===ri),{error}=await sb.from("categories").update({image:null}).eq("id",ri);if(error)return fail(error);if(c&&c.image)await rmFiles([c.image]);await load();draw();return say("Category photo removed")}
   if(s){const n=document.querySelector(`[data-n="${s}"]`).value.trim();if(!n)return;
     const {error}=await sb.from("categories").update({name:n}).eq("id",s);error?fail(error):(await load(),draw(),say("Category saved"))}
   if(d&&confirm("Delete this category? Its products will be kept.")){
-    const {error}=await sb.from("categories").delete().eq("id",d);error?fail(error):(await load(),draw(),say("Category deleted"))}
+    const ci=(cats.find(x=>x.id===d)||{}).image,{error}=await sb.from("categories").delete().eq("id",d);if(error)fail(error);else{if(ci)await rmFiles([ci]);await load();draw();say("Category deleted")}}
 };
 
+$("#clist").onchange=async e=>{const id=e.target.dataset.cf,f=e.target.files&&e.target.files[0];if(!id||!f)return;
+  try{const c=cats.find(x=>x.id===id),url=await upImg(f),{error}=await sb.from("categories").update({image:url}).eq("id",id);if(error)throw error;if(c&&c.image)await rmFiles([c.image]);await load();draw();say("Category photo saved")}
+  catch(x){fail(/column/i.test(x.message||"")?{message:"Add the image column first: run the SQL line I gave you in Supabase."}:x)}};
 /* product editor */
 function drawImgs(){
   $("#imgs").innerHTML=imgs.map((u,i)=>`<div><img src="${esc(u)}" alt="Photo ${i+1}"><button type="button" data-r="${i}" aria-label="Remove photo ${i+1}">x</button></div>`).join("");
@@ -379,7 +384,7 @@ $("#bgo").onclick=async()=>{
 
 /* ---- settings ---- */
 const DEFB={accent:"#FDB515",dim:"40",logo:"logo.png",wallpaper:"wallpaper.jpg"};
-const KEYS=["company","tagline","accent","dim","logo","wallpaper","whatsapp","email","phone","address","hours","about"];
+const KEYS=["company","tagline","accent","dim","logo","wallpaper","whatsapp","email","phone","address","hours","about","map"];
 let ST={},SD={};
 const val=k=>(ST[k]||"").trim()||DEFB[k]||"";
 const lum=h=>{const n=parseInt(h.slice(1),16);return((n>>16)*299+(n>>8&255)*587+(n&255)*114)/1000};

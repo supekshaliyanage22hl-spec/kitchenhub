@@ -653,8 +653,8 @@ function pre(){[s+1,s+2].forEach(n=>{if(n>=nS())return;pagesOf(n).forEach(i=>{co
 const io="IntersectionObserver"in window&&!reduce?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{rootMargin:"0px 0px -6% 0px"}):null;
 function reveal(r){r.querySelectorAll(".rv:not(.in)").forEach((el,i)=>{if(!io)return el.classList.add("in");el.style.setProperty("--d",Math.min(i%6,5)*.06+"s");io.observe(el)})}
 function renderHero(){
-  $("#tiles").innerHTML=cats.map((c,i)=>{const it=DATA.prods.filter(p=>catOf(p)===c.id);if(!it.length)return"";const ph=it.find(p=>p.images&&p.images[0]);
-    return `<button type="button" class="tile rv" data-ci="${i}"><div class="ti">${ph?timg(ph.images[0],c.name):`<span class="tl">${esc(c.name.charAt(0))}</span>`}</div><div class="tn"><b>${esc(c.name)}</b><small>${it.length} product${it.length>1?"s":""}</small></div></button>`}).join("");
+  $("#tiles").innerHTML=cats.map((c,i)=>{const it=DATA.prods.filter(p=>catOf(p)===c.id);if(!it.length)return"";const ph=it.find(p=>p.images&&p.images[0]),im=c.image||(ph&&ph.images[0]);
+    return `<button type="button" class="tile rv" data-ci="${i}"><div class="ti">${im?timg(im,c.name):`<span class="tl">${esc(c.name.charAt(0))}</span>`}</div><div class="tn"><b>${esc(c.name)}</b><small>${it.length} product${it.length>1?"s":""}</small></div></button>`}).join("");
   reveal($("#tiles"));
 }
 $("#hero").addEventListener("click",e=>{const b=e.target.closest("#hb1,.tile");if(!b)return;const ci=b.dataset.ci,sm={behavior:reduce?"auto":"smooth"};
