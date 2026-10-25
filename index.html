@@ -4,6 +4,23 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Kitchen Hub | Commercial Kitchen Equipment Catalogue</title>
+<meta name="description" content="Browse The Kitchen Hub's catalogue of commercial kitchen equipment: ranges, fryers, ovens, chillers, mixers and more for hotels, restaurants and cafés in Sri Lanka. Enquire on WhatsApp.">
+<meta name="theme-color" content="#0F0F10">
+<link rel="canonical" href="https://YOUR-DOMAIN/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="The Kitchen Hub">
+<meta property="og:locale" content="en_LK">
+<meta property="og:title" content="The Kitchen Hub | Commercial Kitchen Equipment Catalogue">
+<meta property="og:description" content="Flip through our catalogue of commercial kitchen equipment for hotels, restaurants and cafés. Enquire on WhatsApp.">
+<meta property="og:url" content="https://YOUR-DOMAIN/">
+<meta property="og:image" content="https://YOUR-DOMAIN/logo.png">
+<meta property="og:image:width" content="900">
+<meta property="og:image:height" content="488">
+<meta property="og:image:alt" content="The Kitchen Hub logo">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Kitchen Hub | Commercial Kitchen Equipment Catalogue">
+<meta name="twitter:description" content="Commercial kitchen equipment for hotels, restaurants and cafés. Enquire on WhatsApp.">
+<meta name="twitter:image" content="https://YOUR-DOMAIN/logo.png">
 <link rel="icon" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
@@ -414,14 +431,28 @@ async function api(t,q){
   const r=await fetch(`${CFG.SUPABASE_URL}/rest/v1/${t}?${q}`,{headers:{apikey:CFG.SUPABASE_KEY,Authorization:"Bearer "+CFG.SUPABASE_KEY}});
   if(!r.ok)throw new Error(r.status);return r.json();
 }
+/* Fetches every row, 1000 at a time (Supabase caps a single request at 1000 rows) */
+async function apiAll(t,q){
+  const h={apikey:CFG.SUPABASE_KEY,Authorization:"Bearer "+CFG.SUPABASE_KEY,Prefer:"count=exact"};
+  let out=[],total=Infinity;
+  while(out.length<total){
+    const r=await fetch(`${CFG.SUPABASE_URL}/rest/v1/${t}?${q}&limit=1000&offset=${out.length}`,{headers:h});
+    if(!r.ok)throw new Error(r.status);
+    const rows=await r.json(),m=/\/(\d+)$/.exec(r.headers.get("content-range")||"");
+    total=m?+m[1]:(rows.length<1000?out.length+rows.length:Infinity);
+    if(!rows.length)break;out=out.concat(rows);
+  }
+  return out;
+}
 async function load(bg){
   if(!CFG.SUPABASE_URL){DATA=DEMO;return}
-  try{DATA={cats:await api("categories","select=*&order=sort,name"),prods:await api("products","select=*&order=sort,name")};try{localStorage.setItem("khc1",JSON.stringify(DATA))}catch(e){}}
+  try{DATA={cats:await apiAll("categories","select=*&order=sort,name,id"),prods:await apiAll("products","select=*&order=sort,name,id")};try{localStorage.setItem("khc1",JSON.stringify(DATA))}catch(e){}}
   catch(e){if(bg)throw e;L.innerHTML="";R.innerHTML='<div class="msg">The catalogue could not be loaded. Please try again shortly.</div>';throw e}
 }
 const catOf=p=>DATA.cats.some(c=>c.id===p.category_id)?p.category_id:"_";
-const wa=p=>`https://wa.me/${CFG.WHATSAPP}?text=${encodeURIComponent("Hi, I'd like to enquire about: "+p.name+(p.model?" ("+p.model+")":""))}`;
-const mail=p=>`mailto:${CFG.EMAIL}?subject=${encodeURIComponent("Enquiry: "+p.name)}&body=${encodeURIComponent("Hi, please send details and a quote for: "+p.name+(p.model?" ("+p.model+")":""))}`;
+const plink=id=>location.origin+location.pathname+"#product="+id;
+const wa=p=>`https://wa.me/${CFG.WHATSAPP}?text=${encodeURIComponent("Hi, I'd like to enquire about: "+p.name+(p.model?" ("+p.model+")":"")+"\n"+plink(p.id))}`;
+const mail=p=>`mailto:${CFG.EMAIL}?subject=${encodeURIComponent("Enquiry: "+p.name)}&body=${encodeURIComponent("Hi, please send details and a quote for: "+p.name+(p.model?" ("+p.model+")":"")+"\n"+plink(p.id))}`;
 
 const F={pw:"",sort:"",ph:false};
 const catNm=p=>(DATA.cats.find(c=>c.id===p.category_id)||{name:"More equipment"}).name;
@@ -485,7 +516,7 @@ function renderList(){
   $("#fcnt").textContent=`${list.length} of ${DATA.prods.length} products`;$("#grid").querySelectorAll(".card").forEach(c=>c.classList.add("rv"));reveal($("#grid"));
   $("#fclr").hidden=!(F.pw||F.sort||F.ph||$("#q").value.trim());
 }
-function open(id){
+function open(id,init){
   const p=DATA.prods.find(x=>x.id===id);if(!p)return;
   const im=p.images||[];lbU=im;lbI=0;
   $("#lb").innerHTML=`<div class="lb"><button class="btn alt x" id="cl">Close</button>
@@ -493,11 +524,14 @@ function open(id){
   ${im.length>1?`<div class="thumbs">${im.map((u,i)=>`<img src="${esc(u)}" class="${i?"":"on"}" alt="Photo ${i+1}">`).join("")}</div>`:""}
   ${p.model?`<span class="plate">${esc(p.model)}</span>`:""}<h2>${esc(p.name)}</h2><p>${esc(p.description)}</p>
   <dl>${(p.specs||[]).map(x=>x.l?`<dt>${esc(x.l)}</dt><dd>${esc(x.v)}</dd>`:`<dd class="full">${esc(x.v)}</dd>`).join("")}</dl>
-  <div class="row">${price(p)}${qbtn(p.id)}<a class="btn" href="${wa(p)}" target="_blank" rel="noopener">Enquire on WhatsApp</a><a class="btn alt" href="${mail(p)}">Email</a></div></div>`;
+  <div class="row">${price(p)}${qbtn(p.id)}<a class="btn" href="${wa(p)}" target="_blank" rel="noopener">Enquire on WhatsApp</a><a class="btn alt" href="${mail(p)}">Email</a><button type="button" class="btn alt" data-share="${esc(p.id)}">Share link</button></div></div>`;
+  try{init?history.replaceState(null,"","#product="+id):history.pushState(null,"","#product="+id);pushed=!init}catch(e){}
+  document.title=p.name+" | "+CFG.COMPANY;
   $("#lb").showModal();
 }
 document.addEventListener("click",e=>{
   const t=e.target,qb=t.closest("[data-q]");if(qb){const had=inQ(qb.dataset.q);qtoggle(qb.dataset.q);if(!had&&!reduce)fly(qb);return}
+  if(t.dataset.share)return shareP(t);
   if(t.closest("#qfab"))return qopen();
   if(t.dataset.qp!=null){const x=Q[+t.dataset.qp];x.n=Math.min(999,x.n+1);qsave();return qlist()}
   if(t.dataset.qm!=null){const x=Q[+t.dataset.qm];x.n=Math.max(1,x.n-1);qsave();return qlist()}
@@ -530,12 +564,31 @@ addEventListener("resize",()=>{const d=innerWidth>=900;if(d!==desk){const cur=pa
 /* ---- navigation, category colours, photo viewer ---- */
 const ACC=["var(--flame)"];
 let lbI=0,lbU=[];
+/* ---- shareable product links: index.html#product=ID ---- */
+let PG=1,pushed=false,PID=(/product=([\w-]+)/.exec(location.hash)||[])[1]||null;
+const baseTitle=()=>`${CFG.COMPANY} | Commercial Kitchen Equipment Catalogue`;
+function hashPage(){if($("#lb").open||$("#q").value.trim())return;try{history.replaceState(null,"","#page="+PG)}catch(e){}}
+$("#lb").addEventListener("close",()=>{
+  document.title=baseTitle();
+  if(/product=/.test(location.hash)){if(pushed)history.back();else hashPage()}
+  pushed=false});
+function openFromHash(final){
+  if(!PID||$("#lb").open)return;
+  if(DATA.prods.some(x=>x.id===PID)){const id=PID;PID=null;open(id,true)}else if(final){PID=null;hashPage()}
+}
+async function shareP(b){
+  const p=DATA.prods.find(x=>x.id===b.dataset.share);if(!p)return;const url=plink(p.id);
+  if(navigator.share){try{await navigator.share({title:p.name,text:p.name+(p.model?" ("+p.model+")":""),url});return}catch(e){if(e.name==="AbortError")return}}
+  let ok=false;try{await navigator.clipboard.writeText(url);ok=true}catch(e){}
+  if(!ok){prompt("Copy this link:",url);return}
+  const o=b.textContent;b.textContent="Link copied";setTimeout(()=>b.textContent=o,1800);
+}
 const price=p=>p.price&&!/on request/i.test(p.price)?`<b>${esc(p.price)}</b>`:"";
 function sync(v){
   const cur=v[0]-1,sl=$("#sl");sl.max=pages.length;sl.value=cur+1;
   let ci=-1;if(pages[cur]&&pages[cur].k!=="back")for(let i=cur;i>=0;i--)if(pages[i].ci!=null){ci=pages[i].ci;break}
   document.querySelectorAll("#tabs button").forEach(b=>{const on=+b.dataset.ci===ci;b.classList.toggle("on",on);if(on)b.scrollIntoView({inline:"center",block:"nearest",behavior:reduce?"auto":"smooth"})});
-  try{if(!$("#q").value.trim())history.replaceState(null,"","#page="+(cur+1))}catch(e){}
+  PG=cur+1;hashPage();
 }
 function hashSpread(){const m=/page=(\d+)/.exec(location.hash);return m?spreadOf(Math.max(0,Math.min(pages.length-1,+m[1]-1))):0}
 function lbSet(i){
@@ -548,7 +601,11 @@ $("#home").onclick=()=>{if(listMode)$("#mode").click();go(spreadOf(1))};
 $("#sl").oninput=e=>{$("#pos").textContent=`Page ${e.target.value} of ${pages.length}`};
 $("#sl").onchange=e=>{const n=spreadOf(+e.target.value-1);n===s?show():go(n)};
 $("#mode").addEventListener("click",()=>document.body.classList.toggle("list",listMode));
-addEventListener("hashchange",()=>{const n=hashSpread();if(n!==s)go(n)});
+addEventListener("hashchange",()=>{
+  const m=/product=([\w-]+)/.exec(location.hash);
+  if(m){if(!$("#lb").open&&DATA.prods.some(x=>x.id===m[1]))open(m[1],true);return}
+  if($("#lb").open){$("#lb").close();return}
+  const n=hashSpread();if(n!==s)go(n)});
 document.addEventListener("keydown",e=>{if(e.target.matches("input,select")||$("#lb").open)return;if(e.key==="Home")go(0);if(e.key==="End")go(nS()-1)});
 document.addEventListener("pointermove",e=>{const c=e.target.closest&&e.target.closest(".cover");if(c){const r=c.getBoundingClientRect();c.style.setProperty("--mx",(e.clientX-r.left)+"px");c.style.setProperty("--my",(e.clientY-r.top)+"px")}});
 $("#lb").addEventListener("keydown",e=>{if(e.key==="ArrowRight")lbSet(lbI+1);if(e.key==="ArrowLeft")lbSet(lbI-1)});
@@ -573,7 +630,7 @@ function qrefresh(){
 }
 function qmsg(){
   const nm=($("#qnm")||{}).value||"",nt=($("#qnt")||{}).value||"";
-  return "Hi, I'd like a quote for these items:\n"+Q.map((x,i)=>`${i+1}. ${x.name}${x.model?" ("+x.model+")":""} x ${x.n}`).join("\n")+(nt.trim()?"\n\nNotes: "+nt.trim():"")+(nm.trim()?"\n\nFrom: "+nm.trim():"")+"\n\nThank you.";
+  return "Hi, I'd like a quote for these items:\n"+Q.map((x,i)=>`${i+1}. ${x.name}${x.model?" ("+x.model+")":""} x ${x.n}\n   ${plink(x.id)}`).join("\n")+(nt.trim()?"\n\nNotes: "+nt.trim():"")+(nm.trim()?"\n\nFrom: "+nm.trim():"")+"\n\nThank you.";
 }
 function qlinks(){
   const w=$("#qwa"),e=$("#qem");if(!w)return;const t=qmsg();
@@ -695,7 +752,7 @@ function endSplash(){if(spl)return;spl=true;let q=false;try{q=!!sessionStorage.g
   setTimeout(()=>{const e=$("#splash");e.classList.add("out");document.body.classList.remove("splashing");document.body.classList.add("go");setTimeout(()=>e.remove(),700)},q?0:Math.max(0,1200-(performance.now()-t0)))}
 setTimeout(endSplash,7000);
 (async()=>{
-  await brand();document.title=`${CFG.COMPANY} | Commercial Kitchen Equipment Catalogue`;
+  await brand();document.title=baseTitle();
   $("#brand").innerHTML=CFG.LOGO?`<img src="${esc(CFG.LOGO)}" alt="${esc(CFG.COMPANY)}">`:esc(CFG.COMPANY);addEventListener("load",setBH);fillContact();
   const sl=$("#slogo"),hl=$("#hlogo");if(CFG.LOGO){sl.onload=()=>sl.classList.add("on");sl.src=CFG.LOGO;hl.src=CFG.LOGO}else{sl.remove();hl.remove();$("#sname").textContent=CFG.COMPANY}
   try{if(localStorage.getItem("khm"))document.body.classList.add("hm1")}catch(e){}
@@ -704,11 +761,11 @@ setTimeout(endSplash,7000);
   const c0=cget(),old=JSON.stringify(c0);let fresh=null;
   if(c0&&CFG.SUPABASE_URL){DATA=c0;fresh=load(true)}else await load();
   fopts();build();s=hashSpread();show();renderList();renderHero();qrefresh();setBH();
-  if(fresh)fresh.then(()=>{if(JSON.stringify(DATA)===old)return;const cs=s;fopts();build($("#q").value);s=Math.min(cs,nS()-1);show();renderList();renderHero();qrefresh()}).catch(()=>{});
+  if(fresh)fresh.then(()=>{if(JSON.stringify(DATA)!==old){const cs=s;fopts();build($("#q").value);s=Math.min(cs,nS()-1);show();renderList();renderHero();qrefresh()}openFromHash(true)}).catch(()=>openFromHash(true));
   if(!desk&&!hadHash)$("#mode").click();
   syncFocus();
   if(hadHash&&!listMode)$("#bookwrap").scrollIntoView();
-  endSplash();
+  endSplash();openFromHash(!fresh);
 })().catch(()=>endSplash());
 </script>
 </body>

@@ -176,7 +176,8 @@ $("#out").onclick=async()=>{await sb.auth.signOut();location.reload()};
 
 async function start(){$("#app").hidden=false;await load();draw();await loadSettings();applyBrand();openSet()}
 async function load(){
-  const c=await sb.from("categories").select("*").order("sort").order("name"),p=await sb.from("products").select("*").order("name").limit(5000);
+  const all=async(t,ord)=>{let out=[];for(;;){const r=await ord(sb.from(t).select("*",{count:"exact"})).range(out.length,out.length+999);if(r.error)return{error:r.error};out=out.concat(r.data);if(!r.data.length||out.length>=(r.count??0))return{data:out}}};
+  const c=await all("categories",q=>q.order("sort").order("name").order("id")),p=await all("products",q=>q.order("name").order("id"));
   if(c.error||p.error)return fail(c.error||p.error);cats=c.data;prods=p.data;
 }
 const catName=id=>(cats.find(c=>c.id===id)||{}).name||"More equipment";
