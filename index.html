@@ -6,22 +6,23 @@
 <title>The Kitchen Hub | Commercial Kitchen Equipment Catalogue</title>
 <meta name="description" content="Browse The Kitchen Hub's catalogue of commercial kitchen equipment: ranges, fryers, ovens, chillers, mixers and more for hotels, restaurants and cafés in Sri Lanka. Enquire on WhatsApp.">
 <meta name="theme-color" content="#0F0F10">
-<link rel="canonical" href="https://YOUR-DOMAIN/">
+<link rel="canonical" href="https://supekshaliyanage22hl-spec.github.io/kitchenhub/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="The Kitchen Hub">
 <meta property="og:locale" content="en_LK">
 <meta property="og:title" content="The Kitchen Hub | Commercial Kitchen Equipment Catalogue">
 <meta property="og:description" content="Flip through our catalogue of commercial kitchen equipment for hotels, restaurants and cafés. Enquire on WhatsApp.">
-<meta property="og:url" content="https://YOUR-DOMAIN/">
-<meta property="og:image" content="https://YOUR-DOMAIN/logo.png">
+<meta property="og:url" content="https://supekshaliyanage22hl-spec.github.io/kitchenhub/">
+<meta property="og:image" content="https://supekshaliyanage22hl-spec.github.io/kitchenhub/logo.png">
 <meta property="og:image:width" content="900">
 <meta property="og:image:height" content="488">
 <meta property="og:image:alt" content="The Kitchen Hub logo">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="The Kitchen Hub | Commercial Kitchen Equipment Catalogue">
 <meta name="twitter:description" content="Commercial kitchen equipment for hotels, restaurants and cafés. Enquire on WhatsApp.">
-<meta name="twitter:image" content="https://YOUR-DOMAIN/logo.png">
+<meta name="twitter:image" content="https://supekshaliyanage22hl-spec.github.io/kitchenhub/logo.png">
 <link rel="icon" href="favicon.png">
+<link rel="sitemap" type="application/xml" href="sitemap.xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -400,8 +401,9 @@ body.hm1 #hot .hm i{animation:none}
     <div class="dock"><button id="prev">Previous</button><button id="first" type="button">Cover</button><input type="range" id="sl" min="1" max="1" value="1" aria-label="Go to page"><span id="pos"></span><button id="next">Next</button></div>
   </div>
   <div id="grid"></div>
+  <noscript><p class="msg" style="color:#fff">Please turn on JavaScript to flip through the catalogue, or read the <a href="catalogue.html" style="color:#FDB515">full product list</a>.</p></noscript>
 </main>
-<footer id="foot"></footer>
+<footer id="foot"><span><a href="catalogue.html">Full product list</a></span><span><a href="company.html">About us</a></span></footer>
 <dialog id="cd" aria-label="Contact details"></dialog>
 <button id="qfab" type="button" hidden>Enquiry list <b id="qn">0</b></button>
 <dialog id="qd" aria-label="Enquiry list"></dialog>
@@ -704,7 +706,7 @@ function fillContact(){
   const tel=CFG.PHONE&&`<a href="tel:${esc(CFG.PHONE.replace(/[^\d+]/g,""))}">${esc(CFG.PHONE)}</a>`,
     wa=CFG.WHATSAPP&&`<a href="https://wa.me/${CFG.WHATSAPP}" target="_blank" rel="noopener">+${esc(CFG.WHATSAPP)}</a>`,
     em=CFG.EMAIL&&`<a href="mailto:${esc(CFG.EMAIL)}">${esc(CFG.EMAIL)}</a>`;
-  $("#foot").innerHTML=[["Call",tel],["WhatsApp",wa],["Email",em]].filter(x=>x[1]).map(x=>`<span>${x[0]}: ${x[1]}</span>`).join("");
+  $("#foot").innerHTML=[["Call",tel],["WhatsApp",wa],["Email",em]].filter(x=>x[1]).map(x=>`<span>${x[0]}: ${x[1]}</span>`).join("")+'<span><a href="catalogue.html">Full product list</a></span><span><a href="company.html">About us</a></span>';
   const rows=[["Phone",tel],["WhatsApp",wa],["Email",em],["Address",CFG.ADDRESS&&esc(CFG.ADDRESS)],["Hours",CFG.HOURS&&esc(CFG.HOURS)]].filter(x=>x[1]);
   $("#cd").innerHTML=`<div class="lb"><div class="qh"><h2>Contact us</h2><button class="btn alt" id="cc" type="button">Close</button></div><p>${esc(CFG.ABOUT||"Tell us what you are building and we will help you choose the right equipment, plan the layout, and arrange delivery.")}</p><dl class="co">${rows.map(x=>`<dt>${x[0]}</dt><dd>${x[1]}</dd>`).join("")}</dl><div class="row"><a class="btn" href="https://wa.me/${CFG.WHATSAPP}" target="_blank" rel="noopener">WhatsApp us</a><a class="btn alt" href="mailto:${esc(CFG.EMAIL)}">Email us</a></div><p class="sp2">${esc(CFG.COMPANY)}${CFG.TAGLINE?" | "+esc(CFG.TAGLINE):""}</p></div>`;
 }
