@@ -84,7 +84,7 @@ th:first-child,td:first-child{width:34px}th:first-child input,td:first-child inp
 
 <div id="app" hidden>
   <header class="top"><h1><img class="blogo" alt="Logo"><span>Admin</span></h1><a href="index.html" target="_blank" style="color:#fff">View catalogue</a><button class="alt" id="out">Sign out</button></header>
-  <nav class="tabs"><button data-t="p" class="on">Products</button><button data-t="c">Categories</button><button data-t="i">Import CSV</button><button data-t="b">Bulk photos</button><button data-t="s">Settings</button></nav>
+  <nav class="tabs"><button data-t="p" class="on">Products</button><button data-t="c">Categories</button><button data-t="i">Import CSV</button><button data-t="b">Bulk photos</button><button data-t="j">Projects</button><button data-t="w">Company page</button><button data-t="s">Settings</button></nav>
   <main>
     <section id="tp">
       <div class="tools"><input id="sq" type="search" placeholder="Search by name or model" aria-label="Search"><select id="sc" aria-label="Filter by category"></select><select id="sm" aria-label="Show"><option value="">All products</option><option value="photo">No photo</option><option value="desc">No description</option><option value="specs">No specs</option><option value="hidden">Hidden from customers</option></select><button id="add">Add product</button></div>
@@ -115,6 +115,20 @@ th:first-child,td:first-child{width:34px}th:first-child input,td:first-child inp
       <label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="brep" style="width:auto"> Replace existing photos instead of adding to them</label>
       <p><button id="bgo" hidden>Upload photos</button></p><p id="bprog" class="muted"></p>
       <h3>Speed up existing photos</h3><p class="muted">New uploads get small thumbnails automatically. Run this once to create them for photos you uploaded earlier.</p><p><button class="alt" id="mkth">Create thumbnails</button> <span id="thp" class="muted"></span></p>
+    </section>
+    <section id="tj" hidden>
+      <h2>Projects</h2><p class="muted">Proof of your work, shown on the company page. The first photo is the cover (click a photo to make it the cover). The section appears once you add a project.</p>
+      <div class="tools"><button id="padd" type="button">Add project</button></div><div id="plist"></div>
+    </section>
+    <section id="tw" hidden>
+      <h2>Company page</h2><p class="muted">All the text and backgrounds on the company page. Press Save at the bottom.</p>
+      <h3>Top of the page</h3><label for="s_c_hero_title">Headline</label><input id="s_c_hero_title" data-s><label for="s_c_hero_text">Short text under the headline</label><textarea id="s_c_hero_text" data-s></textarea>
+      <h3>Numbers</h3><label for="s_c_stats">Up to 4 numbers, one per line</label><textarea id="s_c_stats" data-s></textarea><p class="hint">Write each as: number | label, for example 40 | Hotels</p>
+      <h3>About us</h3><label for="s_c_about">About text</label><textarea id="s_c_about" data-s></textarea><p class="hint">Press Enter between paragraphs.</p><label for="s_c_cover">What you cover (side list)</label><textarea id="s_c_cover" data-s></textarea><p class="hint">One per line: Title | short detail</p>
+      <h3>Projects section</h3><div class="two"><div><label for="s_c_work_title">Heading</label><input id="s_c_work_title" data-s></div><div><label for="s_c_work_text">Intro text</label><input id="s_c_work_text" data-s></div></div>
+      <h3>Links</h3><label for="s_facebook">Facebook page address</label><input id="s_facebook" data-s>
+      <h3>Background for each section</h3><p class="hint">The background fades to the next photo as visitors scroll. Sections without a photo use the main wallpaper from Settings. Wide landscape photos work best.</p><label>Top of the page</label><div class="prev w"><img data-pv="bg_home" alt="Top of the page background preview"></div><div class="frow"><input type="file" accept="image/*" data-up="bg_home" aria-label="Upload Top of the page background"><button type="button" class="alt" data-rm="bg_home">Use main wallpaper</button></div><label>About us</label><div class="prev w"><img data-pv="bg_about" alt="About us background preview"></div><div class="frow"><input type="file" accept="image/*" data-up="bg_about" aria-label="Upload About us background"><button type="button" class="alt" data-rm="bg_about">Use main wallpaper</button></div><label>Projects</label><div class="prev w"><img data-pv="bg_work" alt="Projects background preview"></div><div class="frow"><input type="file" accept="image/*" data-up="bg_work" aria-label="Upload Projects background"><button type="button" class="alt" data-rm="bg_work">Use main wallpaper</button></div><label>What we offer</label><div class="prev w"><img data-pv="bg_offer" alt="What we offer background preview"></div><div class="frow"><input type="file" accept="image/*" data-up="bg_offer" aria-label="Upload What we offer background"><button type="button" class="alt" data-rm="bg_offer">Use main wallpaper</button></div><label>Contact</label><div class="prev w"><img data-pv="bg_contact" alt="Contact background preview"></div><div class="frow"><input type="file" accept="image/*" data-up="bg_contact" aria-label="Upload Contact background"><button type="button" class="alt" data-rm="bg_contact">Use main wallpaper</button></div>
+      <div class="acts"><button type="button" id="wsave">Save company page</button></div>
     </section>
     <section id="ts" hidden>
       <h2>Site settings</h2><p class="muted">Save to update the customer catalogue. Customers see changes after a page refresh.</p>
@@ -149,6 +163,16 @@ th:first-child,td:first-child{width:34px}th:first-child input,td:first-child inp
   <label for="ff">Photos (up to 4, resized automatically)</label><input id="ff" type="file" accept="image/*" multiple><div class="imgs" id="imgs"></div>
   <div class="acts"><button type="button" class="bad sp" id="del">Delete product</button><button type="button" class="alt" id="cancel">Cancel</button><button type="submit" id="save">Save product</button></div>
 </form></dialog>
+<dialog id="pdlg"><form class="f" id="pform" method="dialog">
+  <h2 id="pj_h">Project</h2>
+  <label for="pj_title">Project name</label><input id="pj_title" required placeholder="e.g. Sunrise Beach Hotel kitchen">
+  <div class="two"><div><label for="pj_kind">Type</label><input id="pj_kind" list="pkinds" placeholder="Hotel, Bakery, Restaurant..."><datalist id="pkinds"></datalist></div><div><label for="pj_client">Client (optional)</label><input id="pj_client"></div></div>
+  <div class="two"><div><label for="pj_loc">Location</label><input id="pj_loc" placeholder="Galle"></div><div><label for="pj_year">Year</label><input id="pj_year" placeholder="2025"></div></div>
+  <label for="pj_desc">What we did</label><textarea id="pj_desc"></textarea>
+  <div class="two"><div><label for="pj_sort">Order (smaller shows first)</label><input id="pj_sort" type="number"></div><div><label for="pj_active">Visible on the site</label><select id="pj_active"><option value="1">Yes</option><option value="0">No</option></select></div></div>
+  <label for="pj_files">Photos (up to 8, resized automatically)</label><input id="pj_files" type="file" accept="image/*" multiple><div class="imgs" id="pj_imgs"></div>
+  <div class="acts"><button type="button" class="bad sp" id="pj_del">Delete project</button><button type="button" class="alt" id="pj_cancel">Cancel</button><button type="submit" id="pj_save">Save project</button></div>
+</form></dialog>
 <div id="toast" hidden></div>
 
 <script src="config.js"></script>
@@ -174,7 +198,7 @@ $("#go").onclick=async()=>{
 $("#pw").onkeydown=e=>{if(e.key==="Enter")$("#go").click()};
 $("#out").onclick=async()=>{await sb.auth.signOut();location.reload()};
 
-async function start(){$("#app").hidden=false;await load();draw();await loadSettings();applyBrand();openSet()}
+async function start(){$("#app").hidden=false;await load();draw();await loadSettings();applyBrand();openSet();loadProj()}
 async function load(){
   const all=async(t,ord)=>{let out=[];for(;;){const r=await ord(sb.from(t).select("*",{count:"exact"})).range(out.length,out.length+999);if(r.error)return{error:r.error};out=out.concat(r.data);if(!r.data.length||out.length>=(r.count??0))return{data:out}}};
   const c=await all("categories",q=>q.order("sort").order("name").order("id")),p=await all("products",q=>q.order("name").order("id"));
@@ -207,7 +231,7 @@ $("#pg").onchange=e=>goPg((parseInt(e.target.value)||1)-1);
 $("#ps").onchange=e=>{PS=+e.target.value;pg=0;drawProds()};
 document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{
   document.querySelectorAll(".tabs button").forEach(x=>x.classList.toggle("on",x===b));
-  ["p","c","i","b","s"].forEach(k=>$("#t"+k).hidden=k!==b.dataset.t)});
+  ["p","c","i","b","s","j","w"].forEach(k=>$("#t"+k).hidden=k!==b.dataset.t)});
 
 /* categories */
 $("#addc").onclick=async()=>{const n=$("#newc").value.trim();if(!n)return;
@@ -384,8 +408,9 @@ $("#bgo").onclick=async()=>{
 };
 
 /* ---- settings ---- */
-const DEFB={accent:"#FDB515",dim:"40",logo:"logo.png",wallpaper:"wallpaper.jpg"};
-const KEYS=["company","tagline","accent","dim","logo","wallpaper","whatsapp","email","phone","address","hours","about","map"];
+const DEFB={...{"facebook": "https://www.facebook.com/kitchenhubbranch", "c_hero_title": "Everything you need to build the perfect kitchen, and beyond", "c_hero_text": "Cooking essentials, bakery tools, hotel supplies and complete kitchen interiors, all in one place in Unawatuna.", "c_stats": "40 | Hotels\n30 | Bakeries\n15 | Restaurants\n60 | Kitchen interiors", "c_about": "Welcome to The Kitchen Hub, your one-stop destination for everything your kitchen needs. From everyday cooking essentials and professional bakery tools to complete kitchen interiors and premium hotel supplies, we bring quality, function and style together in one place.\nWhether you are a home baker, a seasoned chef or running a hospitality business, we help you find exactly what you need to create, cook and serve with confidence. If it is not in our collection, our team will source it for you.\nOur mission is simple: to make every kitchen smarter, more efficient and more inspiring.", "c_cover": "Commercial kitchen equipment | Ranges, fryers, ovens, chillers and more\nBakery equipment | Mixers, ovens and professional tools\nHotel and restaurant supplies | Cutlery, tableware and serving\nKitchen interiors | Complete layouts, planned and installed", "c_work_title": "Our projects", "c_work_text": "A selection of kitchens we have equipped and built. Tap a project to see more photos."},accent:"#FDB515",dim:"40",logo:"logo.png",wallpaper:"wallpaper.jpg"};
+const KEYS=["company","tagline","accent","dim","logo","wallpaper","whatsapp","email","phone","address","hours","about","map","facebook","c_hero_title","c_hero_text","c_stats","c_about","c_cover","c_work_title","c_work_text","bg_home","bg_about","bg_work","bg_offer","bg_contact"];
+const IMGK=["logo","wallpaper","bg_home","bg_about","bg_work","bg_offer","bg_contact"];
 let ST={},SD={};
 const val=k=>(ST[k]||"").trim()||DEFB[k]||"";
 const lum=h=>{const n=parseInt(h.slice(1),16);return((n>>16)*299+(n>>8&255)*587+(n&255)*114)/1000};
@@ -398,7 +423,7 @@ function applyBrand(){
   document.title="Catalogue admin | "+(val("company")||"The Kitchen Hub");
 }
 async function loadSettings(){try{const {data}=await sb.from("settings").select("*");ST={};(data||[]).forEach(r=>ST[r.key]=r.value)}catch(e){}}
-function drawSet(){$("#dimv").textContent=$("#s_dim").value;$("#pv_logo").src=SD.logo||DEFB.logo;$("#pv_wall").src=SD.wallpaper||DEFB.wallpaper}
+function drawSet(){$("#dimv").textContent=$("#s_dim").value;$("#pv_logo").src=SD.logo||DEFB.logo;$("#pv_wall").src=SD.wallpaper||DEFB.wallpaper;document.querySelectorAll("[data-pv]").forEach(i=>{const u=SD[i.dataset.pv]||"";if(u)i.src=u;else i.removeAttribute("src");i.style.visibility=u?"":"hidden"})}
 function openSet(){
   SD={...ST};
   document.querySelectorAll("[data-s]").forEach(el=>{const k=el.id.slice(2);el.value=ST[k]||DEFB[k]||""});
@@ -444,16 +469,58 @@ $("#ssave").onclick=async()=>{
   document.querySelectorAll("[data-s]").forEach(el=>SD[el.id.slice(2)]=el.value.trim());
   const t=$("#s_accent_t").value.trim();if(okc(t))SD.accent=t;
   SD.whatsapp=(SD.whatsapp||"").replace(/\D/g,"");
-  const old=[ST.logo,ST.wallpaper],rows=KEYS.map(k=>({key:k,value:String(SD[k]??"")}));
+  const old=IMGK.map(k=>ST[k]),rows=KEYS.map(k=>({key:k,value:String(SD[k]??"")}));
   const {error}=await sb.from("settings").upsert(rows,{onConflict:"key"});
   $("#ssave").disabled=false;if(error)return fail(error);
-  await rmFiles(old.filter(u=>u&&u!==SD.logo&&u!==SD.wallpaper));
+  await rmFiles(old.filter(u=>u&&!IMGK.some(k=>SD[k]===u)));
   await loadSettings();applyBrand();openSet();say("Settings saved");
 };
 $("#sreset").onclick=async()=>{
   if(!confirm("Reset all settings to the defaults? Uploaded logo and wallpaper will be removed."))return;
-  const old=[ST.logo,ST.wallpaper],{error}=await sb.from("settings").delete().neq("key","");
+  const old=IMGK.map(k=>ST[k]),{error}=await sb.from("settings").delete().neq("key","");
   if(error)return fail(error);await rmFiles(old.filter(Boolean));await loadSettings();applyBrand();openSet();say("Settings reset");
+};
+/* ---- company page: save + projects ---- */
+$("#wsave").onclick=()=>$("#ssave").click();
+let projs=[],pcur=null,pimgs=[],pgone=[];
+async function loadProj(){
+  const r=await sb.from("projects").select("*").order("sort").order("created_at",{ascending:false});
+  if(r.error){projs=[];$("#plist").innerHTML='<p class="muted">Projects are not set up yet. Run projects.sql once in the Supabase SQL Editor, then refresh this page.</p>';return}
+  projs=r.data;drawProj();
+}
+function drawProj(){
+  $("#plist").innerHTML=projs.length?`<table><tbody>${projs.map(p=>`<tr><td>${p.images?.[0]?`<img src="${esc(p.images[0])}" alt="">`:'<div class="nop"></div>'}</td><td><b>${esc(p.title)}</b><br><span class="muted">${esc([p.kind,p.location,p.year].filter(Boolean).join(" · "))}${p.active?"":" (hidden)"}</span></td><td class="muted">${p.images?.length||0} photos</td><td><button class="alt" data-pe="${p.id}" type="button">Edit</button></td></tr>`).join("")}</tbody></table>`:'<p class="muted">No projects yet. Add your first one.</p>';
+}
+function drawPimgs(){$("#pj_imgs").innerHTML=pimgs.map((u,i)=>`<div><img src="${esc(u)}" data-c="${i}" title="Click to make this the cover" alt="Photo ${i+1}" style="cursor:pointer${i?"":";outline:3px solid var(--flame)"}"><button type="button" data-pr="${i}" aria-label="Remove photo ${i+1}">x</button></div>`).join("")}
+function openProj(id){
+  pcur=id?projs.find(p=>p.id===id):null;pgone=[];const p=pcur||{title:"",client:"",kind:"",location:"",year:"",description:"",images:[],sort:projs.length,active:true};
+  $("#pj_h").textContent=pcur?"Edit project":"Add project";
+  $("#pj_title").value=p.title;$("#pj_kind").value=p.kind||"";$("#pj_client").value=p.client||"";$("#pj_loc").value=p.location||"";$("#pj_year").value=p.year||"";$("#pj_desc").value=p.description||"";$("#pj_sort").value=p.sort??0;$("#pj_active").value=p.active?"1":"0";
+  $("#pkinds").innerHTML=[...new Set(["Hotel","Bakery","Restaurant","Cafe","Kitchen interior"].concat(projs.map(x=>x.kind).filter(Boolean)))].map(k=>`<option value="${esc(k)}">`).join("");
+  pimgs=[...(p.images||[])];$("#pj_files").value="";drawPimgs();$("#pj_del").hidden=!pcur;$("#pdlg").showModal();
+}
+$("#padd").onclick=()=>openProj(null);
+$("#plist").onclick=e=>{if(e.target.dataset.pe)openProj(e.target.dataset.pe)};
+$("#pj_cancel").onclick=()=>$("#pdlg").close();
+$("#pj_imgs").onclick=e=>{const c=e.target.dataset.c,r=e.target.dataset.pr;
+  if(c!=null&&+c>0){pimgs.unshift(pimgs.splice(+c,1)[0]);drawPimgs()}
+  if(r!=null){pgone.push(pimgs[+r]);pimgs.splice(+r,1);drawPimgs()}};
+$("#pj_files").onchange=async e=>{
+  for(const f of [...e.target.files]){if(pimgs.length>=8){say("Maximum 8 photos per project",true);break}
+    try{pimgs.push(await upImg(f));drawPimgs()}catch(x){fail(x)}}
+  e.target.value="";
+};
+$("#pform").onsubmit=async e=>{
+  e.preventDefault();$("#pj_save").disabled=true;
+  const row={title:$("#pj_title").value.trim(),kind:$("#pj_kind").value.trim(),client:$("#pj_client").value.trim(),location:$("#pj_loc").value.trim(),year:$("#pj_year").value.trim(),description:$("#pj_desc").value.trim(),sort:+$("#pj_sort").value||0,active:$("#pj_active").value==="1",images:pimgs};
+  const {error}=pcur?await sb.from("projects").update(row).eq("id",pcur.id):await sb.from("projects").insert(row);
+  $("#pj_save").disabled=false;if(error)return fail(error);
+  await rmFiles(pgone.filter(Boolean));$("#pdlg").close();await loadProj();say("Project saved");
+};
+$("#pj_del").onclick=async()=>{
+  if(!confirm("Delete this project and its photos? This cannot be undone."))return;
+  const {error}=await sb.from("projects").delete().eq("id",pcur.id);if(error)return fail(error);
+  await rmFiles((pcur.images||[]).filter(Boolean));$("#pdlg").close();await loadProj();say("Project deleted");
 };
 init();
 </script>

@@ -5,6 +5,7 @@ create table if not exists categories (
   name text not null,
   sort int default 0
 );
+alter table categories add column if not exists image text;   -- category cover photo (used by admin)
 
 create table if not exists products (
   id uuid primary key default gen_random_uuid(),
@@ -45,3 +46,22 @@ create policy "public read images" on storage.objects for select using (bucket_i
 create policy "admin upload images" on storage.objects for insert to authenticated with check (bucket_id = 'product-images');
 create policy "admin update images" on storage.objects for update to authenticated using (bucket_id = 'product-images');
 create policy "admin delete images" on storage.objects for delete to authenticated using (bucket_id = 'product-images');
+-- Projects shown on company.html. Run once in Supabase > SQL Editor (safe to run again).
+create table if not exists projects (
+  id uuid primary key default gen_random_uuid(),
+  title text not null,
+  client text,
+  kind text,                       -- e.g. Hotel, Bakery, Restaurant (used for the filter buttons)
+  location text,
+  year text,
+  description text,
+  images text[] default '{}',      -- first photo is the cover
+  sort int default 0,
+  active boolean default true,
+  created_at timestamptz default now()
+);
+alter table projects enable row level security;
+drop policy if exists "public read projects" on projects;
+drop policy if exists "admin write projects" on projects;
+create policy "public read projects" on projects for select using (active);
+create policy "admin write projects" on projects for all to authenticated using (true) with check (true);
