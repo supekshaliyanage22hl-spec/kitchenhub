@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://supekshaliyanage22hl-spec.github.io/kitchenhub/sitemap.xml
+Sitemap: https://ceylonkitchenhub.com/sitemap.xml
