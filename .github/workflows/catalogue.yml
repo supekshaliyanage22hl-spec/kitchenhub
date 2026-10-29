@@ -1,6 +1,6 @@
 name: Update catalogue pages
 
-# Rebuilds catalogue.html, sitemap.xml and robots.txt from your Supabase products.
+# Rebuilds products.html, sitemap.xml and robots.txt from your Supabase products.
 # Runs every night, and whenever you press "Run workflow" (Actions tab) after editing products.
 on:
   schedule:
@@ -23,5 +23,5 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add catalogue.html sitemap.xml robots.txt
+          git add products.html sitemap.xml robots.txt
           git diff --cached --quiet || (git commit -m "Update catalogue pages" && git push)
