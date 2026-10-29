@@ -3,772 +3,282 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Kitchen Hub | Commercial Kitchen Equipment Catalogue</title>
-<meta name="description" content="Browse The Kitchen Hub's catalogue of commercial kitchen equipment: ranges, fryers, ovens, chillers, mixers and more for hotels, restaurants and cafés in Sri Lanka. Enquire on WhatsApp.">
+<title>The Kitchen Hub | Kitchen equipment, bakery tools and interiors in Unawatuna</title>
+<meta name="description" content="One-stop shop for commercial kitchen equipment, bakery tools, hotel supplies and complete kitchen interiors. 149, Matara Rd, Unawatuna.">
 <meta name="theme-color" content="#0F0F10">
+<script>if(/^#(product|page)=/.test(location.hash))location.replace("catalogue.html"+location.hash)</script>
 <link rel="canonical" href="https://supekshaliyanage22hl-spec.github.io/kitchenhub/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="The Kitchen Hub">
 <meta property="og:locale" content="en_LK">
-<meta property="og:title" content="The Kitchen Hub | Commercial Kitchen Equipment Catalogue">
-<meta property="og:description" content="Flip through our catalogue of commercial kitchen equipment for hotels, restaurants and cafés. Enquire on WhatsApp.">
+<meta property="og:title" content="The Kitchen Hub | Kitchen equipment, bakery tools and interiors in Unawatuna">
+<meta property="og:description" content="One-stop shop for commercial kitchen equipment, bakery tools, hotel supplies and complete kitchen interiors. 149, Matara Rd, Unawatuna.">
 <meta property="og:url" content="https://supekshaliyanage22hl-spec.github.io/kitchenhub/">
 <meta property="og:image" content="https://supekshaliyanage22hl-spec.github.io/kitchenhub/logo.png">
 <meta property="og:image:width" content="900">
 <meta property="og:image:height" content="488">
 <meta property="og:image:alt" content="The Kitchen Hub logo">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="The Kitchen Hub | Commercial Kitchen Equipment Catalogue">
-<meta name="twitter:description" content="Commercial kitchen equipment for hotels, restaurants and cafés. Enquire on WhatsApp.">
-<meta name="twitter:image" content="https://supekshaliyanage22hl-spec.github.io/kitchenhub/logo.png">
 <link rel="icon" href="favicon.png">
-<link rel="sitemap" type="application/xml" href="sitemap.xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"LocalBusiness","name":"The Kitchen Hub","description":"Commercial kitchen equipment, bakery tools, hotel supplies and kitchen interiors.","telephone":"+94912224922","email":"contact@kitchenhubb.lk","address":{"@type":"PostalAddress","streetAddress":"149, Matara Rd","addressLocality":"Unawatuna","addressCountry":"LK"},"sameAs":["https://www.facebook.com/kitchenhubbranch"]}</script>
 <style>
-:root{--steel:#2A3036;--steel2:#4A545D;--paper:#F2F3F1;--plate:#DDE1E3;--line:#C9CED2;--flame:#1F6BD6;--ink:#1B1F23;--mut:#5C666F}
+:root{--flame:#FDB515;--on:#111;--dimA:.55;--glow:color-mix(in srgb,var(--flame) 45%,transparent);--mut:#B4BBC1}
 *{box-sizing:border-box}
-body{margin:0;background:#E4E7E8;color:var(--ink);font:400 15px/1.5 Barlow,system-ui,sans-serif}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;background:#0B0B0C;color:#fff;font:400 16px/1.6 Barlow,system-ui,sans-serif}
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:rgba(8,8,9,var(--dimA))}
+#bgs{position:fixed;inset:0;z-index:-2;overflow:hidden;background:#0B0B0C}
+.bgl{position:absolute;inset:0;background:center/cover no-repeat;opacity:0;transform:scale(1.12);transition:opacity 1.1s ease,transform 7s ease-out}
+.bgl.on{opacity:1;transform:scale(1)}
+[hidden]{display:none!important}
 h1,h2,h3{font-family:"Barlow Condensed",Impact,sans-serif;margin:0;line-height:1.05}
-.bar{position:sticky;top:0;z-index:5;display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 16px;background:var(--steel);color:#fff}
-.bar b{font:700 22px "Barlow Condensed",sans-serif;margin-right:auto;letter-spacing:.02em}
-.bar input,.bar select,.bar button{font:inherit;padding:7px 10px;border-radius:4px;border:1px solid var(--steel2);background:#fff;color:var(--ink)}
-.bar button{background:var(--flame);border-color:var(--flame);color:#fff;cursor:pointer}
-.bar input{width:180px}
-:focus-visible{outline:3px solid var(--flame);outline-offset:2px}
-.stage{max-width:1100px;margin:18px auto;padding:0 12px}
-.book{display:flex;justify-content:center;perspective:2400px}
-.leaf{width:50%;height:clamp(540px,78vh,720px);background:var(--paper);overflow:hidden}
-#L{border-radius:6px 0 0 6px;box-shadow:inset -14px 0 18px -14px rgba(0,0,0,.25),0 6px 20px rgba(0,0,0,.18)}
-#R{border-radius:0 6px 6px 0;box-shadow:inset 14px 0 18px -14px rgba(0,0,0,.25),0 6px 20px rgba(0,0,0,.18)}
-.leaf:empty{background:transparent;box-shadow:none}
-.pg{position:relative;height:100%;padding:20px 20px 34px;display:flex;flex-direction:column}
-.pn{position:absolute;bottom:12px;left:0;right:0;text-align:center;font-size:12px;color:var(--mut)}
-.cover,.cat{background:var(--steel);color:#fff;display:flex;flex-direction:column;justify-content:flex-end}
-.cover h1{font-size:clamp(54px,8vw,92px);font-weight:700}
-.cover p{margin:10px 0 0;color:#B9C1C7;max-width:28ch}
-.cover .yr{margin-top:34px;border-top:2px solid var(--flame);padding-top:10px;color:#B9C1C7;font-size:13px}
-.cat h2{font-size:clamp(44px,6vw,70px);font-weight:700}
-.cat p{color:#B9C1C7;margin:8px 0 0}.cat ul{margin:22px 0 28px;padding:0;list-style:none;color:#B9C1C7;font-size:14px}.cat li{padding:5px 0;border-top:1px solid #3B434B}.sp{margin:0;padding:0;list-style:none;font-size:12px;color:var(--mut)}
-.cover .pn,.cat .pn{color:#8A949C}
-.pg>h2.t{font-size:34px;margin-bottom:14px}
-.toc a{display:flex;gap:8px;padding:14px 0;font-size:19px;border-bottom:1px dotted var(--line);color:inherit;text-decoration:none;cursor:pointer}
-.toc a span:first-child{flex:1}
-.toc a:hover{color:var(--flame)}
-.grid2{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:12px}
-.card{background:#fff;border:1px solid var(--line);display:flex;flex-direction:column;min-width:0;min-height:0;overflow:hidden}
-.ph{flex:1;min-height:90px;background:linear-gradient(135deg,#E6E9EA,#CDD3D6);display:grid;place-items:center;color:var(--mut);font-size:12px;cursor:zoom-in;overflow:hidden}
-.ph img{width:100%;height:100%;object-fit:contain;display:block}
-.info{padding:10px 12px 12px;display:flex;flex-direction:column;gap:5px;flex:none}
-.plate{align-self:flex-start;font:600 12px "Barlow Condensed",sans-serif;letter-spacing:.06em;background:var(--plate);border:1px solid #AEB5BA;padding:1px 7px;border-radius:2px}
-.card h3{font-size:20px;font-weight:600}
-.card p{margin:0;font-size:13px;color:var(--mut);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.row{margin-top:auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.row b{font-size:14px;margin-right:auto}
-.btn{font:600 13px Barlow,sans-serif;padding:6px 11px;border-radius:4px;text-decoration:none;border:1px solid var(--flame);background:var(--flame);color:#fff;cursor:pointer}
-.btn.alt{background:#fff;color:var(--flame)}
-.nav{display:flex;justify-content:center;align-items:center;gap:14px;margin:14px 0}
-.nav button{font:600 15px Barlow,sans-serif;padding:8px 18px;border:1px solid var(--steel);background:#fff;border-radius:4px;cursor:pointer}
-.nav button:disabled{opacity:.4;cursor:default}
-#grid{display:none}
-#grid h2{font-size:30px;margin:24px 0 10px}
-#grid .gg{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
-.msg{padding:40px;text-align:center;color:var(--mut)}
-dialog{border:0;border-radius:6px;padding:0;width:min(760px,94vw);max-height:92vh}
-dialog::backdrop{background:rgba(20,24,28,.7)}
-.lb{padding:18px;display:grid;gap:12px}
-.lb .main{aspect-ratio:4/3;background:#EEF0F1;display:grid;place-items:center}
-.lb .main img{max-width:100%;max-height:100%}
-.thumbs{display:flex;gap:8px}
-.thumbs img{width:64px;height:48px;object-fit:cover;border:2px solid transparent;cursor:pointer;background:#EEF0F1}
-.thumbs img.on{border-color:var(--flame)}
-.lb dl{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:0}
-.lb dt{color:var(--mut)}.lb dd{margin:0}
-.x{justify-self:end}
-.book{position:relative}
-.turn{position:absolute;top:0;width:50%;height:100%;z-index:3;transform-style:preserve-3d;transition:transform .8s cubic-bezier(.45,.05,.25,1);will-change:transform;pointer-events:none}
-.turn.fw{left:50%;transform-origin:left center}.turn.bw{left:0;transform-origin:right center}
-.turn .f,.turn .b{position:absolute;inset:0;overflow:hidden;background:var(--paper);backface-visibility:hidden;-webkit-backface-visibility:hidden}
-.turn .b{transform:rotateY(180deg)}
-.turn .f::after,.turn .b::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(to right,rgba(0,0,0,.2),transparent 28%)}
-.turn.bw .f::after{background:linear-gradient(to left,rgba(0,0,0,.2),transparent 28%)}
-.fadeout{animation:fo .2s forwards}.fadein{animation:fi .25s}
-@keyframes fo{to{opacity:0}}@keyframes fi{from{opacity:0}}
-@media (max-width:899px){#L{display:none}.leaf{width:100%;overflow:auto;border-radius:6px!important}.pg{height:auto;min-height:100%}.grid2{grid-template-columns:1fr;grid-template-rows:none}.ph{flex:none;aspect-ratio:4/3}.bar input{width:100%;order:5}}
-@media (prefers-reduced-motion:reduce){*{animation:none!important}}
-
-/* ===== v3: stage, tabs, dock, cover, cards, viewer ===== */
-body{background:radial-gradient(1100px 560px at 50% -8%,#46515B,#1B2025 72%) fixed}
-.stage{max-width:1240px}
-.leaf{color:var(--ink)}
-.bar{background:rgba(24,28,32,.86);backdrop-filter:blur(10px);border-bottom:1px solid #3B434B}
-#brand{font-size:27px}
-#brand::before{content:"";display:inline-block;width:9px;height:22px;background:var(--flame);margin-right:10px;transform:skewX(-14deg);vertical-align:-3px}
-.bar .ghost,.dock button{background:#2B3238;border:1px solid #4A545D;color:#fff;border-radius:4px;padding:7px 14px;cursor:pointer}
-.bar .ghost:hover,.dock button:hover:not(:disabled){border-color:var(--flame)}
-.dock button:disabled{opacity:.35;cursor:default}
-#tabs{display:flex;gap:8px;overflow-x:auto;padding:12px 16px;scrollbar-width:thin}
-#tabs button{flex:none;display:flex;gap:8px;align-items:center;background:#2B3238;color:#D5DBDF;border:1px solid #444E57;border-radius:999px;padding:6px 14px;font:500 14px Barlow,sans-serif;cursor:pointer;transition:background .2s,border-color .2s,transform .2s}
-#tabs button small{opacity:.65;font-size:12px}
-#tabs button:hover{border-color:var(--acc);transform:translateY(-1px)}
-#tabs button.on{background:var(--acc);border-color:var(--acc);color:#fff}
-.shelf{display:flex;align-items:center;gap:12px}
-.book{flex:1}
-.arrow{flex:none;width:46px;height:46px;border-radius:50%;border:1px solid #4A545D;background:#262C32;color:#fff;font-size:28px;line-height:1;cursor:pointer;transition:transform .2s,background .2s}
-.arrow:hover:not(:disabled){background:var(--flame);transform:scale(1.1)}
-.arrow:disabled{opacity:.25;cursor:default}
-.dock{display:flex;align-items:center;gap:12px;max-width:820px;margin:18px auto 6px;color:#C9D1D6}
-.dock input{flex:1;padding:0;accent-color:var(--flame);background:transparent;border:0}
-.dock span{min-width:110px;text-align:center;font-size:13px}
-.list .dock{display:none}
-#grid>h2{color:#fff}#grid .msg{color:#B9C1C7}
-#grid .card{overflow:visible;min-height:auto}#grid .ph{flex:none;aspect-ratio:4/3}
-.cover{position:relative;overflow:hidden;background:repeating-linear-gradient(90deg,rgba(255,255,255,.03) 0 1px,transparent 1px 3px),linear-gradient(160deg,#323A42,#1A1F24)}
-.cover::before{content:"";position:absolute;inset:0;background:radial-gradient(420px circle at var(--mx,72%) var(--my,22%),rgba(110,165,255,.26),transparent 62%);pointer-events:none}
-.cover::after{content:"KH";position:absolute;top:-34px;right:-8px;font:700 270px/1 "Barlow Condensed",sans-serif;color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.08);pointer-events:none}
-.cover>*{position:relative;z-index:1}
-.cat{border-left:12px solid var(--acc)}
-.cat li{border-top-color:#3E464E}
-.card{border-top:3px solid var(--acc,var(--line));transition:transform .25s,box-shadow .25s}
-.card:hover{transform:translateY(-3px);box-shadow:0 12px 24px rgba(0,0,0,.2)}
-.plate{border-color:var(--acc,#AEB5BA)}
-.btn{background:var(--acc,var(--flame));border-color:var(--acc,var(--flame))}
-.btn.alt{background:#fff;color:var(--acc,var(--flame))}
-.ph{position:relative}
-.ph img{transition:transform .4s}
-.ph .alt2{position:absolute;inset:0;opacity:0;transition:opacity .35s}
-.card:hover .alt2{opacity:1}
-.card:hover .ph img:first-child{transform:scale(1.05)}
-dialog[open]{animation:pop .22s ease-out}
-@keyframes pop{from{opacity:0;transform:translateY(10px) scale(.98)}}
-.lb .main{position:relative;display:block;overflow:hidden;cursor:zoom-in}
-.lb .main:not(:has(img)){display:grid;place-items:center}
-.lb .main img{position:absolute;inset:0;width:100%;height:100%;max-width:none;max-height:none;object-fit:contain;transition:transform .25s}
-.lb .main img.zoom{transform:scale(2.2);cursor:zoom-out}
-.ar{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;border:0;background:rgba(27,31,35,.72);color:#fff;font-size:24px;line-height:1;cursor:pointer;z-index:2}
-.ar.l{left:10px}.ar.r{right:10px}
-.ct{position:absolute;bottom:8px;right:10px;z-index:2;background:rgba(27,31,35,.72);color:#fff;font-size:12px;padding:2px 9px;border-radius:10px}
-@media (max-width:899px){.arrow{display:none}#tabs{padding:10px 12px}.dock span{min-width:80px}}
-
-/* ===== v3.1 fixes ===== */
-.cover .pn{display:none}
-.book{transition:transform .6s cubic-bezier(.45,.05,.25,1)}
-.book.closed{transform:translateX(-25%)}
-.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
-.card .sp{display:none}
-.card p{-webkit-line-clamp:2}
-.card .row{flex-wrap:nowrap}
-.card .row .btn{text-align:center;white-space:nowrap}
-.card .row .btn:not(.alt){flex:1}
-dialog{overflow:auto}
-.lb .main{aspect-ratio:auto;height:min(46vh,62vw);width:100%}
-.lb .plate{justify-self:start}
-@media (max-width:899px){.book.closed{transform:none}}
-@media (max-width:899px){.bar{padding:8px 12px;gap:8px}#brand{font-size:22px;flex:1 1 auto}.bar .ghost,#mode{padding:6px 10px;font-size:14px}.bar input{order:5;flex:1 0 100%}}
-
-/* ===== v4: filters, enquiry list, sticky category nav, mobile ===== */
-html,body{max-width:100%;overflow-x:clip}
-#flt{display:flex;flex-wrap:wrap;gap:10px;align-items:center;max-width:1240px;margin:0 auto;padding:0 16px 8px;color:#C9D1D6;font-size:14px}
-#flt select{padding:7px 10px;border-radius:4px;border:1px solid #4A545D;background:#2B3238;color:#fff;font:inherit}
-#flt .chk{display:flex;gap:6px;align-items:center;cursor:pointer}
-#flt .chk input{accent-color:var(--flame);width:16px;height:16px}
-#flt .ghost{background:#2B3238;border:1px solid #4A545D;color:#fff;border-radius:4px;padding:6px 12px;cursor:pointer}
-#fcnt{margin-left:auto;color:#9AA5AD}
-.list #tabs{position:sticky;top:var(--bh,0px);z-index:4;background:#1E2328;border-bottom:1px solid #3B434B}
-#grid h2{scroll-margin-top:calc(var(--bh,0px) + 64px)}
-.btn.qb.on{background:var(--acc,var(--flame));color:#fff}
-#qfab{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:20;display:flex;gap:8px;align-items:center;background:var(--flame);color:#fff;border:0;border-radius:999px;padding:12px 18px;font:600 15px Barlow,sans-serif;box-shadow:0 8px 22px rgba(0,0,0,.35);cursor:pointer}
-#qfab[hidden]{display:none}
-#qfab b{background:#fff;color:var(--flame);border-radius:999px;min-width:22px;padding:0 6px;text-align:center}
-#qd .qh{display:flex;align-items:center;justify-content:space-between}
-#qd h2{font-size:30px}
-#qd label{font-weight:600;font-size:13px}
-#qd input,#qd textarea{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:4px;font:inherit}
-#ql{max-height:40vh;overflow:auto}
-.qi{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
-.qi .muted{display:block;font-size:12px;color:var(--mut)}
-.qty{display:flex;align-items:center;gap:6px}
-.qty button,.rm{width:34px;height:34px;border:1px solid var(--line);background:#fff;border-radius:4px;font-size:18px;line-height:1;cursor:pointer}
-.rm{color:#B3261E}
-.qty span{min-width:26px;text-align:center}
-#qd .qa{flex-wrap:wrap}
-#qd .qa .btn{flex:1 1 auto;text-align:center}
-.btn.dis{opacity:.4;pointer-events:none}
-@media (max-width:899px){
- .bar{position:static}
- .bar input,.bar select,#flt select,#qd input,#qd textarea{font-size:16px}
- .stage{margin:10px auto;padding:0 10px}
- .leaf{height:auto;min-height:60vh;overflow:visible}
- .pg{padding:16px 14px 34px}
- #flt{padding:0 12px 8px}#flt select{flex:1 1 130px}#fcnt{flex:1 0 100%;margin:0}
- .dock{flex-wrap:wrap;gap:8px;padding:0 10px;margin:12px auto}
- .dock input{order:5;flex:1 0 100%}
- #first{display:none}
- .dock span{flex:1;min-width:0}
- .dock button{padding:9px 14px}
- #grid .gg{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
- #grid .card h3{font-size:17px}
- #grid .card .info{padding:8px 10px 10px}
- #grid .card .row{flex-wrap:wrap}
- #grid .card .row .btn{flex:1 1 100%;padding:9px 8px}
- dialog{max-width:100vw}.lb{padding:14px}
- .thumbs{overflow-x:auto}
-}
-@media (max-width:360px){#grid .gg{grid-template-columns:1fr}}
-
-/* ===== v5: wider flipbook, 3 per row, focus mode ===== */
-#chrome{display:contents}
-.card{container-type:inline-size}
-@container (max-width:240px){.card h3{font-size:17px}.card .row{flex-wrap:wrap}.card .row .btn{flex:1 1 100%!important}.card .row b{flex:1 1 100%}}
-@media (min-width:900px){.stage{max-width:min(1760px,98vw)}.grid2{grid-template-columns:repeat(3,minmax(0,1fr))}}
-#hot{display:none;position:fixed;top:0;left:0;right:0;height:36px;z-index:9}
-#hot::after{content:"Hover here for menu";position:absolute;top:6px;left:50%;transform:translateX(-50%);font-size:12px;color:#C9D1D6;background:rgba(24,28,32,.7);padding:2px 12px;border-radius:999px;opacity:.7}
-body.fb #chrome{display:block;position:fixed;top:0;left:0;right:0;z-index:10;background:rgba(22,26,30,.97);box-shadow:0 14px 34px rgba(0,0,0,.45);transition:opacity .3s,transform .3s}
-body.fb:not(.ch) #chrome{opacity:0;transform:translateY(-10px);pointer-events:none}
-body.fb:not(.ch) #hot{display:block}
-body.fb .bar{position:static}
-body.fb .stage{margin:40px auto 0}
-body.fb .leaf{height:max(460px,calc(100vh - 120px))}
-body.fb .dock{margin:10px auto 6px;opacity:.55;transition:opacity .25s}
-body.fb .dock:hover,body.fb .dock:focus-within{opacity:1}
-@media (prefers-reduced-motion:reduce){body.fb #chrome{transition:none}}
-
-/* ===== v6: brand theme (black + gold, wallpaper, logo) ===== */
-:root{--flame:#FDB515;--on:#111;--dimA:.4;--steel:#0F0F10;--steel2:#3A3A3D}
-body{background:#0B0B0C}
-body::before{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradient(rgba(8,8,9,var(--dimA)),rgba(8,8,9,var(--dimA))),var(--wall,none) center/cover no-repeat}
-.bar{background:rgba(10,10,11,.88);border-bottom:2px solid var(--flame)}
-#brand{display:flex;align-items:center}
-#brand::before{display:none}
-#brand img{height:46px;width:auto;display:block}
-.bar button,.btn,.arrow:hover:not(:disabled),#tabs button.on{color:var(--on)}
-.btn.alt{background:#fff;color:var(--ink);border-color:var(--acc,var(--flame))}
-.btn.qb.on{background:var(--acc,var(--flame));color:var(--on)}
-#qfab{color:var(--on)}#qfab b{background:var(--on);color:var(--flame)}
-.toc a:hover{color:var(--ink);border-bottom-color:var(--flame)}
-.pg :focus-visible,dialog :focus-visible{outline-color:#111}
-.cover{background:repeating-linear-gradient(90deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px),linear-gradient(160deg,#1B1608,#090909)}
-.cover::before{background:radial-gradient(420px circle at var(--mx,72%) var(--my,22%),rgba(253,181,21,.2),transparent 62%)}
-.cover::after{-webkit-text-stroke:2px rgba(253,181,21,.12)}
-.cat{background:#0E0E0F}
-.clogo{display:block;width:min(100%,540px);height:auto;margin-bottom:16px}
-.pg>h2.t{border-bottom:3px solid var(--flame);padding-bottom:8px}
-.co{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:14px 0}.co dt{color:var(--mut)}.co dd{margin:0}.co a{color:inherit}
-.lb dd.full{grid-column:1/-1}
-.pg .sp2{margin-top:auto;font-size:12px;color:var(--mut)}
-@media (max-width:899px){#brand img{height:38px}}
-#foot{max-width:1240px;margin:26px auto 0;padding:16px 16px 80px;display:flex;flex-wrap:wrap;gap:8px 28px;justify-content:center;color:#B9C1C7;font-size:14px;border-top:1px solid #3B434B}
-#foot:empty,body.fb #foot{display:none}
-#foot a{color:#fff;text-decoration:none;border-bottom:1px solid var(--flame)}#foot a:hover{color:var(--flame)}
-#cd .qh{display:flex;align-items:center;justify-content:space-between}#cd h2{font-size:30px}#cd .sp2{font-size:12px;color:var(--mut);margin:0}
-
-/* ===== v7: dark premium showroom, studio frames, chips, quick view, realistic flipbook ===== */
-:root{--glow:color-mix(in srgb,var(--flame) 45%,transparent);--tex:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35  0 0 0 0 .3  0 0 0 0 .25  0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url%28%23n%29'/%3E%3C/svg%3E")}
-.bar{background:rgba(12,12,13,.62);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);box-shadow:0 1px 26px color-mix(in srgb,var(--flame) 16%,transparent)}
-body.fb #chrome{background:rgba(14,14,15,.8);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
-#tabs button{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.16);backdrop-filter:blur(8px)}
-#tabs button.on{background:var(--flame);box-shadow:0 0 20px var(--glow)}
-.arrow,.dock button,.bar .ghost,#flt select,#flt .ghost{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.18);backdrop-filter:blur(8px)}
-.arrow:hover:not(:disabled){box-shadow:0 0 24px var(--glow)}
-.dock button:hover:not(:disabled),.bar .ghost:hover{box-shadow:0 0 16px var(--glow)}
-.btn{transition:transform .2s,box-shadow .2s}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--flame);outline-offset:3px}
+.btn{display:inline-block;font:600 15px Barlow,sans-serif;padding:11px 20px;border-radius:4px;text-decoration:none;border:1px solid var(--flame);background:var(--flame);color:var(--on);cursor:pointer;transition:transform .2s,box-shadow .2s}
 .btn:hover{transform:translateY(-1px);box-shadow:0 0 18px var(--glow)}
-dialog{border-radius:10px;border-top:4px solid var(--flame);box-shadow:0 30px 90px rgba(0,0,0,.65),0 0 40px var(--glow)}
-dialog::backdrop{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
-.ph,.lb .main{background:radial-gradient(120% 90% at 50% 35%,#fff 0,#fff 38%,#E9ECED 100%)}
-.ph::before,.lb .main::before{content:"";position:absolute;left:20%;right:20%;bottom:8%;height:7%;background:radial-gradient(ellipse at center,rgba(0,0,0,.28),transparent 70%);filter:blur(5px);z-index:0}
-.ph img,.lb .main img{z-index:1;padding:7%;mix-blend-mode:multiply}
-.lb .main img{padding:4%}
-.ph::after{content:"Quick view";position:absolute;left:50%;bottom:12px;transform:translate(-50%,8px);z-index:2;background:rgba(14,14,15,.84);backdrop-filter:blur(6px);color:#fff;font:600 12px Barlow,sans-serif;letter-spacing:.04em;padding:6px 14px;border-radius:999px;border:1px solid var(--flame);opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;white-space:nowrap}
-.card:hover .ph::after,.ph:focus-visible::after{opacity:1;transform:translate(-50%,0)}
-@media (hover:none){.ph::after{display:none}}
-.card .sp{display:flex;flex-wrap:wrap;gap:4px;max-height:24px;overflow:hidden}
-.card .sp li{white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis;padding:1px 9px;border:1px solid color-mix(in srgb,var(--acc,var(--flame)) 55%,#C9CED2);border-radius:999px;background:color-mix(in srgb,var(--acc,var(--flame)) 10%,#fff);color:#2C343B;font-size:11.5px;font-weight:500}
-#grid .card .sp{max-height:none}
-#grid .card{background:rgba(18,18,20,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-color:rgba(255,255,255,.1);color:#fff}
-#grid .card h3{color:#fff}#grid .card p{color:#B4BBC1}
-#grid .card .sp li{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.2);color:#E6E9EB}
-#grid .card .plate{background:rgba(255,255,255,.08);color:#fff}
-#grid .card .btn.alt{background:transparent;color:#fff;border-color:rgba(255,255,255,.35)}
-#grid .card .btn.qb.on{background:var(--flame);color:var(--on);border-color:var(--flame)}
-#grid .card:hover{box-shadow:0 16px 36px rgba(0,0,0,.55),0 0 26px var(--glow)}
-.leaf,.turn .f,.turn .b{background-color:var(--paper);background-image:var(--tex)}
-.leaf:empty{background:transparent}
-.leaf{position:relative}
-.leaf::after{content:"";position:absolute;top:0;bottom:0;width:15%;z-index:2;pointer-events:none}
-#L::after{right:0;background:linear-gradient(to left,rgba(0,0,0,.34),rgba(0,0,0,.1) 38%,transparent)}
-#R::after{left:0;background:linear-gradient(to right,rgba(0,0,0,.34),rgba(0,0,0,.1) 38%,transparent)}
-.leaf:empty::after{display:none}
-#L{box-shadow:-1px 0 0 rgba(255,255,255,.7),-3px 1px 0 #E6E6E1,-5px 2px 0 #D6D6CF,-7px 3px 0 #C4C4BD,0 20px 44px rgba(0,0,0,.5)}
-#R{box-shadow:1px 0 0 rgba(255,255,255,.7),3px 1px 0 #E6E6E1,5px 2px 0 #D6D6CF,7px 3px 0 #C4C4BD,0 20px 44px rgba(0,0,0,.5)}
-#L:empty,#R:empty{box-shadow:none}
-.book::before{content:"";position:absolute;left:3%;right:3%;bottom:-20px;height:34px;background:radial-gradient(ellipse at center,rgba(0,0,0,.6),transparent 70%);filter:blur(9px);z-index:-1;pointer-events:none}
-.turn .f,.turn .b{box-shadow:0 0 34px rgba(0,0,0,.35)}
-.turn .f::after,.turn .b::after{background:linear-gradient(to right,rgba(0,0,0,.38),rgba(0,0,0,.08) 42%,transparent 72%);animation:sh .8s ease-in-out}
-.turn.bw .f::after,.turn.bw .b::after{background:linear-gradient(to left,rgba(0,0,0,.38),rgba(0,0,0,.08) 42%,transparent 72%)}
-@keyframes sh{0%,100%{opacity:.5}50%{opacity:1}}
-@media (max-width:899px){.leaf::after,.book::before{display:none}#L,#R{box-shadow:0 10px 30px rgba(0,0,0,.45)}}
-
-/* ===== v8: hero, reveals, fly-to-list, skeleton, suggestions ===== */
-#hero{max-width:1240px;margin:0 auto;padding:46px 16px 30px;color:#fff}
-#hero h1{font-size:clamp(38px,6vw,72px);font-weight:700;max-width:20ch;text-shadow:0 2px 24px rgba(0,0,0,.6);animation:hin .7s both}
-#hero p{max-width:46ch;margin:16px 0 22px;color:#CBD1D6;font-size:17px;animation:hin .7s .12s both}
-#hero .hb{display:flex;gap:10px;flex-wrap:wrap;animation:hin .7s .22s both}
-#hero .btn{padding:11px 20px;font-size:15px}
-@keyframes hin{from{opacity:0;translate:0 14px}}
-.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px;margin-top:34px}
-.tile{display:flex;flex-direction:column;padding:0;text-align:left;font:inherit;color:#fff;cursor:pointer;border-radius:8px;overflow:hidden;background:rgba(18,18,20,.72);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.12);border-top:3px solid var(--flame)}
+.btn.alt{background:rgba(255,255,255,.08);color:#fff;border-color:rgba(255,255,255,.3);backdrop-filter:blur(8px)}
+nav{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:22px;padding:10px clamp(14px,4vw,40px);background:rgba(10,10,11,.7);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:2px solid var(--flame)}
+nav img{height:42px;width:auto;display:block;margin-right:auto}
+nav a:not(.btn){text-decoration:none;color:#D5DBDF;font-weight:500}
+nav a:not(.btn):hover{color:var(--flame)}
+.w{max-width:1160px;margin:0 auto;padding:0 clamp(14px,4vw,28px)}
+section{padding:76px 0}
+h2{font-size:clamp(34px,4.5vw,52px);font-weight:700;margin-bottom:18px}
+h2::after{content:"";display:block;width:64px;height:4px;background:var(--flame);margin-top:12px;box-shadow:0 0 16px var(--glow)}
+#home{min-height:calc(100svh - 64px);display:grid;align-items:center;padding:40px 0}
+.hl{display:block;width:min(88vw,620px);height:auto;margin-bottom:24px;filter:drop-shadow(0 0 30px var(--glow));animation:up .9s both}
+#home h1{font-size:clamp(32px,5.4vw,66px);font-weight:700;max-width:18ch;text-shadow:0 2px 24px rgba(0,0,0,.6);animation:up .8s .12s both}
+#home p{max-width:50ch;color:#CBD1D6;font-size:18px;margin:16px 0 26px;animation:up .8s .24s both}
+.hb{display:flex;gap:12px;flex-wrap:wrap;animation:up .8s .36s both}
+@keyframes up{from{opacity:0;translate:0 16px}}
+.stats{padding:0}
+.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));background:rgba(14,14,15,.75);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.12);border-top:3px solid var(--flame);border-radius:8px}
+.sg div{padding:26px 14px;text-align:center;border-left:1px solid rgba(255,255,255,.1)}
+.sg div:first-child{border:0}
+.sg b{display:block;font:700 clamp(40px,6vw,66px) "Barlow Condensed",sans-serif;color:var(--flame);line-height:1;text-shadow:0 0 22px var(--glow)}
+.sg span{color:var(--mut)}
+.g2{display:grid;grid-template-columns:1.2fr 1fr;gap:34px;align-items:start}
+.gl{background:rgba(14,14,15,.72);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:clamp(18px,3vw,30px)}
+.gl p{margin:0 0 14px;color:#D5DBDF}
+.cov{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.cov li{padding:14px 16px;background:rgba(14,14,15,.72);border:1px solid rgba(255,255,255,.12);border-left:4px solid var(--flame);border-radius:6px;font-weight:600}
+.cov small{display:block;font-weight:400;color:var(--mut)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-top:8px}
+.tile{display:flex;flex-direction:column;text-decoration:none;border-radius:8px;overflow:hidden;background:rgba(18,18,20,.72);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.12);border-top:3px solid var(--flame)}
 .tile:hover{transform:translateY(-4px);box-shadow:0 16px 34px rgba(0,0,0,.5),0 0 26px var(--glow)}
-.tile .ti{position:relative;aspect-ratio:4/3;background:radial-gradient(120% 90% at 50% 35%,#fff 0,#fff 38%,#E9ECED 100%)}
-.tile .ti img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:8%;mix-blend-mode:multiply;transition:transform .4s}
+.ti{position:relative;aspect-ratio:4/3;background:radial-gradient(120% 90% at 50% 35%,#fff 0,#fff 38%,#E9ECED 100%)}
+.ti img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:8%;mix-blend-mode:multiply;transition:transform .4s}
 .tile:hover .ti img{transform:scale(1.06)}
-.tile .tl{position:absolute;inset:0;display:grid;place-items:center;font:700 90px "Barlow Condensed",sans-serif;color:rgba(253,181,21,.3)}
-.tile .tn{padding:10px 12px 12px}.tile b{display:block;font:600 22px "Barlow Condensed",sans-serif}.tile small{color:#B4BBC1}
-.rv{opacity:0;translate:0 18px;transition:opacity .5s,translate .5s,transform .25s,box-shadow .25s;transition-delay:var(--d,0s),var(--d,0s),0s,0s}
+.tl{position:absolute;inset:0;display:grid;place-items:center;font:700 90px "Barlow Condensed",sans-serif;color:rgba(253,181,21,.3)}
+.tn{padding:10px 14px 14px}.tn b{display:block;font:600 22px "Barlow Condensed",sans-serif}.tn small{color:var(--mut)}
+.more{margin-top:22px}
+dl{display:grid;grid-template-columns:auto 1fr;gap:10px 18px;margin:0 0 20px}
+dt{color:var(--mut)}dd{margin:0}dd a{text-decoration:none;border-bottom:1px solid var(--flame)}dd a:hover{color:var(--flame)}
+.map{width:100%;height:100%;min-height:320px;border:0;border-radius:8px;filter:grayscale(.3) contrast(1.05)}
+label{display:block;font-weight:600;font-size:13px;margin:12px 0 4px}
+input,textarea{width:100%;padding:10px 12px;border:1px solid rgba(255,255,255,.25);border-radius:4px;background:rgba(255,255,255,.08);color:#fff;font:inherit}
+input::placeholder,textarea::placeholder{color:#8F989F}
+.fa{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+footer{padding:28px 16px 40px;text-align:center;color:var(--mut);font-size:14px;border-top:1px solid rgba(255,255,255,.1)}
+footer a{color:#fff}
+.rv{opacity:0;translate:0 18px;transition:opacity .6s,translate .6s,transform .25s,box-shadow .25s;transition-delay:var(--d,0s),var(--d,0s),0s,0s}
 .rv.in{opacity:1;translate:0 0}
-@media (prefers-reduced-motion:reduce){.rv{opacity:1;translate:none}}
-.fly{position:fixed;z-index:60;width:28px;height:28px;border-radius:50%;background:var(--flame);box-shadow:0 0 18px var(--glow);pointer-events:none}
-.bump{animation:bump .4s}@keyframes bump{40%{transform:scale(1.18)}}
-.sk{gap:14px;justify-content:flex-end;background:#101012}
-.sk i{display:block;height:18px;border-radius:4px;background:linear-gradient(90deg,#1c1c20 25%,#2e2e35 50%,#1c1c20 75%) 0 0/200% 100%;animation:shm 1.4s linear infinite}
-.sk i:nth-child(1){height:64px;width:70%}.sk i:nth-child(2){width:45%}.sk i:nth-child(3){width:60%}
-@keyframes shm{to{background-position:-200% 0}}
-#sug{position:fixed;z-index:40;background:rgba(16,16,18,.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.14);border-top:2px solid var(--flame);border-radius:8px;box-shadow:0 18px 40px rgba(0,0,0,.55),0 0 24px var(--glow);overflow:hidden}
-.si{display:flex;gap:10px;align-items:center;padding:8px 10px;cursor:pointer;color:#fff}
-.si.on,.si:hover{background:rgba(255,255,255,.1)}
-.si .st{width:46px;height:36px;flex:none;background:#fff;border-radius:3px;overflow:hidden}
-.si .st img{width:100%;height:100%;object-fit:contain;mix-blend-mode:multiply}
-.si b{display:block;font-weight:600}.si .sm{display:flex;gap:10px;font-size:12px;color:#B4BBC1}
-#sug mark{background:var(--flame);color:var(--on);border-radius:2px;padding:0 1px}
-.sn{padding:12px;color:#B4BBC1}
-
-/* ===== v9: menu pill, big logo, splash ===== */
-body.splashing{overflow:hidden}
-#splash{position:fixed;inset:0;z-index:100;display:grid;place-items:center;background:radial-gradient(900px 520px at 50% 40%,#2a2108,#0a0a0b 70%);transition:opacity .6s,visibility .6s}
-#splash.out{opacity:0;visibility:hidden}
-#splash .sw{display:flex;flex-direction:column;align-items:center;gap:18px;padding:24px;text-align:center}
-#slogo{width:min(78vw,460px);height:auto;opacity:0;transform:scale(.92);transition:opacity .6s,transform .8s;filter:drop-shadow(0 0 34px var(--glow))}
-#slogo.on{opacity:1;transform:none}
-#splash.out #slogo{transform:scale(1.08)}
-#sname{font:700 48px "Barlow Condensed",sans-serif;color:#fff}
-.sbar{width:min(64vw,260px);height:3px;background:rgba(255,255,255,.12);border-radius:3px;overflow:hidden}
-.sbar i{display:block;height:100%;width:40%;background:var(--flame);box-shadow:0 0 14px var(--flame);animation:sbar 1.1s ease-in-out infinite}
-@keyframes sbar{from{translate:-100%}to{translate:260%}}
-#splash p{margin:0;color:#8F989F;font-size:13px;letter-spacing:.08em}
-.hlogo{display:block;width:min(86vw,560px);height:auto;margin:0 0 22px;animation:lin 1s .05s both,lglow 3.2s 1.2s ease-in-out infinite}
-@keyframes lin{from{opacity:0;scale:.9}}
-@keyframes lglow{0%,100%{filter:drop-shadow(0 0 22px color-mix(in srgb,var(--flame) 30%,transparent))}50%{filter:drop-shadow(0 0 42px color-mix(in srgb,var(--flame) 60%,transparent))}}
-#hero h1{font-size:clamp(30px,4.4vw,54px)}
-body:not(.go) #hero :is(.hlogo,h1,p,.hb),body:not(.go) #hot .hm{animation-play-state:paused}
-#hot{height:64px}
-#hot::after{content:none}
-#hot .hm{position:absolute;top:10px;left:50%;translate:-50% 0;display:flex;align-items:center;gap:10px;padding:9px 20px 9px 16px;border-radius:999px;background:rgba(14,14,15,.88);backdrop-filter:blur(10px);border:1px solid var(--flame);color:#fff;font:600 14px Barlow,sans-serif;box-shadow:0 0 22px var(--glow);cursor:pointer;animation:hdrop .8s .4s both cubic-bezier(.2,.9,.3,1.2),hpulse 2.2s 1.4s ease-in-out infinite}
-#hot .hm i{width:9px;height:9px;border-right:2.5px solid var(--flame);border-bottom:2.5px solid var(--flame);rotate:45deg;translate:0 -3px;animation:hbob 1.1s ease-in-out infinite}
-@keyframes hdrop{from{opacity:0;translate:-50% -30px}}
-@keyframes hpulse{50%{box-shadow:0 0 38px var(--flame)}}
-@keyframes hbob{50%{translate:0 2px}}
-body.hm1 #hot .hm{animation:hdrop .8s .4s both;padding:6px 14px;font-size:12px;opacity:.8}
-body.hm1 #hot .hm i{animation:none}
-.bar a.ghost{text-decoration:none;color:#fff;display:inline-block}
+@media (max-width:760px){nav a:not(.btn){display:none}.sg{grid-template-columns:1fr 1fr}.sg div:nth-child(3){border-left:0}.sg div:nth-child(n+3){border-top:1px solid rgba(255,255,255,.1)}.g2{grid-template-columns:1fr}section{padding:54px 0}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;translate:none}html{scroll-behavior:auto}}
 
 /* category photo fills the whole card, name overlaid, hover zoom kept */
 .tile .ti{overflow:hidden}
 .tile .ti img.fill{padding:0;object-fit:cover;mix-blend-mode:normal}
 .tile.full .tn{position:absolute;left:0;right:0;bottom:0;padding:48px 14px 14px;background:linear-gradient(to top,rgba(0,0,0,.88),rgba(0,0,0,.5) 55%,transparent);text-shadow:0 1px 8px rgba(0,0,0,.6)}
 .tile.full .tn small{color:#D5DBDF}
+
+.g2>*{min-width:0}dd{min-width:0;overflow-wrap:anywhere}
+/* compact category chips */
+#offer{padding:44px 0}#offer h2{font-size:clamp(28px,3.4vw,38px)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:8px;padding:7px 15px;border-radius:999px;text-decoration:none;font-weight:500;background:rgba(18,18,20,.72);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.16);transition:border-color .2s,transform .2s,box-shadow .2s}
+.chip small{color:var(--on);background:var(--flame);border-radius:999px;padding:0 8px;font-size:12px;font-weight:600}
+.chip:hover{border-color:var(--flame);transform:translateY(-2px);box-shadow:0 0 18px var(--glow)}
+/* projects showcase */
+#wf{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px}
+#wf button{font:600 14px Barlow,sans-serif;padding:7px 16px;border-radius:999px;cursor:pointer;color:#fff;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.25);backdrop-filter:blur(8px)}
+#wf button.on,#wf button:hover{background:var(--flame);border-color:var(--flame);color:var(--on)}
+.pj{display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:190px;gap:14px}
+.pc{position:relative;grid-column:span 4;grid-row:span 2;padding:0;overflow:hidden;border-radius:10px;border:1px solid rgba(255,255,255,.14);background:linear-gradient(135deg,#26262a,#101012);color:#fff;font:inherit;text-align:left;cursor:pointer;transition:transform .3s,box-shadow .3s,border-color .3s}
+.pc:nth-child(4n+1),.pc:nth-child(4n){grid-column:span 8}
+.pc img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+.pc .pl{position:absolute;inset:0;display:grid;place-items:center;font:700 110px "Barlow Condensed",sans-serif;color:rgba(253,181,21,.25)}
+.pc::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.9),rgba(0,0,0,.25) 55%,transparent)}
+.pc:hover{transform:translateY(-4px);border-color:var(--flame);box-shadow:0 18px 40px rgba(0,0,0,.55),0 0 28px var(--glow)}
+.pc:hover img{transform:scale(1.08)}
+.pk{position:absolute;z-index:1;top:12px;left:12px;background:var(--flame);color:var(--on);font:600 12px Barlow,sans-serif;letter-spacing:.05em;text-transform:uppercase;padding:3px 10px;border-radius:999px}
+.pn{position:absolute;z-index:1;top:12px;right:12px;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);font-size:12px;padding:3px 10px;border-radius:999px}
+.pi{position:absolute;z-index:1;left:0;right:0;bottom:0;padding:16px 18px}
+.pi b{display:block;font:700 clamp(24px,2.6vw,32px) "Barlow Condensed",sans-serif;line-height:1.05;text-shadow:0 2px 12px rgba(0,0,0,.7)}
+.pi span{color:#D5DBDF;font-size:14px}
+.pi em{display:block;font-style:normal;color:var(--flame);font-size:13px;font-weight:600;max-height:0;opacity:0;overflow:hidden;transition:max-height .3s,opacity .3s}
+.pc:hover .pi em,.pc:focus-visible .pi em{max-height:24px;opacity:1}
+@media(max-width:900px){.pc,.pc:nth-child(4n+1),.pc:nth-child(4n){grid-column:span 6}}
+@media(max-width:560px){.pj{grid-auto-rows:150px}.pc,.pc:nth-child(4n+1),.pc:nth-child(4n){grid-column:span 12}.pi em{max-height:24px;opacity:1}}
+#pd{border:0;border-radius:12px;padding:0;width:min(900px,94vw);max-height:92vh;color:#fff;background:rgba(16,16,18,.97);border-top:4px solid var(--flame);box-shadow:0 30px 90px rgba(0,0,0,.7),0 0 40px var(--glow)}
+#pd::backdrop{background:rgba(8,8,9,.78);backdrop-filter:blur(6px)}
+.pdi{padding:16px;display:grid;gap:12px}.pdi .px{justify-self:end}
+.pm{position:relative;height:min(52vh,56vw);background:#000;border-radius:8px;overflow:hidden}
+.pm img{width:100%;height:100%;object-fit:contain;display:block}
+.ar{position:absolute;top:50%;translate:0 -50%;width:42px;height:42px;border-radius:50%;border:0;background:rgba(0,0,0,.65);color:#fff;font-size:26px;cursor:pointer}.ar.l{left:10px}.ar.r{right:10px}
+.ct{position:absolute;right:10px;bottom:8px;background:rgba(0,0,0,.65);font-size:12px;padding:2px 9px;border-radius:10px}
+.th{display:flex;gap:8px;overflow-x:auto}.th img{width:72px;height:54px;object-fit:cover;border:2px solid transparent;border-radius:4px;cursor:pointer;flex:none}.th img.on{border-color:var(--flame)}
+#pd h3{font-size:34px}#pd p{margin:0;color:#D5DBDF}#pd dl{margin:0}
 </style>
 </head>
-<body class="splashing">
-<div id="splash" aria-live="polite"><div class="sw"><img id="slogo" alt=""><b id="sname"></b><div class="sbar"><i></i></div><p>Loading the catalogue</p></div></div>
-<noscript><style>#splash{display:none}</style></noscript>
-<div id="chrome"><header class="bar">
-  <b id="brand">The Kitchen Hub</b>
-  <button id="home" type="button" class="ghost">Contents</button><button id="cbtn" type="button" class="ghost">Contact</button><a class="ghost" href="company.html">About us</a>
-  <input id="q" type="search" placeholder="Search products" aria-label="Search products">
-  <button id="mode" type="button">List view</button>
-</header>
-<nav id="tabs" aria-label="Categories"></nav>
-<section id="flt" aria-label="Filters"><select id="fp" aria-label="Power type" hidden></select><select id="fs" aria-label="Sort"><option value="">Sort: Default</option><option value="az">Name A to Z</option><option value="za">Name Z to A</option></select><label class="chk"><input type="checkbox" id="fph"> With photos</label><button type="button" id="fclr" class="ghost" hidden>Clear filters</button><span id="fcnt" aria-live="polite"></span></section></div>
-<div id="hot"><b class="hm"><i></i>Menu, search and contact</b></div>
-<main class="stage">
-  <section id="hero"><img id="hlogo" class="hlogo" alt=""><h1>Commercial kitchen equipment for hotels, restaurants and cafés</h1><p>Flip through the catalogue like a brochure, or search for exactly what you need.</p><div class="hb"><button type="button" class="btn" id="hb1">Browse the catalogue</button><a class="btn alt" id="hwa" target="_blank" rel="noopener">Ask on WhatsApp</a><a class="btn alt" href="company.html">About us</a></div><div class="tiles" id="tiles"></div></section>
-  <div id="bookwrap">
-    <div class="shelf">
-      <button class="arrow" id="aL" aria-label="Previous page">&#8249;</button>
-      <div class="book closed"><div class="leaf" id="L"></div><div class="leaf" id="R"><section class="pg sk" aria-label="Loading catalogue"><i></i><i></i><i></i></section></div></div>
-      <button class="arrow" id="aR" aria-label="Next page">&#8250;</button>
-    </div>
-    <div class="dock"><button id="prev">Previous</button><button id="first" type="button">Cover</button><input type="range" id="sl" min="1" max="1" value="1" aria-label="Go to page"><span id="pos"></span><button id="next">Next</button></div>
-  </div>
-  <div id="grid"></div>
-  <noscript><p class="msg" style="color:#fff">Please turn on JavaScript to flip through the catalogue, or read the <a href="catalogue.html" style="color:#FDB515">full product list</a>.</p></noscript>
-</main>
-<footer id="foot"><span><a href="catalogue.html">Full product list</a></span><span><a href="company.html">About us</a></span></footer>
-<dialog id="cd" aria-label="Contact details"></dialog>
-<button id="qfab" type="button" hidden>Enquiry list <b id="qn">0</b></button>
-<dialog id="qd" aria-label="Enquiry list"></dialog>
-<dialog id="lb"></dialog>
+<body>
+<div id="bgs" aria-hidden="true"></div>
+<nav><img data-logo alt="The Kitchen Hub"><a href="#about">About</a><a href="#work" id="nwork" hidden>Projects</a><a href="#offer">What we offer</a><a href="#contact">Contact</a><a class="btn" href="catalogue.html">View catalogue</a></nav>
+
+<header id="home" data-bg="home"><div class="w">
+  <img class="hl" data-logo alt="The Kitchen Hub">
+  <h1 id="hh"></h1>
+  <p id="hp"></p>
+  <div class="hb"><a class="btn" href="catalogue.html">Browse the catalogue</a><a class="btn alt" href="#contact">Contact us</a></div>
+</div></header>
+
+<section class="stats"><div class="w"><div class="sg" id="sg"></div></div></section>
+
+<section id="about" data-bg="about"><div class="w g2">
+  <div class="gl rv"><h2>About us</h2><div id="ab"></div></div>
+  <ul class="cov rv" id="cov"></ul>
+</div></section>
+
+<section id="work" data-bg="work" hidden><div class="w"><h2 id="wt"></h2><p id="wp" style="max-width:60ch;color:#CBD1D6"></p><div id="wf"></div><div class="pj" id="pj"></div></div></section>
+
+<section id="offer" data-bg="offer"><div class="w"><h2>What we offer</h2><div class="chips" id="tiles"></div><p class="more"><a class="btn" href="catalogue.html">See the full catalogue</a></p></div></section>
+
+<section id="contact" data-bg="contact"><div class="w"><h2>Visit or contact us</h2>
+<div class="g2">
+  <div class="gl rv"><dl id="cl"></dl>
+    <label for="fn">Your name</label><input id="fn" autocomplete="name">
+    <label for="fp">Phone (optional)</label><input id="fp" type="tel" autocomplete="tel">
+    <label for="fm">How can we help?</label><textarea id="fm" rows="3" placeholder="Tell us what you need"></textarea>
+    <div class="fa"><a class="btn" id="fw" target="_blank" rel="noopener">Send on WhatsApp</a><a class="btn alt" id="fe">Send by email</a></div></div>
+  <iframe class="map rv" id="map" title="Map to The Kitchen Hub, Unawatuna" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+</div></div></section>
+
+<dialog id="pd" aria-label="Project details"></dialog>
+<footer><span id="ft"></span> | <a href="catalogue.html">Catalogue</a> | <a href="products.html">All products</a></footer>
 
 <script src="config.js"></script>
 <script>
-
-const DEMO={cats:[{id:"c1",name:"Cooking Equipment"},{id:"c2",name:"Refrigeration"},{id:"c3",name:"Food Preparation"}],
-prods:[
-{id:"1",category_id:"c1",name:"4-Burner Gas Range with Oven",model:"KH-GR4",description:"Heavy-duty stainless steel range with cast iron burners and a full-size oven. Built for busy hotel kitchens.",specs:[{l:"Burners",v:"4"},{l:"Power",v:"Gas"},{l:"Size",v:"900 x 800 x 900 mm"}],price:"Price on request",images:[]},
-{id:"2",category_id:"c1",name:"Double Basket Deep Fryer",model:"KH-DF2",description:"Twin 12 L tanks with independent thermostats and a safety cut-off.",specs:[{l:"Capacity",v:"2 x 12 L"},{l:"Power",v:"Electric 6 kW"}],price:"Price on request",images:[]},
-{id:"3",category_id:"c1",name:"Flat Top Griddle",model:"KH-GT6",description:"Polished steel plate with even heat distribution for breakfast and grill service.",specs:[{l:"Plate",v:"600 mm"}],price:"Price on request",images:[]},
-{id:"4",category_id:"c1",name:"Combi Oven 6 Tray",model:"KH-CO6",description:"Steam, convection, and combination modes with a programmable touch panel.",specs:[{l:"Trays",v:"6 x GN 1/1"}],price:"Price on request",images:[]},
-{id:"5",category_id:"c2",name:"Upright Chiller 2 Door",model:"KH-UC2",description:"Stainless steel body with digital control and auto-defrost.",specs:[{l:"Volume",v:"1200 L"},{l:"Temp",v:"0 to 8 C"}],price:"Price on request",images:[]},
-{id:"6",category_id:"c2",name:"Under-counter Freezer",model:"KH-UF1",description:"Compact freezer that fits beneath a standard prep counter.",specs:[{l:"Volume",v:"300 L"}],price:"Price on request",images:[]},
-{id:"7",category_id:"c3",name:"Planetary Mixer 20 L",model:"KH-PM20",description:"Three speeds with a stainless bowl, hook, whisk, and beater.",specs:[{l:"Bowl",v:"20 L"}],price:"Price on request",images:[]},
-{id:"8",category_id:"c3",name:"Meat Slicer 300 mm",model:"KH-MS30",description:"Belt-driven slicer with an adjustable thickness gauge and blade guard.",specs:[{l:"Blade",v:"300 mm"}],price:"Price on request",images:[]}
-]};
-
-const $=s=>document.querySelector(s),L=$("#L"),R=$("#R");
-const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const $=s=>document.querySelector(s),esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const reduce=matchMedia("(prefers-reduced-motion:reduce)").matches;
-let DATA={cats:[],prods:[]},pages=[],cats=[],s=0,desk=innerWidth>=900,busy=false,list=[],listMode=false;
-
-async function api(t,q){
-  const r=await fetch(`${CFG.SUPABASE_URL}/rest/v1/${t}?${q}`,{headers:{apikey:CFG.SUPABASE_KEY,Authorization:"Bearer "+CFG.SUPABASE_KEY}});
-  if(!r.ok)throw new Error(r.status);return r.json();
-}
-/* Fetches every row, 1000 at a time (Supabase caps a single request at 1000 rows) */
-async function apiAll(t,q){
-  const h={apikey:CFG.SUPABASE_KEY,Authorization:"Bearer "+CFG.SUPABASE_KEY,Prefer:"count=exact"};
-  let out=[],total=Infinity;
-  while(out.length<total){
-    const r=await fetch(`${CFG.SUPABASE_URL}/rest/v1/${t}?${q}&limit=1000&offset=${out.length}`,{headers:h});
-    if(!r.ok)throw new Error(r.status);
-    const rows=await r.json(),m=/\/(\d+)$/.exec(r.headers.get("content-range")||"");
-    total=m?+m[1]:(rows.length<1000?out.length+rows.length:Infinity);
-    if(!rows.length)break;out=out.concat(rows);
-  }
-  return out;
-}
-async function load(bg){
-  if(!CFG.SUPABASE_URL){DATA=DEMO;return}
-  try{DATA={cats:await apiAll("categories","select=*&order=sort,name,id"),prods:await apiAll("products","select=*&order=sort,name,id")};try{localStorage.setItem("khc1",JSON.stringify(DATA))}catch(e){}}
-  catch(e){if(bg)throw e;L.innerHTML="";R.innerHTML='<div class="msg">The catalogue could not be loaded. Please try again shortly.</div>';throw e}
-}
-const catOf=p=>DATA.cats.some(c=>c.id===p.category_id)?p.category_id:"_";
-const plink=id=>location.origin+location.pathname+"#product="+id;
-const wa=p=>`https://wa.me/${CFG.WHATSAPP}?text=${encodeURIComponent("Hi, I'd like to enquire about: "+p.name+(p.model?" ("+p.model+")":"")+"\n"+plink(p.id))}`;
-const mail=p=>`mailto:${CFG.EMAIL}?subject=${encodeURIComponent("Enquiry: "+p.name)}&body=${encodeURIComponent("Hi, please send details and a quote for: "+p.name+(p.model?" ("+p.model+")":"")+"\n"+plink(p.id))}`;
-
-const F={pw:"",sort:"",ph:false};
-const catNm=p=>(DATA.cats.find(c=>c.id===p.category_id)||{name:"More equipment"}).name;
-const txt=p=>[p.name,p.model,p.description,catNm(p),(p.specs||[]).map(x=>x.l+" "+x.v).join(" ")].join(" ").toLowerCase();
-const pw=p=>{const t=txt(p);return /\bgas\b|\blpg\b/.test(t)?"gas":/electric/.test(t)?"electric":""};
-function build(q=""){
-  const w=q.trim().toLowerCase().split(/\s+/).filter(Boolean);
-  list=DATA.prods.filter(p=>{const t=txt(p);return w.every(x=>t.includes(x))&&(!F.pw||pw(p)===F.pw)&&(!F.ph||(p.images&&p.images.length))});
-  if(F.sort)list.sort((a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true})*(F.sort==="za"?-1:1));
-  cats=DATA.cats.slice();
-  if(list.some(p=>catOf(p)==="_"))cats.push({id:"_",name:"More equipment"});
-  pages=[{k:"cover"},{k:"toc"}];
-  cats.forEach((c,ci)=>{const it=list.filter(p=>catOf(p)===c.id);if(!it.length)return;
-    pages.push({k:"cat",c,ci,n:it.length,names:it.slice(0,8).map(p=>p.name)});
-    const pp=desk?6:CFG.PER_PAGE;for(let i=0;i<it.length;i+=pp)pages.push({k:"prods",ci,it:it.slice(i,i+pp)})});
-  pages.push({k:"back"});
-  $("#tabs").innerHTML=pages.map(p=>p.k==="cat"?`<button type="button" data-go="${pages.indexOf(p)}" data-ci="${p.ci}" style="--acc:${ACC[p.ci%ACC.length]}">${esc(p.c.name)}<small>${p.n}</small></button>`:"").join("");
-}
-const card=p=>`<article class="card"><div class="ph" data-open="${esc(p.id)}" tabindex="0" role="button" aria-label="View ${esc(p.name)}">${p.images&&p.images[0]?`${timg(p.images[0],p.name)}${p.images[1]?`${timg(p.images[1],"","class=\"alt2\"")}`:""}`:"No photo yet"}</div>
-<div class="info">${p.model?`<span class="plate">${esc(p.model)}</span>`:""}<h3>${esc(p.name)}</h3><p>${esc(p.description)}</p>${(p.specs||[]).length?`<ul class="sp">${p.specs.slice(0,3).map(x=>`<li>${x.l?esc(x.l)+": ":""}${esc(x.v)}</li>`).join("")}</ul>`:""}
-<div class="row">${price(p)}<a class="btn" href="${wa(p)}" target="_blank" rel="noopener">Enquire</a>${qbtn(p.id)}</div></div></article>`;
-
-function pg(i){
-  const p=pages[i];if(!p)return"";let h="";
-  if(p.k==="cover")h=(CFG.LOGO?`<img class="clogo" src="${esc(CFG.LOGO)}" alt="${esc(CFG.COMPANY)}">`:`<h1>${esc(CFG.COMPANY)}</h1><p>${esc(CFG.TAGLINE)}</p>`)+`<div class="yr">Commercial kitchen equipment catalogue, ${new Date().getFullYear()}</div>`;
-  else if(p.k==="toc")h=`<h2 class="t">Contents</h2><nav class="toc">${pages.map((x,j)=>x.k==="cat"?`<a data-go="${j}" tabindex="0"><span>${esc(x.c.name)}</span><span>${j+1}</span></a>`:"").join("")||'<div class="msg">No products match your search.</div>'}</nav>`;
-  else if(p.k==="cat")h=`<h2>${esc(p.c.name)}</h2><p>${p.n} product${p.n>1?"s":""}</p><ul>${p.names.map(n=>`<li>${esc(n)}</li>`).join("")}</ul>`;
-  else if(p.k==="prods")h=`<div class="grid2">${p.it.map(card).join("")}</div>`;
-  else{const rows=[["Phone",CFG.PHONE&&`<a href="tel:${esc(CFG.PHONE.replace(/[^\d+]/g,""))}">${esc(CFG.PHONE)}</a>`],["Address",CFG.ADDRESS&&esc(CFG.ADDRESS)],["Hours",CFG.HOURS&&esc(CFG.HOURS)]].filter(x=>x[1]);
-    h=`<h2 class="t">Talk to us</h2><p>${esc(CFG.ABOUT||"Tell us what you are building and we will help you choose the right equipment, plan the layout, and arrange delivery.")}</p>${rows.length?`<dl class="co">${rows.map(x=>`<dt>${x[0]}</dt><dd>${x[1]}</dd>`).join("")}</dl>`:""}<p><a class="btn" href="https://wa.me/${CFG.WHATSAPP}" target="_blank" rel="noopener">WhatsApp us</a> <a class="btn alt" href="mailto:${CFG.EMAIL}">${esc(CFG.EMAIL)}</a></p><p class="sp2">${esc(CFG.COMPANY)}${CFG.TAGLINE?" | "+esc(CFG.TAGLINE):""}</p>`}
-  return `<section class="pg ${p.k}" style="--acc:${ACC[(p.ci||0)%ACC.length]}">${h}<span class="pn">${i+1}</span></section>`;
-}
-const nS=()=>desk?1+Math.ceil((pages.length-1)/2):pages.length;
-const spreadOf=i=>desk?(i===0?0:Math.ceil(i/2)):i;
-const pagesOf=n=>desk?(n===0?[null,0]:[2*n-1,2*n<pages.length?2*n:null]):[null,n];
-function show(){
-  const [a,b]=pagesOf(s);
-  L.innerHTML=a==null?"":pg(a);R.innerHTML=b==null?"":pg(b);L.scrollTop=R.scrollTop=0;document.querySelector(".book").classList.toggle("closed",desk&&s===0);
-  const v=[a,b].filter(x=>x!=null).map(x=>x+1);
-  $("#pos").textContent=`Page ${v.join("–")} of ${pages.length}`;
-  $("#prev").disabled=$("#aL").disabled=s===0;$("#next").disabled=$("#aR").disabled=s>=nS()-1;sync(v);pre();
-}
-function go(n){
-  n=Math.max(0,Math.min(nS()-1,n));if(n===s||busy)return;
-  if(reduce){s=n;show();return}
-  if(!desk){busy=true;R.classList.add("fadeout");
-    setTimeout(()=>{R.classList.remove("fadeout");s=n;show();R.classList.add("fadein");setTimeout(()=>{R.classList.remove("fadein");busy=false},260)},200);return}
-  const d=n>s?1:-1,o=pagesOf(s),w=pagesOf(n),bk=document.querySelector(".book"),t=document.createElement("div");
-  bk.classList.toggle("closed",n===0);
-  const front=d>0?o[1]:o[0],back=d>0?w[0]:w[1];
-  t.className="turn "+(d>0?"fw":"bw");
-  t.innerHTML=`<div class="f">${front==null?"":pg(front)}</div><div class="b">${back==null?"":pg(back)}</div>`;
-  if(d>0)R.innerHTML=w[1]==null?"":pg(w[1]);else L.innerHTML=w[0]==null?"":pg(w[0]);
-  busy=true;bk.appendChild(t);void t.offsetWidth;
-  let done=false;const end=()=>{if(done)return;done=true;t.remove();s=n;show();busy=false};
-  t.addEventListener("transitionend",end,{once:true});setTimeout(end,1100);
-  t.style.transform=`rotateY(${d>0?-180:180}deg)`;
-}
-function renderList(){
-  $("#grid").innerHTML=cats.map((c,i)=>{const it=list.filter(p=>catOf(p)===c.id);return it.length?`<h2 id="cs${i}">${esc(c.name)}</h2><div class="gg">${it.map(card).join("")}</div>`:""}).join("")||'<div class="msg">No products match your search or filters.</div>';
-  $("#fcnt").textContent=`${list.length} of ${DATA.prods.length} products`;$("#grid").querySelectorAll(".card").forEach(c=>c.classList.add("rv"));reveal($("#grid"));
-  $("#fclr").hidden=!(F.pw||F.sort||F.ph||$("#q").value.trim());
-}
-function open(id,init){
-  const p=DATA.prods.find(x=>x.id===id);if(!p)return;
-  const im=p.images||[];lbU=im;lbI=0;
-  $("#lb").innerHTML=`<div class="lb"><button class="btn alt x" id="cl">Close</button>
-  <div class="main">${im[0]?`<img id="big" src="${esc(im[0])}" alt="${esc(p.name)}">${im.length>1?'<button type="button" class="ar l" data-lb="-1" aria-label="Previous photo">&#8249;</button><button type="button" class="ar r" data-lb="1" aria-label="Next photo">&#8250;</button>':""}<span class="ct" id="ct">1 / ${im.length}</span>`:"No photo yet"}</div>
-  ${im.length>1?`<div class="thumbs">${im.map((u,i)=>`<img src="${esc(u)}" class="${i?"":"on"}" alt="Photo ${i+1}">`).join("")}</div>`:""}
-  ${p.model?`<span class="plate">${esc(p.model)}</span>`:""}<h2>${esc(p.name)}</h2><p>${esc(p.description)}</p>
-  <dl>${(p.specs||[]).map(x=>x.l?`<dt>${esc(x.l)}</dt><dd>${esc(x.v)}</dd>`:`<dd class="full">${esc(x.v)}</dd>`).join("")}</dl>
-  <div class="row">${price(p)}${qbtn(p.id)}<a class="btn" href="${wa(p)}" target="_blank" rel="noopener">Enquire on WhatsApp</a><a class="btn alt" href="${mail(p)}">Email</a><button type="button" class="btn alt" data-share="${esc(p.id)}">Share link</button></div></div>`;
-  try{init?history.replaceState(null,"","#product="+id):history.pushState(null,"","#product="+id);pushed=!init}catch(e){}
-  document.title=p.name+" | "+CFG.COMPANY;
-  $("#lb").showModal();
-}
-document.addEventListener("click",e=>{
-  const t=e.target,qb=t.closest("[data-q]");if(qb){const had=inQ(qb.dataset.q);qtoggle(qb.dataset.q);if(!had&&!reduce)fly(qb);return}
-  if(t.dataset.share)return shareP(t);
-  if(t.closest("#qfab"))return qopen();
-  if(t.dataset.qp!=null){const x=Q[+t.dataset.qp];x.n=Math.min(999,x.n+1);qsave();return qlist()}
-  if(t.dataset.qm!=null){const x=Q[+t.dataset.qm];x.n=Math.max(1,x.n-1);qsave();return qlist()}
-  if(t.dataset.qx!=null){Q.splice(+t.dataset.qx,1);qsave();return qrefresh()}
-  if(t.id==="qc")return $("#qd").close();
-  if(t.id==="cbtn")return $("#cd").showModal();
-  if(t.id==="cc")return $("#cd").close();
-  if(t.id==="qclr"){if(Q.length&&confirm("Clear the whole list?")){Q=[];qsave();qrefresh()}return}
-  const o=t.closest("[data-open]");if(o)return open(o.dataset.open);
-  const g=t.closest("[data-go]");if(g){
-    if(listMode&&g.closest("#tabs")){const h=$("#cs"+g.dataset.ci);if(h)h.scrollIntoView({behavior:reduce?"auto":"smooth"});return}
-    return go(spreadOf(+g.dataset.go))}
-  if(e.target.id==="cl")$("#lb").close();
-  if(e.target.matches(".thumbs img"))lbSet([...e.target.parentNode.children].indexOf(e.target));
-  if(e.target.dataset.lb)lbSet(lbI+ +e.target.dataset.lb);
-  if(e.target.id==="big")e.target.classList.toggle("zoom");
-});
-document.addEventListener("keydown",e=>{
-  if((e.key==="Enter"||e.key===" ")&&e.target.matches("[data-open],[data-go]")){e.preventDefault();e.target.click();return}
-  if(e.target.matches("input,select")||$("#lb").open)return;
-  if(e.key==="ArrowRight")go(s+1);if(e.key==="ArrowLeft")go(s-1)});
-$("#next").onclick=()=>go(s+1);$("#prev").onclick=()=>go(s-1);
-
-let tx=0;$("#bookwrap").addEventListener("touchstart",e=>tx=e.touches[0].clientX,{passive:true});
-$("#bookwrap").addEventListener("touchend",e=>{const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>60)go(s+(dx<0?1:-1))});
-let t;$("#q").oninput=e=>{clearTimeout(t);t=setTimeout(()=>{build(e.target.value);s=spreadOf(e.target.value.trim()&&pages.length>3?2:0);show();renderList()},200)};
-$("#mode").onclick=()=>{listMode=!listMode;$("#bookwrap").style.display=listMode?"none":"";$("#grid").style.display=listMode?"block":"none";$("#mode").textContent=listMode?"Flipbook view":"List view"};
-addEventListener("resize",()=>{const d=innerWidth>=900;if(d!==desk){const cur=pagesOf(s).find(x=>x!=null)??0;desk=d;build($("#q").value);s=spreadOf(Math.min(cur,pages.length-1));show();renderList()}});
-
-/* ---- navigation, category colours, photo viewer ---- */
-const ACC=["var(--flame)"];
-let lbI=0,lbU=[];
-/* ---- shareable product links: index.html#product=ID ---- */
-let PG=1,pushed=false,PID=(/product=([\w-]+)/.exec(location.hash)||[])[1]||null;
-const baseTitle=()=>`${CFG.COMPANY} | Commercial Kitchen Equipment Catalogue`;
-function hashPage(){if($("#lb").open||$("#q").value.trim())return;try{history.replaceState(null,"","#page="+PG)}catch(e){}}
-$("#lb").addEventListener("close",()=>{
-  document.title=baseTitle();
-  if(/product=/.test(location.hash)){if(pushed)history.back();else hashPage()}
-  pushed=false});
-function openFromHash(final){
-  if(!PID||$("#lb").open)return;
-  if(DATA.prods.some(x=>x.id===PID)){const id=PID;PID=null;open(id,true)}else if(final){PID=null;hashPage()}
-}
-async function shareP(b){
-  const p=DATA.prods.find(x=>x.id===b.dataset.share);if(!p)return;const url=plink(p.id);
-  if(navigator.share){try{await navigator.share({title:p.name,text:p.name+(p.model?" ("+p.model+")":""),url});return}catch(e){if(e.name==="AbortError")return}}
-  let ok=false;try{await navigator.clipboard.writeText(url);ok=true}catch(e){}
-  if(!ok){prompt("Copy this link:",url);return}
-  const o=b.textContent;b.textContent="Link copied";setTimeout(()=>b.textContent=o,1800);
-}
-const price=p=>p.price&&!/on request/i.test(p.price)?`<b>${esc(p.price)}</b>`:"";
-function sync(v){
-  const cur=v[0]-1,sl=$("#sl");sl.max=pages.length;sl.value=cur+1;
-  let ci=-1;if(pages[cur]&&pages[cur].k!=="back")for(let i=cur;i>=0;i--)if(pages[i].ci!=null){ci=pages[i].ci;break}
-  document.querySelectorAll("#tabs button").forEach(b=>{const on=+b.dataset.ci===ci;b.classList.toggle("on",on);if(on)b.scrollIntoView({inline:"center",block:"nearest",behavior:reduce?"auto":"smooth"})});
-  PG=cur+1;hashPage();
-}
-function hashSpread(){const m=/page=(\d+)/.exec(location.hash);return m?spreadOf(Math.max(0,Math.min(pages.length-1,+m[1]-1))):0}
-function lbSet(i){
-  if(lbU.length<2)return;lbI=(i+lbU.length)%lbU.length;
-  const b=$("#big");b.classList.remove("zoom");b.style.transformOrigin="";b.src=lbU[lbI];$("#ct").textContent=`${lbI+1} / ${lbU.length}`;
-  document.querySelectorAll(".thumbs img").forEach((t,k)=>t.classList.toggle("on",k===lbI));
-}
-$("#aL").onclick=()=>go(s-1);$("#aR").onclick=()=>go(s+1);$("#first").onclick=()=>go(0);
-$("#home").onclick=()=>{if(listMode)$("#mode").click();go(spreadOf(1))};
-$("#sl").oninput=e=>{$("#pos").textContent=`Page ${e.target.value} of ${pages.length}`};
-$("#sl").onchange=e=>{const n=spreadOf(+e.target.value-1);n===s?show():go(n)};
-$("#mode").addEventListener("click",()=>document.body.classList.toggle("list",listMode));
-addEventListener("hashchange",()=>{
-  const m=/product=([\w-]+)/.exec(location.hash);
-  if(m){if(!$("#lb").open&&DATA.prods.some(x=>x.id===m[1]))open(m[1],true);return}
-  if($("#lb").open){$("#lb").close();return}
-  const n=hashSpread();if(n!==s)go(n)});
-document.addEventListener("keydown",e=>{if(e.target.matches("input,select")||$("#lb").open)return;if(e.key==="Home")go(0);if(e.key==="End")go(nS()-1)});
-document.addEventListener("pointermove",e=>{const c=e.target.closest&&e.target.closest(".cover");if(c){const r=c.getBoundingClientRect();c.style.setProperty("--mx",(e.clientX-r.left)+"px");c.style.setProperty("--my",(e.clientY-r.top)+"px")}});
-$("#lb").addEventListener("keydown",e=>{if(e.key==="ArrowRight")lbSet(lbI+1);if(e.key==="ArrowLeft")lbSet(lbI-1)});
-$("#lb").addEventListener("mousemove",e=>{const b=e.target;if(b.id==="big"&&b.classList.contains("zoom")){const r=b.parentNode.getBoundingClientRect();b.style.transformOrigin=`${(e.clientX-r.left)/r.width*100}% ${(e.clientY-r.top)/r.height*100}%`}});
-let lx=0;$("#lb").addEventListener("touchstart",e=>lx=e.touches[0].clientX,{passive:true});
-$("#lb").addEventListener("touchend",e=>{const dx=e.changedTouches[0].clientX-lx;if(Math.abs(dx)>50&&lbU.length>1)lbSet(lbI+(dx<0?1:-1))});
-
-/* ---- enquiry list ---- */
-let Q=[];try{Q=JSON.parse(localStorage.getItem("khq")||"[]").filter(x=>x&&x.id)}catch(e){}
-const qsave=()=>{try{localStorage.setItem("khq",JSON.stringify(Q))}catch(e){}};
-const inQ=id=>Q.some(x=>x.id===id);
-const qbtn=id=>`<button type="button" class="btn alt qb${inQ(id)?" on":""}" data-q="${esc(id)}" aria-pressed="${inQ(id)}">${inQ(id)?"In list":"Add to list"}</button>`;
-function qtoggle(id){
-  if(inQ(id))Q=Q.filter(x=>x.id!==id);
-  else{const p=DATA.prods.find(x=>x.id===id);if(!p)return;Q.push({id,name:p.name,model:p.model||"",n:1})}
-  qsave();qrefresh();
-}
-function qrefresh(){
-  $("#qfab").hidden=!Q.length;$("#qn").textContent=Q.length;
-  document.querySelectorAll("[data-q]").forEach(b=>{const on=inQ(b.dataset.q);b.classList.toggle("on",on);b.setAttribute("aria-pressed",on);b.textContent=on?"In list":"Add to list"});
-  qlist();
-}
-function qmsg(){
-  const nm=($("#qnm")||{}).value||"",nt=($("#qnt")||{}).value||"";
-  return "Hi, I'd like a quote for these items:\n"+Q.map((x,i)=>`${i+1}. ${x.name}${x.model?" ("+x.model+")":""} x ${x.n}\n   ${plink(x.id)}`).join("\n")+(nt.trim()?"\n\nNotes: "+nt.trim():"")+(nm.trim()?"\n\nFrom: "+nm.trim():"")+"\n\nThank you.";
-}
-function qlinks(){
-  const w=$("#qwa"),e=$("#qem");if(!w)return;const t=qmsg();
-  w.href=`https://wa.me/${CFG.WHATSAPP}?text=${encodeURIComponent(t)}`;
-  e.href=`mailto:${CFG.EMAIL}?subject=${encodeURIComponent("Quote request: "+Q.length+" item"+(Q.length==1?"":"s"))}&body=${encodeURIComponent(t)}`;
-  w.classList.toggle("dis",!Q.length);e.classList.toggle("dis",!Q.length);
-}
-function qlist(){
-  const l=$("#ql");if(!l)return;
-  l.innerHTML=Q.length?Q.map((x,i)=>`<div class="qi"><div><b>${esc(x.name)}</b>${x.model?`<span class="muted">${esc(x.model)}</span>`:""}</div><div class="qty"><button type="button" data-qm="${i}" aria-label="Fewer ${esc(x.name)}">-</button><span>${x.n}</span><button type="button" data-qp="${i}" aria-label="More ${esc(x.name)}">+</button></div><button type="button" class="rm" data-qx="${i}" aria-label="Remove ${esc(x.name)}">&times;</button></div>`).join(""):'<p class="msg">Your list is empty. Tap "Add to list" on any product.</p>';
-  qlinks();
-}
-function qopen(){
-  $("#qd").innerHTML=`<div class="lb"><div class="qh"><h2>Enquiry list</h2><button class="btn alt" id="qc" type="button">Close</button></div><div id="ql"></div><div><label for="qnm">Your name or company (optional)</label><input id="qnm" autocomplete="organization"></div><div><label for="qnt">Notes (optional)</label><textarea id="qnt" rows="2" placeholder="Delivery location, timing, questions"></textarea></div><div class="row qa"><button class="btn alt" id="qclr" type="button">Clear list</button><a class="btn" id="qwa" target="_blank" rel="noopener">Send on WhatsApp</a><a class="btn alt" id="qem">Send by email</a></div></div>`;
-  qlist();$("#qd").showModal();
-}
-$("#qd").addEventListener("input",qlinks);
-
-/* ---- filters ---- */
-function fopts(){
-  const c={gas:0,electric:0};DATA.prods.forEach(p=>{const k=pw(p);if(k)c[k]++});
-  $("#fp").hidden=!(c.gas||c.electric);
-  $("#fp").innerHTML=`<option value="">Power: Any</option><option value="gas">Gas (${c.gas})</option><option value="electric">Electric (${c.electric})</option>`;
-}
-function applyF(){build($("#q").value);s=0;show();renderList()}
-$("#fp").onchange=e=>{F.pw=e.target.value;applyF()};
-$("#fs").onchange=e=>{F.sort=e.target.value;applyF()};
-$("#fph").onchange=e=>{F.ph=e.target.checked;applyF()};
-$("#fclr").onclick=()=>{F.pw=F.sort="";F.ph=false;$("#fp").value=$("#fs").value="";$("#fph").checked=false;$("#q").value="";applyF()};
-
-/* ---- sticky offset + category highlight in list view ---- */
-const setBH=()=>{const b=document.querySelector(".bar");document.documentElement.style.setProperty("--bh",(getComputedStyle(b).position==="sticky"?b.offsetHeight:0)+"px")};
-addEventListener("resize",setBH);document.fonts&&document.fonts.ready.then(setBH);
-let lastA=-2;
-addEventListener("scroll",()=>{
-  if(!listMode)return;
-  const y=(parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--bh"))||0)+90;let a=-1;
-  document.querySelectorAll("#grid h2").forEach(h=>{if(h.getBoundingClientRect().top<y)a=+h.id.slice(2)});
-  if(a===lastA)return;lastA=a;const tb=$("#tabs");
-  document.querySelectorAll("#tabs button").forEach(b=>{const on=+b.dataset.ci===a;b.classList.toggle("on",on);if(on)tb.scrollLeft=b.offsetLeft-tb.clientWidth/2+b.offsetWidth/2});
-},{passive:true});
-
-/* ---- focus mode: menus fade away while the cursor is over the flipbook ---- */
-const fmq=matchMedia("(min-width:900px) and (hover:hover)"),chromeEl=$("#chrome");
-function syncFocus(){const on=fmq.matches&&!listMode;document.body.classList.toggle("fb",on)}
-const chOn=()=>{document.body.classList.add("ch","hm1");try{localStorage.setItem("khm","1")}catch(e){}};
-const chOff=()=>{if(!chromeEl.contains(document.activeElement))document.body.classList.remove("ch")};
-$("#hot").addEventListener("mouseenter",chOn);chromeEl.addEventListener("mouseenter",chOn);chromeEl.addEventListener("focusin",chOn);
-chromeEl.addEventListener("focusout",()=>setTimeout(()=>{if(!chromeEl.matches(":hover"))chOff()},60));
-$("#bookwrap").addEventListener("mouseenter",chOff);
-$("#mode").addEventListener("click",syncFocus);fmq.addEventListener("change",syncFocus);
-
-/* ---- brand settings (admin > Settings) ---- */
+const D={...{"facebook": "https://www.facebook.com/kitchenhubbranch", "c_hero_title": "Everything you need to build the perfect kitchen, and beyond", "c_hero_text": "Cooking essentials, bakery tools, hotel supplies and complete kitchen interiors, all in one place in Unawatuna.", "c_stats": "40 | Hotels\n30 | Bakeries\n15 | Restaurants\n60 | Kitchen interiors", "c_about": "Welcome to The Kitchen Hub, your one-stop destination for everything your kitchen needs. From everyday cooking essentials and professional bakery tools to complete kitchen interiors and premium hotel supplies, we bring quality, function and style together in one place.\nWhether you are a home baker, a seasoned chef or running a hospitality business, we help you find exactly what you need to create, cook and serve with confidence. If it is not in our collection, our team will source it for you.\nOur mission is simple: to make every kitchen smarter, more efficient and more inspiring.", "c_cover": "Commercial kitchen equipment | Ranges, fryers, ovens, chillers and more\nBakery equipment | Mixers, ovens and professional tools\nHotel and restaurant supplies | Cutlery, tableware and serving\nKitchen interiors | Complete layouts, planned and installed", "c_work_title": "Our projects", "c_work_text": "A selection of kitchens we have equipped and built. Tap a project to see more photos."},phone:"+94 91 222 4922 | +94 76 4875 776",address:"149, Matara Rd, Unawatuna",email:"contact@kitchenhubb.lk",accent:"#FDB515",dim:"55",logo:"logo.png",wallpaper:"wallpaper.jpg"};
+let S={};try{S=JSON.parse(localStorage.getItem("khs1")||"{}")||{}}catch(e){}
+const v=k=>(S[k]||"").trim()||D[k]||"";
+const wa=()=>(S.whatsapp||CFG.WHATSAPP||"").replace(/\D/g,"");
 const lum=h=>{const n=parseInt(h.slice(1),16);return((n>>16)*299+(n>>8&255)*587+(n&255)*114)/1000};
-async function brand(){
-  const S={};
-  if(CFG.SUPABASE_URL){let c=null;try{c=JSON.parse(localStorage.getItem("khs1"))}catch(e){}
-    const f=api("settings","select=*").then(r=>{const o={};r.forEach(x=>o[x.key]=x.value);try{localStorage.setItem("khs1",JSON.stringify(o))}catch(e){}return o});f.catch(()=>{});
-    try{Object.assign(S,c||await f)}catch(e){}}
-  const v=(k,d)=>(S[k]||"").trim()||d;
-  CFG.COMPANY=v("company",CFG.COMPANY);CFG.TAGLINE=v("tagline",CFG.TAGLINE);CFG.EMAIL=v("email",CFG.EMAIL);
-  CFG.WHATSAPP=v("whatsapp",CFG.WHATSAPP).replace(/\D/g,"");
-  CFG.PHONE=v("phone","");CFG.ADDRESS=v("address","");CFG.HOURS=v("hours","");CFG.ABOUT=v("about","");CFG.LOGO=v("logo","logo.png");
-  let ac=v("accent","#FDB515");if(!/^#[0-9a-f]{6}$/i.test(ac))ac="#FDB515";
-  const r=document.documentElement.style;r.setProperty("--flame",ac);r.setProperty("--on",lum(ac)>150?"#111":"#fff");
-  r.setProperty("--wall",`url("${v("wallpaper","wallpaper.jpg").replace(/"/g,"%22")}")`);
-  r.setProperty("--dimA",Math.min(90,Math.max(0,+v("dim","40")||0))/100);
-}
-
-function fillContact(){
-  const tel=CFG.PHONE&&`<a href="tel:${esc(CFG.PHONE.replace(/[^\d+]/g,""))}">${esc(CFG.PHONE)}</a>`,
-    wa=CFG.WHATSAPP&&`<a href="https://wa.me/${CFG.WHATSAPP}" target="_blank" rel="noopener">+${esc(CFG.WHATSAPP)}</a>`,
-    em=CFG.EMAIL&&`<a href="mailto:${esc(CFG.EMAIL)}">${esc(CFG.EMAIL)}</a>`;
-  $("#foot").innerHTML=[["Call",tel],["WhatsApp",wa],["Email",em]].filter(x=>x[1]).map(x=>`<span>${x[0]}: ${x[1]}</span>`).join("")+'<span><a href="catalogue.html">Full product list</a></span><span><a href="company.html">About us</a></span>';
-  const rows=[["Phone",tel],["WhatsApp",wa],["Email",em],["Address",CFG.ADDRESS&&esc(CFG.ADDRESS)],["Hours",CFG.HOURS&&esc(CFG.HOURS)]].filter(x=>x[1]);
-  $("#cd").innerHTML=`<div class="lb"><div class="qh"><h2>Contact us</h2><button class="btn alt" id="cc" type="button">Close</button></div><p>${esc(CFG.ABOUT||"Tell us what you are building and we will help you choose the right equipment, plan the layout, and arrange delivery.")}</p><dl class="co">${rows.map(x=>`<dt>${x[0]}</dt><dd>${x[1]}</dd>`).join("")}</dl><div class="row"><a class="btn" href="https://wa.me/${CFG.WHATSAPP}" target="_blank" rel="noopener">WhatsApp us</a><a class="btn alt" href="mailto:${esc(CFG.EMAIL)}">Email us</a></div><p class="sp2">${esc(CFG.COMPANY)}${CFG.TAGLINE?" | "+esc(CFG.TAGLINE):""}</p></div>`;
-}
-
+const api=(t,q)=>fetch(`${CFG.SUPABASE_URL}/rest/v1/${t}?${q}`,{headers:{apikey:CFG.SUPABASE_KEY,Authorization:"Bearer "+CFG.SUPABASE_KEY}}).then(r=>r.ok?r.json():Promise.reject());
 const th=u=>/\/product-images\//.test(u)&&!/\/brand\//.test(u)?u.replace(/\/([^\/]+)$/,"/t/$1"):u;
-const timg=(u,a,c)=>`<img ${c||""} loading="lazy" src="${esc(th(u))}" data-f="${esc(u)}" onerror="this.onerror=null;this.src=this.dataset.f" alt="${esc(a||"")}">`;
-const cget=()=>{try{const c=JSON.parse(localStorage.getItem("khc1"));return c&&c.cats&&c.prods?c:null}catch(e){return null}};
-function pre(){[s+1,s+2].forEach(n=>{if(n>=nS())return;pagesOf(n).forEach(i=>{const p=i!=null&&pages[i];if(p&&p.k==="prods")p.it.forEach(x=>{if(x.images&&x.images[0])new Image().src=th(x.images[0])})})})}
 const io="IntersectionObserver"in window&&!reduce?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{rootMargin:"0px 0px -6% 0px"}):null;
-function reveal(r){r.querySelectorAll(".rv:not(.in)").forEach((el,i)=>{if(!io)return el.classList.add("in");el.style.setProperty("--d",Math.min(i%6,5)*.06+"s");io.observe(el)})}
-function renderHero(){
-  $("#tiles").innerHTML=cats.map((c,i)=>{const it=DATA.prods.filter(p=>catOf(p)===c.id);if(!it.length)return"";const ph=it.find(p=>p.images&&p.images[0]),im=c.image||(ph&&ph.images[0]);
-    return `<button type="button" class="tile rv${c.image?" full":""}" data-ci="${i}"><div class="ti">${im?timg(im,c.name,c.image?'class="fill"':""):`<span class="tl">${esc(c.name.charAt(0))}</span>`}</div><div class="tn"><b>${esc(c.name)}</b><small>${it.length} product${it.length>1?"s":""}</small></div></button>`}).join("");
-  reveal($("#tiles"));
+const rv=r=>r.querySelectorAll(".rv:not(.in)").forEach((el,i)=>{if(!io)return el.classList.add("in");el.style.setProperty("--d",Math.min(i%6,5)*.07+"s");io.observe(el)});
+const coord=()=>/^-?\d+(\.\d+)?\s*,\s*-?\d+(\.\d+)?$/.test(v("map").trim());
+const dq=()=>coord()?v("map").replace(/\s/g,""):(v("map").trim()&&!/[<>]/.test(v("map"))?v("map").trim():v("address")+", Sri Lanka");
+function mapSrc(){const m=v("map").trim(),f=m.match(/src="([^"]+)"/),e=f?f[1].replace(/&amp;/g,"&"):m;
+  if(/^https:\/\/www\.google\.com\/maps/.test(e)&&/embed/.test(e))return e;
+  return `https://www.google.com/maps?q=${encodeURIComponent(dq())}&z=17&output=embed`}
+function apply(){
+  let ac=v("accent");if(!/^#[0-9a-f]{6}$/i.test(ac))ac=D.accent;const r=document.documentElement.style;
+  r.setProperty("--flame",ac);r.setProperty("--on",lum(ac)>150?"#111":"#fff");
+  r.setProperty("--wall",`url("${v("wallpaper").replace(/"/g,"%22")}")`);r.setProperty("--dimA",Math.min(90,Math.max(0,+v("dim")))/100);
+  document.querySelectorAll("[data-logo]").forEach(i=>{if(i.getAttribute("src")!==v("logo"))i.src=v("logo")});
+  const co=v("company")||CFG.COMPANY,tels=v("phone").split(/[|,\/]/).map(x=>x.trim()).filter(Boolean),w=wa(),rows=[
+    ["Address",`${esc(v("address"))} <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(dq())}" target="_blank" rel="noopener">Directions</a>`],
+    ["Phone",tels.map(t=>`<a href="tel:${esc(t.replace(/[^\d+]/g,""))}">${esc(t)}</a>`).join("<br>")],
+    ["WhatsApp",w&&`<a href="https://wa.me/${w}" target="_blank" rel="noopener">+${esc(w)}</a>`],
+    ["Email",`<a href="mailto:${esc(v("email"))}">${esc(v("email"))}</a>`],
+    ["Hours",v("hours")&&esc(v("hours"))],
+    ["Facebook",/^https?:\/\//.test(v("facebook"))&&`<a href="${esc(v("facebook"))}" target="_blank" rel="noopener">${esc(v("facebook").replace(/^https?:\/\/(www\.)?/,""))}</a>`]].filter(x=>x[1]);
+  $("#cl").innerHTML=rows.map(x=>`<dt>${x[0]}</dt><dd>${x[1]}</dd>`).join("");
+  const u=mapSrc();if($("#map").getAttribute("src")!==u)$("#map").src=u;
+  $("#ft").textContent=`© ${new Date().getFullYear()} ${co}${v("tagline")?" | "+v("tagline"):CFG.TAGLINE?" | "+CFG.TAGLINE:""}`;
+  document.title=`${co} | Kitchen equipment, bakery tools and interiors in Unawatuna`;fl();texts();bgs();
 }
-$("#hero").addEventListener("click",e=>{const b=e.target.closest("#hb1,.tile");if(!b)return;const ci=b.dataset.ci,sm={behavior:reduce?"auto":"smooth"};
-  if(listMode){const h=ci!=null&&$("#cs"+ci);(h||$("#grid")).scrollIntoView(sm);return}
-  const j=ci!=null?pages.findIndex(p=>p.k==="cat"&&p.ci===+ci):-1;go(spreadOf(j>=0?j:1));$("#bookwrap").scrollIntoView(sm)});
-function fly(el){const f=$("#qfab");if(!f||f.hidden)return;const a=el.getBoundingClientRect(),b=f.getBoundingClientRect(),d=document.createElement("div");
-  d.className="fly";d.style.left=a.left+a.width/2-14+"px";d.style.top=a.top+a.height/2-14+"px";document.body.appendChild(d);
-  d.animate([{transform:"translate(0,0) scale(1)",opacity:1},{transform:`translate(${b.left+b.width/2-a.left-a.width/2}px,${b.top+b.height/2-a.top-a.height/2}px) scale(.3)`,opacity:.4}],{duration:650,easing:"cubic-bezier(.5,-.2,.7,1)"}).onfinish=()=>{d.remove();f.classList.remove("bump");void f.offsetWidth;f.classList.add("bump")}}
-/* search suggestions */
-const sug=document.createElement("div");sug.id="sug";sug.setAttribute("role","listbox");sug.hidden=true;document.body.appendChild(sug);let sa=-1,sl=[];
-const hl=(t,w)=>{t=String(t||"");if(!w.length)return esc(t);const re=new RegExp("("+w.map(x=>x.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")).join("|")+")","ig");return t.split(re).map((x,i)=>i%2?`<mark>${esc(x)}</mark>`:esc(x)).join("")};
-function suggest(){
-  const w=$("#q").value.trim().toLowerCase().split(/\s+/).filter(Boolean);if(!w.length){sug.hidden=true;return}
-  const sc=p=>{const n=(p.name||"").toLowerCase(),m=(p.model||"").toLowerCase();return w.reduce((a,x)=>a+(n.startsWith(x)?3:n.includes(x)||m.includes(x)?2:0),0)};
-  sl=DATA.prods.filter(p=>{const t=txt(p);return w.every(x=>t.includes(x))}).sort((a,b)=>sc(b)-sc(a)).slice(0,6);sa=-1;
-  sug.innerHTML=sl.length?sl.map((p,i)=>`<div class="si" role="option" data-sg="${i}"><div class="st">${p.images&&p.images[0]?timg(p.images[0]):""}</div><div><b>${hl(p.name,w)}</b><div class="sm"><span>${hl(p.model||"",w)}</span><span>${esc(catNm(p))}</span></div></div></div>`).join(""):'<div class="sn">No products match. Try fewer words.</div>';
-  const r=$("#q").getBoundingClientRect(),W=Math.min(Math.max(r.width,320),innerWidth-16);
-  sug.style.left=Math.max(8,Math.min(r.left,innerWidth-W-8))+"px";sug.style.top=r.bottom+6+"px";sug.style.width=W+"px";sug.hidden=false;
+function fl(){
+  const t=`Hi, I'd like to get in touch.\n\n${$("#fm").value.trim()}${$("#fn").value.trim()?"\n\nName: "+$("#fn").value.trim():""}${$("#fp").value.trim()?"\nPhone: "+$("#fp").value.trim():""}`;
+  $("#fw").href=`https://wa.me/${wa()}?text=${encodeURIComponent(t)}`;
+  $("#fe").href=`mailto:${v("email")}?subject=${encodeURIComponent("Enquiry from the website")}&body=${encodeURIComponent(t)}`;
 }
-const sMark=()=>sug.querySelectorAll(".si").forEach((e,i)=>{e.classList.toggle("on",i===sa);e.setAttribute("aria-selected",i===sa)});
-const sPick=id=>{sug.hidden=true;open(id)};
-$("#q").addEventListener("input",suggest);
-$("#q").addEventListener("keydown",e=>{if(sug.hidden||!sl.length)return;
-  if(e.key==="ArrowDown"||e.key==="ArrowUp"){e.preventDefault();sa=(sa+(e.key==="ArrowDown"?1:-1)+sl.length)%sl.length;sMark()}
-  else if(e.key==="Enter"&&sa>=0){e.preventDefault();sPick(sl[sa].id)}else if(e.key==="Escape")sug.hidden=true});
-$("#q").addEventListener("blur",()=>setTimeout(()=>sug.hidden=true,120));
-sug.addEventListener("mousedown",e=>{e.preventDefault();const i=e.target.closest("[data-sg]");if(i)sPick(sl[+i.dataset.sg].id)});
-addEventListener("scroll",()=>{sug.hidden=true},{passive:true});
+["#fn","#fp","#fm"].forEach(s=>$(s).addEventListener("input",fl));
+const lines=x=>String(x||"").split(/\n/).map(y=>y.trim()).filter(Boolean);
+const pair=l=>{const i=l.indexOf("|");return i<0?[l,""]:[l.slice(0,i).trim(),l.slice(i+1).trim()]};
+let tsig="";
+function texts(){
+  const sig=JSON.stringify(["c_hero_title","c_hero_text","c_stats","c_about","c_cover","c_work_title","c_work_text"].map(v));if(sig===tsig)return;tsig=sig;
+  $("#hh").textContent=v("c_hero_title");$("#hp").textContent=v("c_hero_text");
+  $("#sg").innerHTML=lines(v("c_stats")).slice(0,4).map(l=>{const [n,x]=pair(l),k=parseInt(n,10),ok=!isNaN(k);return `<div><b${ok?` data-n="${k}"`:""}>${ok?0:esc(n)}</b><span>${esc(x)}</span></div>`}).join("");
+  $("#sg").querySelectorAll("[data-n]").forEach(el=>co?co.observe(el):count(el));
+  $("#ab").innerHTML=lines(v("c_about")).map(x=>`<p>${esc(x)}</p>`).join("");
+  $("#cov").innerHTML=lines(v("c_cover")).map(l=>{const [a,b]=pair(l);return `<li>${esc(a)}${b?`<small>${esc(b)}</small>`:""}</li>`}).join("");
+  $("#wt").textContent=v("c_work_title");$("#wp").textContent=v("c_work_text");
+}
+function tiles(c,p){
+  const n={};(p||[]).forEach(x=>n[x.category_id]=(n[x.category_id]||0)+1);
+  let h=(c||[]).filter(k=>n[k.id]).map(k=>`<a class="chip rv" href="catalogue.html">${esc(k.name)}<small>${n[k.id]}</small></a>`).join("");
+  if(!h)h=lines(v("c_cover")).map(l=>`<a class="chip rv" href="catalogue.html">${esc(pair(l)[0])}</a>`).join("");
+  $("#tiles").innerHTML=h;rv($("#tiles"));
+}
+async function pages(t,q){let o=[],tot=Infinity;while(o.length<tot){const r=await fetch(`${CFG.SUPABASE_URL}/rest/v1/${t}?${q}&limit=1000&offset=${o.length}`,{headers:{apikey:CFG.SUPABASE_KEY,Authorization:"Bearer "+CFG.SUPABASE_KEY,Prefer:"count=exact"}});if(!r.ok)throw 0;const a=await r.json(),m=/\/(\d+)$/.exec(r.headers.get("content-range")||"");tot=m?+m[1]:(a.length<1000?o.length+a.length:Infinity);if(!a.length)break;o=o.concat(a)}return o}
 
-const t0=performance.now();let spl=false;
-function endSplash(){if(spl)return;spl=true;let q=false;try{q=!!sessionStorage.getItem("khsp");sessionStorage.setItem("khsp","1")}catch(e){}
-  setTimeout(()=>{const e=$("#splash");e.classList.add("out");document.body.classList.remove("splashing");document.body.classList.add("go");setTimeout(()=>e.remove(),700)},q?0:Math.max(0,1200-(performance.now()-t0)))}
-setTimeout(endSplash,7000);
+/* ---- section backgrounds that change while scrolling ---- */
+const BG=["home","about","work","offer","contact"];let bsig="",bcur=-1;
+function bgs(){
+  const u=BG.map(k=>v("bg_"+k)||v("wallpaper")),sig=u.join("|");if(sig===bsig)return;bsig=sig;
+  const box=$("#bgs");box.innerHTML="";
+  u.forEach((x,i)=>{const d=document.createElement("div");d.className="bgl";d.style.backgroundImage=`url("${x.replace(/"/g,"%22")}")`;d.style.transformOrigin=["50% 50%","20% 30%","80% 40%","30% 80%","70% 30%"][i];box.appendChild(d);new Image().src=x});
+  bcur=-1;pick();
+}
+function pick(){
+  const L=$("#bgs").children;if(!L.length)return;let a=0;
+  BG.forEach((k,i)=>{const e=document.querySelector("[data-bg="+k+"]");if(e&&!e.hidden&&e.getBoundingClientRect().top<=innerHeight*.45)a=i});
+  if(a!==bcur){bcur=a;[...L].forEach((l,i)=>l.classList.toggle("on",i===a))}
+}
+let tk=false;addEventListener("scroll",()=>{if(tk)return;tk=true;requestAnimationFrame(()=>{tk=false;pick()})},{passive:true});addEventListener("resize",pick);
+
+/* ---- projects ---- */
+let PJ=[],pf="",pi=0;
+function pjDraw(){
+  const kinds=[...new Set(PJ.map(x=>(x.kind||"").trim()).filter(Boolean))];
+  $("#wf").innerHTML=kinds.length>1?[""].concat(kinds).map(k=>`<button type="button" data-f="${esc(k)}" class="${k===pf?"on":""}">${k?esc(k):"All"}</button>`).join(""):"";
+  $("#pj").innerHTML=PJ.map((x,i)=>({x,i})).filter(o=>!pf||(o.x.kind||"").trim()===pf).map(({x,i})=>{const im=x.images||[],m=[x.location,x.year].filter(Boolean).join(" · ");
+    return `<button type="button" class="pc rv" data-i="${i}">${im[0]?`<img loading="lazy" src="${esc(th(im[0]))}" data-f="${esc(im[0])}" onerror="this.onerror=null;this.src=this.dataset.f" alt="${esc(x.title)}">`:`<span class="pl">${esc(x.title.charAt(0))}</span>`}${x.kind?`<span class="pk">${esc(x.kind)}</span>`:""}${im.length>1?`<span class="pn">${im.length} photos</span>`:""}<span class="pi"><b>${esc(x.title)}</b>${m?`<span>${esc(m)}</span>`:""}<em>View project &rarr;</em></span></button>`}).join("");
+  rv($("#pj"));
+}
+function pOpen(i){
+  const x=PJ[i];if(!x)return;pi=i;const im=x.images||[],rows=[["Client",x.client],["Location",x.location],["Type",x.kind],["Year",x.year]].filter(r=>r[1]);
+  $("#pd").innerHTML=`<div class="pdi"><button type="button" class="btn alt px" id="pdx">Close</button><div class="pm">${im[0]?`<img id="pdb" src="${esc(im[0])}" alt="${esc(x.title)}">`:""}${im.length>1?`<button type="button" class="ar l" data-s="-1" aria-label="Previous photo">&#8249;</button><button type="button" class="ar r" data-s="1" aria-label="Next photo">&#8250;</button><span class="ct" id="pdc">1 / ${im.length}</span>`:""}</div>${im.length>1?`<div class="th">${im.map((u,k)=>`<img src="${esc(th(u))}" data-k="${k}" class="${k?"":"on"}" alt="Photo ${k+1}">`).join("")}</div>`:""}<h3>${esc(x.title)}</h3>${rows.length?`<dl>${rows.map(r=>`<dt>${r[0]}</dt><dd>${esc(r[1])}</dd>`).join("")}</dl>`:""}${lines(x.description).map(p=>`<p>${esc(p)}</p>`).join("")}<div><a class="btn" href="https://wa.me/${wa()}?text=${encodeURIComponent("Hi, I saw your "+x.title+" project and I'm planning something similar.")}" target="_blank" rel="noopener">Planning something similar? WhatsApp us</a></div></div>`;
+  pim=0;$("#pd").showModal();
+}
+let pim=0;
+function pShow(k){const im=(PJ[pi]||{}).images||[];if(im.length<2)return;pim=(k+im.length)%im.length;$("#pdb").src=im[pim];$("#pdc").textContent=`${pim+1} / ${im.length}`;document.querySelectorAll("#pd .th img").forEach((t,j)=>t.classList.toggle("on",j===pim))}
+document.addEventListener("click",e=>{
+  const t=e.target,c=t.closest&&t.closest(".pc");if(c)return pOpen(+c.dataset.i);
+  if(t.closest&&t.closest("#wf")&&t.dataset.f!=null){pf=t.dataset.f;return pjDraw()}
+  if(t.id==="pdx"||t===$("#pd"))return $("#pd").close();
+  if(t.dataset.s)return pShow(pim+ +t.dataset.s);
+  if(t.matches&&t.matches("#pd .th img"))pShow(+t.dataset.k)});
+$("#pd").addEventListener("keydown",e=>{if(e.key==="ArrowRight")pShow(pim+1);if(e.key==="ArrowLeft")pShow(pim-1)});
+function count(el){
+  const n=+el.dataset.n;if(reduce){el.textContent=n+"+";return}
+  const t0=performance.now(),f=t=>{const k=Math.min(1,(t-t0)/1300);el.textContent=Math.round(n*(1-Math.pow(1-k,3)))+(k===1?"+":"");if(k<1)requestAnimationFrame(f)};requestAnimationFrame(f);
+}
+const co=io&&new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){count(e.target);co.unobserve(e.target)}}));
+rv(document);apply();
 (async()=>{
-  await brand();document.title=baseTitle();
-  $("#brand").innerHTML=CFG.LOGO?`<img src="${esc(CFG.LOGO)}" alt="${esc(CFG.COMPANY)}">`:esc(CFG.COMPANY);addEventListener("load",setBH);fillContact();
-  const sl=$("#slogo"),hl=$("#hlogo");if(CFG.LOGO){sl.onload=()=>sl.classList.add("on");sl.src=CFG.LOGO;hl.src=CFG.LOGO}else{sl.remove();hl.remove();$("#sname").textContent=CFG.COMPANY}
-  try{if(localStorage.getItem("khm"))document.body.classList.add("hm1")}catch(e){}
-  const hadHash=(+(/page=(\d+)/.exec(location.hash)||[])[1]||0)>1;
-  $("#hwa").href=`https://wa.me/${CFG.WHATSAPP}`;
-  const c0=cget(),old=JSON.stringify(c0);let fresh=null;
-  if(c0&&CFG.SUPABASE_URL){DATA=c0;fresh=load(true)}else await load();
-  fopts();build();s=hashSpread();show();renderList();renderHero();qrefresh();setBH();
-  if(fresh)fresh.then(()=>{if(JSON.stringify(DATA)!==old){const cs=s;fopts();build($("#q").value);s=Math.min(cs,nS()-1);show();renderList();renderHero();qrefresh()}openFromHash(true)}).catch(()=>openFromHash(true));
-  if(!desk&&!hadHash)$("#mode").click();
-  syncFocus();
-  if(hadHash&&!listMode)$("#bookwrap").scrollIntoView();
-  endSplash();openFromHash(!fresh);
-})().catch(()=>endSplash());
+  if(!CFG.SUPABASE_URL)return tiles();
+  api("settings","select=*").then(rows=>{S={};rows.forEach(r=>S[r.key]=r.value);try{localStorage.setItem("khs1",JSON.stringify(S))}catch(e){}apply()}).catch(()=>{});
+  pages("projects","select=*&order=sort,created_at.desc").then(r=>{PJ=r.filter(x=>x.active!==false);if(!PJ.length)return;$("#work").hidden=false;$("#nwork").hidden=false;pjDraw();pick()}).catch(()=>{});
+  try{tiles(...await Promise.all([pages("categories","select=*&order=sort,name,id"),pages("products","select=category_id&order=id")]))}catch(e){tiles()}
+})();
 </script>
 </body>
 </html>
