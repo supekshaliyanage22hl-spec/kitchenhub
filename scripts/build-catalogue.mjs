@@ -1,6 +1,6 @@
 /*
   Builds the crawlable pages from your live Supabase catalogue:
-    catalogue.html  - every category and product as plain HTML (what Google reads)
+    products.html  - every category and product as plain HTML (what Google reads)
     sitemap.xml     - lists your public pages
     robots.txt      - points search engines to the sitemap
 
@@ -68,13 +68,13 @@ const product = p => {
   const price = p.price && !/on request/i.test(p.price) ? `<p class="pr">${esc(p.price)}</p>` : "";
   const img = p.images && p.images[0] ? `<img loading="lazy" src="${esc(th(p.images[0]))}" onerror="this.onerror=null;this.src='${esc(p.images[0])}'" alt="${esc(p.name)}">` : "";
   const msg = encodeURIComponent(`Hi, I'd like to enquire about: ${p.name}${p.model ? " (" + p.model + ")" : ""}`);
-  return `<article id="p-${esc(p.id)}"><div class="im">${img}</div><div class="tx"><h3>${esc(p.name)}</h3>${p.model ? `<p class="md">Model: ${esc(p.model)}</p>` : ""}${p.description ? `<p>${esc(p.description)}</p>` : ""}${sp ? `<ul>${sp}</ul>` : ""}${price}<p class="ac"><a href="index.html#product=${encodeURIComponent(p.id)}">View in catalogue</a>${wa ? ` <a href="https://wa.me/${wa}?text=${msg}" rel="noopener">Enquire on WhatsApp</a>` : ""}</p></div></article>`;
+  return `<article id="p-${esc(p.id)}"><div class="im">${img}</div><div class="tx"><h3>${esc(p.name)}</h3>${p.model ? `<p class="md">Model: ${esc(p.model)}</p>` : ""}${p.description ? `<p>${esc(p.description)}</p>` : ""}${sp ? `<ul>${sp}</ul>` : ""}${price}<p class="ac"><a href="catalogue.html#product=${encodeURIComponent(p.id)}">View in catalogue</a>${wa ? ` <a href="https://wa.me/${wa}?text=${msg}" rel="noopener">Enquire on WhatsApp</a>` : ""}</p></div></article>`;
 };
 
 const ld = site ? `<script type="application/ld+json">${JSON.stringify({
-  "@context": "https://schema.org", "@type": "CollectionPage", name: title, url: abs("catalogue.html"),
+  "@context": "https://schema.org", "@type": "CollectionPage", name: title, url: abs("products.html"),
   mainEntity: {"@type": "ItemList", numberOfItems: prods.length,
-    itemListElement: prods.map((p, i) => ({"@type": "ListItem", position: i + 1, name: p.name + (p.model ? " (" + p.model + ")" : ""), url: abs("catalogue.html") + "#p-" + p.id}))}
+    itemListElement: prods.map((p, i) => ({"@type": "ListItem", position: i + 1, name: p.name + (p.model ? " (" + p.model + ")" : ""), url: abs("products.html") + "#p-" + p.id}))}
 }).replace(/</g, "\\u003c")}</script>\n` : "";
 
 const html = `<!DOCTYPE html>
@@ -84,9 +84,9 @@ const html = `<!DOCTYPE html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
-${site ? `<link rel="canonical" href="${esc(abs("catalogue.html"))}">\n` : ""}<meta name="theme-color" content="#0F0F10">
+${site ? `<link rel="canonical" href="${esc(abs("products.html"))}">\n` : ""}<meta name="theme-color" content="#0F0F10">
 <meta property="og:type" content="website"><meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(desc)}">
-${site ? `<meta property="og:url" content="${esc(abs("catalogue.html"))}"><meta property="og:image" content="${esc(abs(logo))}">\n` : ""}<link rel="icon" href="favicon.png">
+${site ? `<meta property="og:url" content="${esc(abs("products.html"))}"><meta property="og:image" content="${esc(abs(logo))}">\n` : ""}<link rel="icon" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 ${ld}<style>
@@ -113,10 +113,10 @@ footer{max-width:1100px;margin:0 auto;padding:18px 16px 40px;border-top:1px soli
 </style>
 </head>
 <body>
-<header><a href="index.html"><img src="${esc(logo)}" alt="${esc(company)}"></a><nav><a href="index.html">Interactive catalogue</a><a href="company.html">About us</a></nav></header>
+<header><a href="index.html"><img src="${esc(logo)}" alt="${esc(company)}"></a><nav><a href="catalogue.html">Interactive catalogue</a><a href="index.html">About us</a></nav></header>
 <main>
 <h1>Commercial kitchen equipment: full product list</h1>
-<p class="lead">${esc(company)} supplies kitchen equipment, bakery tools and hotel supplies. Browse every product below, or open the <a href="index.html">interactive catalogue</a>. Ask us for prices and availability.</p>
+<p class="lead">${esc(company)} supplies kitchen equipment, bakery tools and hotel supplies. Browse every product below, or open the <a href="catalogue.html">interactive catalogue</a>. Ask us for prices and availability.</p>
 <ul class="jump" aria-label="Categories">${groups.map(g => `<li><a href="#c-${esc(g.c.id)}">${esc(g.c.name)} (${g.it.length})</a></li>`).join("")}</ul>
 ${groups.map(g => `<section><h2 id="c-${esc(g.c.id)}">${esc(g.c.name)}</h2>\n${g.it.map(product).join("\n")}</section>`).join("\n")}
 </main>
@@ -124,16 +124,16 @@ ${groups.map(g => `<section><h2 id="c-${esc(g.c.id)}">${esc(g.c.name)}</h2>\n${g
 </body>
 </html>
 `;
-writeFileSync(join(root, "catalogue.html"), html);
-console.log(`catalogue.html: ${prods.length} products in ${groups.length} categories`);
+writeFileSync(join(root, "products.html"), html);
+console.log(`products.html: ${prods.length} products in ${groups.length} categories`);
 
 /* ---------- sitemap + robots ---------- */
 if (site) {
-  const pages = ["", "company.html", "catalogue.html"];
+  const pages = ["", "catalogue.html", "products.html"];
   writeFileSync(join(root, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${pages.map(p => `  <url><loc>${esc(abs(p))}</loc></url>`).join("\n")}\n</urlset>\n`);
   writeFileSync(join(root, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${abs("sitemap.xml")}\n`);
   console.log(`sitemap.xml and robots.txt written for ${site}`);
 } else console.warn("No site address found: skipped sitemap.xml and robots.txt (set SITE_URL).");
 
-for (const f of ["index.html", "company.html"])
+for (const f of ["index.html", "catalogue.html"])
   if (readFileSync(join(root, f), "utf8").includes("YOUR-DOMAIN")) console.warn(`Reminder: replace YOUR-DOMAIN in ${f} with your real address.`);
