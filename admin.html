@@ -31,6 +31,9 @@ main{padding:16px 20px 60px;max-width:1100px;margin:0 auto}
 .tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
 .tools input{flex:1;min-width:160px}.tools select{width:auto}
 table{width:100%;border-collapse:collapse;background:#fff}
+.dg{border:1px solid var(--line);border-radius:6px;background:#fff;margin:12px 0;overflow:hidden}.dg>h3{margin:0;padding:8px 12px;font-size:15px;background:#EEF0EE;border-bottom:1px solid var(--line)}
+.dg label.di{display:flex;gap:10px;align-items:center;padding:8px 12px;border-bottom:1px solid var(--line);cursor:pointer;font-weight:400}.dg label.di input{width:auto}
+.dg label.di img,.dg .np{width:54px;height:40px;object-fit:cover;border-radius:3px;background:#E5E8EA;flex:none}.dg .ac{display:flex;gap:8px;padding:8px 12px;flex-wrap:wrap}
 th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
 td img,.nop{width:52px;height:40px;object-fit:cover;background:#E3E6E8;display:block;border-radius:2px}
 .muted{color:var(--mut);font-size:13px}
@@ -84,7 +87,7 @@ th:first-child,td:first-child{width:34px}th:first-child input,td:first-child inp
 
 <div id="app" hidden>
   <header class="top"><h1><img class="blogo" alt="Logo"><span>Admin</span></h1><a href="index.html" target="_blank" style="color:#fff">View site</a><a href="catalogue.html" target="_blank" style="color:#fff">View catalogue</a><button class="alt" id="out">Sign out</button></header>
-  <nav class="tabs"><button data-t="p" class="on">Products</button><button data-t="c">Categories</button><button data-t="i">Import CSV</button><button data-t="b">Bulk photos</button><button data-t="j">Projects</button><button data-t="w">Company page</button><button data-t="s">Settings</button></nav>
+  <nav class="tabs"><button data-t="p" class="on">Products</button><button data-t="c">Categories</button><button data-t="i">Import CSV</button><button data-t="b">Bulk photos</button><button data-t="d">Duplicates</button><button data-t="j">Projects</button><button data-t="w">Company page</button><button data-t="s">Settings</button></nav>
   <main>
     <section id="tp">
       <div class="tools"><input id="sq" type="search" placeholder="Search by name or model" aria-label="Search"><select id="sc" aria-label="Filter by category"></select><select id="sm" aria-label="Show"><option value="">All products</option><option value="photo">No photo</option><option value="desc">No description</option><option value="specs">No specs</option><option value="hidden">Hidden from customers</option></select><button id="add">Add product</button></div>
@@ -115,6 +118,12 @@ th:first-child,td:first-child{width:34px}th:first-child input,td:first-child inp
       <label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="brep" style="width:auto"> Replace existing photos instead of adding to them</label>
       <p><button id="bgo" hidden>Upload photos</button></p><p id="bprog" class="muted"></p>
       <h3>Speed up existing photos</h3><p class="muted">New uploads get small thumbnails automatically. Run this once to create them for photos you uploaded earlier.</p><p><button class="alt" id="mkth">Create thumbnails</button> <span id="thp" class="muted"></span></p>
+    </section>
+    <section id="td" hidden>
+      <h2>Find duplicates</h2>
+      <p class="muted">Finds products that look like the same item, usually from repeated rows in the stock report. Check each group, choose the one to keep, and merge: photos, specs and any missing details from the others are moved into it, then the others are deleted.</p>
+      <div class="tools"><button id="d_scan" type="button">Scan now</button><label><input type="checkbox" id="d_cat" style="width:auto"> Also compare across categories</label><label><input type="checkbox" id="d_br" checked style="width:auto"> Ignore text in (brackets)</label><button id="d_all" type="button" class="alt" hidden>Merge all exact matches</button></div>
+      <p id="d_sum" class="muted"></p><div id="d_list"></div>
     </section>
     <section id="tj" hidden>
       <h2>Projects</h2><p class="muted">Proof of your work, shown on the company page. The first photo is the cover (click a photo to make it the cover). The section appears once you add a project.</p>
@@ -231,7 +240,7 @@ $("#pg").onchange=e=>goPg((parseInt(e.target.value)||1)-1);
 $("#ps").onchange=e=>{PS=+e.target.value;pg=0;drawProds()};
 document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{
   document.querySelectorAll(".tabs button").forEach(x=>x.classList.toggle("on",x===b));
-  ["p","c","i","b","s","j","w"].forEach(k=>$("#t"+k).hidden=k!==b.dataset.t)});
+  ["p","c","i","b","s","j","w","d"].forEach(k=>$("#t"+k).hidden=k!==b.dataset.t)});
 
 /* categories */
 $("#addc").onclick=async()=>{const n=$("#newc").value.trim();if(!n)return;
@@ -295,6 +304,7 @@ $("#form").onsubmit=async e=>{
   e.preventDefault();$("#save").disabled=true;
   const row={name:$("#fn").value.trim(),model:$("#fm").value.trim(),category_id:$("#fc").value||null,description:$("#fd").value.trim(),
     specs:parseSpecs($("#fs").value),price:$("#fp").value.trim()||"Price on request",images:imgs,active:$("#fa").value==="1"};
+  if(!cur&&prods.some(p=>dkey(p.name,p.model)===dkey(row.name,row.model))&&!confirm("A product with the same name and model already exists. Save it anyway?")){$("#save").disabled=false;return}
   const {error}=cur?await sb.from("products").update(row).eq("id",cur.id):await sb.from("products").insert(row);
   $("#save").disabled=false;if(error)return fail(error);
   await rmFiles(gone);$("#dlg").close();await load();draw();say("Product saved");
@@ -319,7 +329,10 @@ $("#csv").onchange=async e=>{
   const h=rows.shift().map(x=>x.trim().toLowerCase());
   if(!h.includes("name")){$("#ipre").textContent="The first row must be a header that includes a 'name' column.";$("#doimp").hidden=true;return}
   csvRows=rows.map(r=>Object.fromEntries(h.map((k,i)=>[k,(r[i]||"").trim()]))).filter(r=>r.name);
-  $("#ipre").textContent=`Ready to import ${csvRows.length} products.`;$("#doimp").hidden=!csvRows.length;
+  const have=new Set(prods.map(p=>dkey(p.name,p.model))),seenk=new Set(),fresh=[];let dDb=0,dFile=0;
+  csvRows.forEach(r=>{const k=dkey(r.name,r.model);if(have.has(k)){dDb++;return}if(seenk.has(k)){dFile++;return}seenk.add(k);fresh.push(r)});
+  csvRows=fresh;
+  $("#ipre").textContent=`Ready to import ${csvRows.length} new products. Skipped ${dDb} that are already in the catalogue and ${dFile} repeated inside the file.`;$("#doimp").hidden=!csvRows.length;
 };
 $("#doimp").onclick=async()=>{
   $("#doimp").disabled=true;
@@ -521,6 +534,62 @@ $("#pj_del").onclick=async()=>{
   if(!confirm("Delete this project and its photos? This cannot be undone."))return;
   const {error}=await sb.from("projects").delete().eq("id",pcur.id);if(error)return fail(error);
   await rmFiles((pcur.images||[]).filter(Boolean));$("#pdlg").close();await loadProj();say("Project deleted");
+};
+/* ---- duplicates ---- */
+function dnk(s,br){s=String(s||"").toLowerCase();if(br)s=s.replace(/\([^)]*\)/g," ");return s.replace(/&/g," and ").replace(/[^a-z0-9]+/g," ").trim().split(" ").filter(Boolean).sort().join(" ")}
+function mk(s){return String(s||"").toLowerCase().replace(/[^a-z0-9]+/g,"")}
+function dkey(n,m){return dnk(n,true)+"|"+mk(m)}
+let dgroups=[],dscanned=false;
+const dscore=p=>(p.images||[]).length*3+(p.description?2:0)+(p.specs||[]).length+(p.price&&!/request/i.test(p.price)?2:0);
+const dkeeper=g=>g.items.slice().sort((x,y)=>dscore(y)-dscore(x)||String(x.created_at).localeCompare(String(y.created_at)))[0];
+const dignore=()=>{try{return JSON.parse(localStorage.getItem("kh_nodup")||"[]")}catch(e){return[]}};
+const dsig=g=>g.items.map(p=>p.id).sort().join(",");
+function scanDup(){
+  dscanned=true;const br=$("#d_br").checked,xc=$("#d_cat").checked,ck=p=>xc?"":(p.category_id||"-"),skip=new Set(dignore());
+  const by=f=>{const m=new Map();prods.forEach(p=>{const k=f(p);if(!k)return;if(!m.has(k))m.set(k,[]);m.get(k).push(p)});return[...m.values()].filter(g=>g.length>1)};
+  const used=new Set();dgroups=[];
+  const take=(gs,type)=>gs.forEach(g=>{g=g.filter(p=>!used.has(p.id));if(g.length<2)return;const o={type,items:g};if(skip.has(dsig(o)))return;g.forEach(p=>used.add(p.id));dgroups.push(o)});
+  take(by(p=>{const n=dnk(p.name,br);return n&&ck(p)+"|"+n+"|"+mk(p.model)}),"exact");
+  take(by(p=>{const m=mk(p.model);return m.length>=3?m:""}),"model");
+  take(by(p=>{const n=dnk(p.name,br);return n&&ck(p)+"|"+n}),"name");
+  drawDup();
+}
+function drawDup(){
+  const T={exact:"Same name and model: almost certainly duplicates",model:"Same model code, different names: probably duplicates",name:"Same name, different models: could be real variants, check carefully"};
+  const ex=dgroups.filter(g=>g.type==="exact"),extra=ex.reduce((n,g)=>n+g.items.length-1,0);
+  $("#d_sum").textContent=dgroups.length?`${dgroups.length} groups found (${ex.length} exact, covering ${extra} removable items).`:"No duplicates found.";
+  $("#d_all").hidden=!ex.length;
+  const cn=id=>(cats.find(c=>c.id===id)||{}).name||"No category";
+  $("#d_list").innerHTML=dgroups.map((g,i)=>{const k=dkeeper(g).id;return `<div class="dg"><h3>${T[g.type]}</h3>${g.items.map(p=>`<label class="di"><input type="radio" name="dk${i}" value="${p.id}"${p.id===k?" checked":""}>${p.images?.[0]?`<img src="${esc(p.images[0])}" alt="">`:'<span class="np"></span>'}<span><b>${esc(p.name)}</b>${p.model?" · "+esc(p.model):""}<br><span class="muted">${esc(cn(p.category_id))} · ${esc(p.price||"")} · ${(p.images||[]).length} photos · ${(p.specs||[]).length} specs${p.description?" · has description":""}</span></span></label>`).join("")}<div class="ac"><button type="button" data-dm="${i}">Merge into selected</button><button type="button" class="alt" data-dn="${i}">Not duplicates</button></div></div>`}).join("");
+}
+async function mergeGroup(g,keepId){
+  const keep=g.items.find(p=>p.id===keepId),rest=g.items.filter(p=>p.id!==keepId);
+  let im=[...(keep.images||[])];rest.forEach(p=>(p.images||[]).forEach(u=>{if(!im.includes(u))im.push(u)}));
+  const extra=im.slice(6);im=im.slice(0,6);
+  const sp=[...(keep.specs||[])],sk=s=>((s.l||"")+"|"+(s.v||"")).toLowerCase(),seen=new Set(sp.map(sk));
+  rest.forEach(p=>(p.specs||[]).forEach(s=>{if(!seen.has(sk(s))){seen.add(sk(s));sp.push(s)}}));
+  const first=f=>keep[f]||rest.map(p=>p[f]).find(Boolean)||"";
+  const row={images:im,specs:sp,description:first("description"),model:first("model"),category_id:keep.category_id||rest.map(p=>p.category_id).find(Boolean)||null};
+  if(!keep.price||/request/i.test(keep.price)){const pr=rest.map(p=>p.price).find(x=>x&&!/request/i.test(x));if(pr)row.price=pr}
+  let r=await sb.from("products").update(row).eq("id",keep.id);if(r.error)throw r.error;
+  r=await sb.from("products").delete().in("id",rest.map(p=>p.id));if(r.error)throw r.error;
+  await rmFiles(extra);
+}
+$("#d_scan").onclick=scanDup;$("#d_cat").onchange=$("#d_br").onchange=()=>{if(dscanned)scanDup()};
+document.querySelector('[data-t="d"]').addEventListener("click",()=>{if(!dscanned)scanDup()});
+$("#d_list").onclick=async e=>{
+  const m=e.target.dataset.dm,n=e.target.dataset.dn;
+  if(n!=null){const g=dgroups[+n],s=dignore();s.push(dsig(g));try{localStorage.setItem("kh_nodup",JSON.stringify(s))}catch(x){}dgroups.splice(+n,1);return drawDup()}
+  if(m==null)return;const g=dgroups[+m],k=(document.querySelector(`input[name="dk${m}"]:checked`)||{}).value;if(!k)return;
+  if(!confirm(`Keep the selected item and delete the other ${g.items.length-1}? This cannot be undone.`))return;
+  e.target.disabled=true;try{await mergeGroup(g,k);await load();draw();scanDup();say("Merged")}catch(x){fail(x);e.target.disabled=false}
+};
+$("#d_all").onclick=async()=>{
+  const ex=dgroups.filter(g=>g.type==="exact");if(!ex.length)return;
+  if(!confirm(`Merge ${ex.length} exact-match groups? In each one the most complete item is kept (most photos, description and specs) and the rest are deleted. This cannot be undone.`))return;
+  $("#d_all").disabled=true;let n=0;
+  try{for(const g of ex){await mergeGroup(g,dkeeper(g).id);n++;$("#d_sum").textContent=`Merging... ${n} of ${ex.length}`}}catch(x){fail(x)}
+  await load();draw();scanDup();$("#d_all").disabled=false;say(`Merged ${n} groups`);
 };
 init();
 </script>
