@@ -65,3 +65,6 @@ drop policy if exists "public read projects" on projects;
 drop policy if exists "admin write projects" on projects;
 create policy "public read projects" on projects for select using (active);
 create policy "admin write projects" on projects for all to authenticated using (true) with check (true);
+
+-- Mark products whose photo is only an illustration (similar item). Run once; safe to run again.
+alter table products add column if not exists illustrative boolean default false;
