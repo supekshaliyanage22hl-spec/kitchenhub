@@ -462,9 +462,10 @@ async function load(bg){
   catch(e){if(bg)throw e;L.innerHTML="";R.innerHTML='<div class="msg">The catalogue could not be loaded. Please try again shortly.</div>';throw e}
 }
 const catOf=p=>DATA.cats.some(c=>c.id===p.category_id)?p.category_id:"_";
+const mdl=p=>CFG.SHOWMODEL?(p.model||""):"";
 const plink=id=>location.origin+location.pathname+"#product="+id;
-const wa=p=>`https://wa.me/${CFG.WHATSAPP}?text=${encodeURIComponent("Hi, I'd like to enquire about: "+p.name+(p.model?" ("+p.model+")":"")+"\n"+plink(p.id))}`;
-const mail=p=>`mailto:${CFG.EMAIL}?subject=${encodeURIComponent("Enquiry: "+p.name)}&body=${encodeURIComponent("Hi, please send details and a quote for: "+p.name+(p.model?" ("+p.model+")":"")+"\n"+plink(p.id))}`;
+const wa=p=>`https://wa.me/${CFG.WHATSAPP}?text=${encodeURIComponent("Hi, I'd like to enquire about: "+p.name+(mdl(p)?" ("+mdl(p)+")":"")+"\n"+plink(p.id))}`;
+const mail=p=>`mailto:${CFG.EMAIL}?subject=${encodeURIComponent("Enquiry: "+p.name)}&body=${encodeURIComponent("Hi, please send details and a quote for: "+p.name+(mdl(p)?" ("+mdl(p)+")":"")+"\n"+plink(p.id))}`;
 
 const F={pw:"",sort:"",ph:false};
 const catNm=p=>(DATA.cats.find(c=>c.id===p.category_id)||{name:"More equipment"}).name;
@@ -484,7 +485,7 @@ function build(q=""){
   $("#tabs").innerHTML=pages.map(p=>p.k==="cat"?`<button type="button" data-go="${pages.indexOf(p)}" data-ci="${p.ci}" style="--acc:${ACC[p.ci%ACC.length]}">${esc(p.c.name)}<small>${p.n}</small></button>`:"").join("");
 }
 const card=p=>`<article class="card"><div class="ph" data-open="${esc(p.id)}" tabindex="0" role="button" aria-label="View ${esc(p.name)}">${p.images&&p.images[0]?`${timg(p.images[0],p.name)}${p.images[1]?`${timg(p.images[1],"","class=\"alt2\"")}`:""}`:"No photo yet"}${p.illustrative&&p.images&&p.images[0]?'<span class="ill">Illustrative photo</span>':""}</div>
-<div class="info">${p.model?`<span class="plate">${esc(p.model)}</span>`:""}<h3>${esc(p.name)}</h3><p>${esc(p.description)}</p>${(p.specs||[]).length?`<ul class="sp">${p.specs.slice(0,3).map(x=>`<li>${x.l?esc(x.l)+": ":""}${esc(x.v)}</li>`).join("")}</ul>`:""}
+<div class="info">${mdl(p)?`<span class="plate">${esc(mdl(p))}</span>`:""}<h3>${esc(p.name)}</h3><p>${esc(p.description)}</p>${(p.specs||[]).length?`<ul class="sp">${p.specs.slice(0,3).map(x=>`<li>${x.l?esc(x.l)+": ":""}${esc(x.v)}</li>`).join("")}</ul>`:""}
 <div class="row">${price(p)}<a class="btn" href="${wa(p)}" target="_blank" rel="noopener">Enquire</a>${qbtn(p.id)}</div></div></article>`;
 
 function pg(i){
@@ -535,7 +536,7 @@ function open(id,init){
   <div class="main">${im[0]?`<img id="big" src="${esc(im[0])}" alt="${esc(p.name)}">${im.length>1?'<button type="button" class="ar l" data-lb="-1" aria-label="Previous photo">&#8249;</button><button type="button" class="ar r" data-lb="1" aria-label="Next photo">&#8250;</button>':""}<span class="ct" id="ct">1 / ${im.length}</span>${p.illustrative?'<span class="ill">Illustrative photo</span>':""}`:"No photo yet"}</div>
   ${im.length>1?`<div class="thumbs">${im.map((u,i)=>`<img src="${esc(u)}" class="${i?"":"on"}" alt="Photo ${i+1}">`).join("")}</div>`:""}
   ${im[0]&&CFG.IMGNOTE?`<p class="imgnote">${esc(CFG.IMGNOTE)}</p>`:""}
-  ${p.model?`<span class="plate">${esc(p.model)}</span>`:""}<h2>${esc(p.name)}</h2><p>${esc(p.description)}</p>
+  ${mdl(p)?`<span class="plate">${esc(mdl(p))}</span>`:""}<h2>${esc(p.name)}</h2><p>${esc(p.description)}</p>
   <dl>${(p.specs||[]).map(x=>x.l?`<dt>${esc(x.l)}</dt><dd>${esc(x.v)}</dd>`:`<dd class="full">${esc(x.v)}</dd>`).join("")}</dl>
   <div class="row">${price(p)}${qbtn(p.id)}<a class="btn" href="${wa(p)}" target="_blank" rel="noopener">Enquire on WhatsApp</a><a class="btn alt" href="${mail(p)}">Email</a><button type="button" class="btn alt" data-share="${esc(p.id)}">Share link</button></div></div>`;
   try{init?history.replaceState(null,"","#product="+id):history.pushState(null,"","#product="+id);pushed=!init}catch(e){}
@@ -591,7 +592,7 @@ function openFromHash(final){
 }
 async function shareP(b){
   const p=DATA.prods.find(x=>x.id===b.dataset.share);if(!p)return;const url=plink(p.id);
-  if(navigator.share){try{await navigator.share({title:p.name,text:p.name+(p.model?" ("+p.model+")":""),url});return}catch(e){if(e.name==="AbortError")return}}
+  if(navigator.share){try{await navigator.share({title:p.name,text:p.name+(mdl(p)?" ("+mdl(p)+")":""),url});return}catch(e){if(e.name==="AbortError")return}}
   let ok=false;try{await navigator.clipboard.writeText(url);ok=true}catch(e){}
   if(!ok){prompt("Copy this link:",url);return}
   const o=b.textContent;b.textContent="Link copied";setTimeout(()=>b.textContent=o,1800);
@@ -633,7 +634,7 @@ const inQ=id=>Q.some(x=>x.id===id);
 const qbtn=id=>`<button type="button" class="btn alt qb${inQ(id)?" on":""}" data-q="${esc(id)}" aria-pressed="${inQ(id)}">${inQ(id)?"In list":"Add to list"}</button>`;
 function qtoggle(id){
   if(inQ(id))Q=Q.filter(x=>x.id!==id);
-  else{const p=DATA.prods.find(x=>x.id===id);if(!p)return;Q.push({id,name:p.name,model:p.model||"",n:1})}
+  else{const p=DATA.prods.find(x=>x.id===id);if(!p)return;Q.push({id,name:p.name,model:mdl(p),n:1})}
   qsave();qrefresh();
 }
 function qrefresh(){
@@ -706,7 +707,7 @@ async function brand(){
   const v=(k,d)=>(S[k]||"").trim()||d;
   CFG.COMPANY=v("company",CFG.COMPANY);CFG.TAGLINE=v("tagline",CFG.TAGLINE);CFG.EMAIL=v("email",CFG.EMAIL);
   CFG.WHATSAPP=v("whatsapp",CFG.WHATSAPP).replace(/\D/g,"");
-  CFG.IMGNOTE=v("img_note","Photos are for illustration only. The actual item, finish and specifications may vary depending on stock. Please confirm details with us before ordering.");CFG.PHONE=v("phone","");CFG.ADDRESS=v("address","");CFG.HOURS=v("hours","");CFG.ABOUT=v("about","");CFG.LOGO=v("logo","logo.png");
+  CFG.SHOWMODEL=v("show_model","0")==="1";CFG.IMGNOTE=v("img_note","Photos are for illustration only. The actual item, finish and specifications may vary depending on stock. Please confirm details with us before ordering.");CFG.PHONE=v("phone","");CFG.ADDRESS=v("address","");CFG.HOURS=v("hours","");CFG.ABOUT=v("about","");CFG.LOGO=v("logo","logo.png");
   let ac=v("accent","#FDB515");if(!/^#[0-9a-f]{6}$/i.test(ac))ac="#FDB515";
   const r=document.documentElement.style;r.setProperty("--flame",ac);r.setProperty("--on",lum(ac)>150?"#111":"#fff");
   r.setProperty("--wall",`url("${v("wallpaper","wallpaper.jpg").replace(/"/g,"%22")}")`);
@@ -746,7 +747,7 @@ function suggest(){
   const w=$("#q").value.trim().toLowerCase().split(/\s+/).filter(Boolean);if(!w.length){sug.hidden=true;return}
   const sc=p=>{const n=(p.name||"").toLowerCase(),m=(p.model||"").toLowerCase();return w.reduce((a,x)=>a+(n.startsWith(x)?3:n.includes(x)||m.includes(x)?2:0),0)};
   sl=DATA.prods.filter(p=>{const t=txt(p);return w.every(x=>t.includes(x))}).sort((a,b)=>sc(b)-sc(a)).slice(0,6);sa=-1;
-  sug.innerHTML=sl.length?sl.map((p,i)=>`<div class="si" role="option" data-sg="${i}"><div class="st">${p.images&&p.images[0]?timg(p.images[0]):""}</div><div><b>${hl(p.name,w)}</b><div class="sm"><span>${hl(p.model||"",w)}</span><span>${esc(catNm(p))}</span></div></div></div>`).join(""):'<div class="sn">No products match. Try fewer words.</div>';
+  sug.innerHTML=sl.length?sl.map((p,i)=>`<div class="si" role="option" data-sg="${i}"><div class="st">${p.images&&p.images[0]?timg(p.images[0]):""}</div><div><b>${hl(p.name,w)}</b><div class="sm"><span>${hl(mdl(p),w)}</span><span>${esc(catNm(p))}</span></div></div></div>`).join(""):'<div class="sn">No products match. Try fewer words.</div>';
   const r=$("#q").getBoundingClientRect(),W=Math.min(Math.max(r.width,320),innerWidth-16);
   sug.style.left=Math.max(8,Math.min(r.left,innerWidth-W-8))+"px";sug.style.top=r.bottom+6+"px";sug.style.width=W+"px";sug.hidden=false;
 }
