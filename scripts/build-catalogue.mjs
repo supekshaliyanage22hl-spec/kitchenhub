@@ -54,6 +54,7 @@ const company = v("company", CFG.COMPANY), accent = /^#[0-9a-f]{6}$/i.test(v("ac
 const wa = v("whatsapp", CFG.WHATSAPP).replace(/\D/g, "");
 const phone = v("phone"), address = v("address"), hours = v("hours");
 const logo = v("logo", "logo.png");
+const imgNote = v("img_note", "Photos are for illustration only. The actual item, finish and specifications may vary depending on stock. Please confirm details with us before ordering.");
 const catName = id => (cats.find(c => c.id === id) || {name: "More equipment"}).name;
 const catId = p => cats.some(c => c.id === p.category_id) ? p.category_id : "_";
 const groups = cats.concat(prods.some(p => catId(p) === "_") ? [{id: "_", name: "More equipment"}] : [])
@@ -68,7 +69,7 @@ const product = p => {
   const price = p.price && !/on request/i.test(p.price) ? `<p class="pr">${esc(p.price)}</p>` : "";
   const img = p.images && p.images[0] ? `<img loading="lazy" src="${esc(th(p.images[0]))}" onerror="this.onerror=null;this.src='${esc(p.images[0])}'" alt="${esc(p.name)}">` : "";
   const msg = encodeURIComponent(`Hi, I'd like to enquire about: ${p.name}${p.model ? " (" + p.model + ")" : ""}`);
-  return `<article id="p-${esc(p.id)}"><div class="im">${img}</div><div class="tx"><h3>${esc(p.name)}</h3>${p.model ? `<p class="md">Model: ${esc(p.model)}</p>` : ""}${p.description ? `<p>${esc(p.description)}</p>` : ""}${sp ? `<ul>${sp}</ul>` : ""}${price}<p class="ac"><a href="catalogue.html#product=${encodeURIComponent(p.id)}">View in catalogue</a>${wa ? ` <a href="https://wa.me/${wa}?text=${msg}" rel="noopener">Enquire on WhatsApp</a>` : ""}</p></div></article>`;
+  return `<article id="p-${esc(p.id)}"><div class="im">${img}</div><div class="tx"><h3>${esc(p.name)}</h3>${p.model ? `<p class="md">Model: ${esc(p.model)}</p>` : ""}${p.illustrative ? `<p class="md">Illustrative photo: the actual item may vary.</p>` : ""}${p.description ? `<p>${esc(p.description)}</p>` : ""}${sp ? `<ul>${sp}</ul>` : ""}${price}<p class="ac"><a href="catalogue.html#product=${encodeURIComponent(p.id)}">View in catalogue</a>${wa ? ` <a href="https://wa.me/${wa}?text=${msg}" rel="noopener">Enquire on WhatsApp</a>` : ""}</p></div></article>`;
 };
 
 const ld = site ? `<script type="application/ld+json">${JSON.stringify({
@@ -117,6 +118,7 @@ footer{max-width:1100px;margin:0 auto;padding:18px 16px 40px;border-top:1px soli
 <main>
 <h1>Commercial kitchen equipment: full product list</h1>
 <p class="lead">${esc(company)} supplies kitchen equipment, bakery tools and hotel supplies. Browse every product below, or open the <a href="catalogue.html">interactive catalogue</a>. Ask us for prices and availability.</p>
+<p class="lead"><em>${esc(imgNote)}</em></p>
 <ul class="jump" aria-label="Categories">${groups.map(g => `<li><a href="#c-${esc(g.c.id)}">${esc(g.c.name)} (${g.it.length})</a></li>`).join("")}</ul>
 ${groups.map(g => `<section><h2 id="c-${esc(g.c.id)}">${esc(g.c.name)}</h2>\n${g.it.map(product).join("\n")}</section>`).join("\n")}
 </main>
