@@ -54,6 +54,7 @@ const company = v("company", CFG.COMPANY), accent = /^#[0-9a-f]{6}$/i.test(v("ac
 const wa = v("whatsapp", CFG.WHATSAPP).replace(/\D/g, "");
 const phone = v("phone"), address = v("address"), hours = v("hours");
 const logo = v("logo", "logo.png");
+const showModel = v("show_model", "0") === "1", mdl = p => showModel ? (p.model || "") : "";
 const imgNote = v("img_note", "Photos are for illustration only. The actual item, finish and specifications may vary depending on stock. Please confirm details with us before ordering.");
 const catName = id => (cats.find(c => c.id === id) || {name: "More equipment"}).name;
 const catId = p => cats.some(c => c.id === p.category_id) ? p.category_id : "_";
@@ -68,14 +69,14 @@ const product = p => {
   const sp = (p.specs || []).map(x => `<li>${x.l ? `<b>${esc(x.l)}:</b> ` : ""}${esc(x.v)}</li>`).join("");
   const price = p.price && !/on request/i.test(p.price) ? `<p class="pr">${esc(p.price)}</p>` : "";
   const img = p.images && p.images[0] ? `<img loading="lazy" src="${esc(th(p.images[0]))}" onerror="this.onerror=null;this.src='${esc(p.images[0])}'" alt="${esc(p.name)}">` : "";
-  const msg = encodeURIComponent(`Hi, I'd like to enquire about: ${p.name}${p.model ? " (" + p.model + ")" : ""}`);
-  return `<article id="p-${esc(p.id)}"><div class="im">${img}</div><div class="tx"><h3>${esc(p.name)}</h3>${p.model ? `<p class="md">Model: ${esc(p.model)}</p>` : ""}${p.illustrative ? `<p class="md">Illustrative photo: the actual item may vary.</p>` : ""}${p.description ? `<p>${esc(p.description)}</p>` : ""}${sp ? `<ul>${sp}</ul>` : ""}${price}<p class="ac"><a href="catalogue.html#product=${encodeURIComponent(p.id)}">View in catalogue</a>${wa ? ` <a href="https://wa.me/${wa}?text=${msg}" rel="noopener">Enquire on WhatsApp</a>` : ""}</p></div></article>`;
+  const msg = encodeURIComponent(`Hi, I'd like to enquire about: ${p.name}${mdl(p) ? " (" + mdl(p) + ")" : ""}`);
+  return `<article id="p-${esc(p.id)}"><div class="im">${img}</div><div class="tx"><h3>${esc(p.name)}</h3>${mdl(p) ? `<p class="md">Model: ${esc(mdl(p))}</p>` : ""}${p.illustrative ? `<p class="md">Illustrative photo: the actual item may vary.</p>` : ""}${p.description ? `<p>${esc(p.description)}</p>` : ""}${sp ? `<ul>${sp}</ul>` : ""}${price}<p class="ac"><a href="catalogue.html#product=${encodeURIComponent(p.id)}">View in catalogue</a>${wa ? ` <a href="https://wa.me/${wa}?text=${msg}" rel="noopener">Enquire on WhatsApp</a>` : ""}</p></div></article>`;
 };
 
 const ld = site ? `<script type="application/ld+json">${JSON.stringify({
   "@context": "https://schema.org", "@type": "CollectionPage", name: title, url: abs("products.html"),
   mainEntity: {"@type": "ItemList", numberOfItems: prods.length,
-    itemListElement: prods.map((p, i) => ({"@type": "ListItem", position: i + 1, name: p.name + (p.model ? " (" + p.model + ")" : ""), url: abs("products.html") + "#p-" + p.id}))}
+    itemListElement: prods.map((p, i) => ({"@type": "ListItem", position: i + 1, name: p.name + (mdl(p) ? " (" + mdl(p) + ")" : ""), url: abs("products.html") + "#p-" + p.id}))}
 }).replace(/</g, "\\u003c")}</script>\n` : "";
 
 const html = `<!DOCTYPE html>
