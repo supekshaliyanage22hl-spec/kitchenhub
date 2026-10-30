@@ -94,6 +94,7 @@ th:first-child,td:first-child{width:34px}th:first-child input,td:first-child inp
       <div id="bb" class="bulk" hidden><b id="bn"></b><button class="alt" id="bsall" hidden></button>
         <select id="bcat" aria-label="Move to category"></select><button class="alt" id="bmove">Move</button>
         <button class="alt" id="bshow">Show</button><button class="alt" id="bhide">Hide</button>
+        <button class="alt" id="bill">Photo: illustration</button><button class="alt" id="bexact">Photo: exact</button>
         <input id="bprice" placeholder="New price" aria-label="New price"><button class="alt" id="bsetp">Set price</button>
         <button class="bad" id="bdel">Delete</button><button class="alt" id="bclr">Clear selection</button></div>
       <table><thead><tr><th><input type="checkbox" id="sa" aria-label="Select all on this page"></th><th>#</th><th></th><th>Name</th><th>Category</th><th>Photos</th><th></th></tr></thead><tbody id="rows"></tbody></table>
@@ -157,6 +158,7 @@ th:first-child,td:first-child{width:34px}th:first-child input,td:first-child inp
       <label for="s_address">Address</label><input id="s_address" data-s>
       <label for="s_map">Map location (coordinates or Google Maps embed code)</label><input id="s_map" data-s placeholder="6.0108, 80.2496"><p class="hint">In Google Maps, right-click your shop and click the coordinates to copy them, then paste here. Or use Share, Embed a map, and paste the whole code.</p>
       <label for="s_about">About text (shown on the Talk to us page)</label><textarea id="s_about" data-s></textarea>
+      <label for="s_img_note">Photo notice (shown in the catalogue)</label><textarea id="s_img_note" data-s></textarea><p class="hint">Shown under product photos and in the footer. Products marked as illustration also get an "Illustrative photo" tag.</p>
       <div class="acts"><button type="button" class="bad sp" id="sreset">Reset to defaults</button><button type="button" id="ssave">Save settings</button></div>
     </section>
   </main>
@@ -169,6 +171,7 @@ th:first-child,td:first-child{width:34px}th:first-child input,td:first-child inp
   <label for="fd">Description</label><textarea id="fd"></textarea>
   <label for="fs">Specs (one per line, like Power: 3 kW)</label><textarea id="fs"></textarea>
   <div class="two"><div><label for="fp">Price</label><input id="fp" placeholder="Price on request"></div><div><label for="fa">Visible to customers</label><select id="fa"><option value="1">Yes</option><option value="0">No (hidden)</option></select></div></div>
+  <label for="fil">Photo type</label><select id="fil"><option value="0">Exact photo of this item</option><option value="1">Illustration only (similar item)</option></select>
   <label for="ff">Photos (up to 4, resized automatically)</label><input id="ff" type="file" accept="image/*" multiple><div class="imgs" id="imgs"></div>
   <div class="acts"><button type="button" class="bad sp" id="del">Delete product</button><button type="button" class="alt" id="cancel">Cancel</button><button type="submit" id="save">Save product</button></div>
 </form></dialog>
@@ -266,7 +269,7 @@ function openEd(id){
   const p=cur||{name:"",model:"",category_id:"",description:"",specs:[],price:"",images:[],active:true};
   $("#dt").textContent=cur?"Edit product":"Add product";
   $("#fn").value=p.name;$("#fm").value=p.model||"";$("#fc").value=p.category_id||"";$("#fd").value=p.description||"";
-  $("#fs").value=(p.specs||[]).map(x=>x.l?`${x.l}: ${x.v}`:x.v).join("\n");$("#fp").value=p.price||"";$("#fa").value=p.active?"1":"0";
+  $("#fs").value=(p.specs||[]).map(x=>x.l?`${x.l}: ${x.v}`:x.v).join("\n");$("#fp").value=p.price||"";$("#fa").value=p.active?"1":"0";$("#fil").value=p.illustrative?"1":"0";
   imgs=[...(p.images||[])];$("#ff").value="";drawImgs();$("#del").hidden=!cur;$("#dlg").showModal();
 }
 $("#add").onclick=()=>openEd(null);
@@ -275,7 +278,7 @@ $("#cancel").onclick=()=>$("#dlg").close();
 $("#imgs").onclick=e=>{const i=e.target.dataset.r;if(i==null)return;gone.push(imgs[i]);imgs.splice(i,1);drawImgs()};
 async function shrink(f){
   const b=await createImageBitmap(f),k=Math.min(1,1200/Math.max(b.width,b.height)),c=document.createElement("canvas");
-  c.width=Math.round(b.width*k);c.height=Math.round(b.height*k);c.getContext("2d").drawImage(b,0,0,c.width,c.height);
+  c.width=Math.round(b.width*k);c.height=Math.round(b.height*k);const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.imageSmoothingQuality="high";x.drawImage(b,0,0,c.width,c.height);
   return new Promise(r=>c.toBlob(r,"image/jpeg",.82));
 }
 $("#ff").onchange=async e=>{
@@ -303,7 +306,7 @@ const parseSpecs=t=>t.split(/\n|\|/).map(x=>x.trim()).filter(Boolean).map(x=>{co
 $("#form").onsubmit=async e=>{
   e.preventDefault();$("#save").disabled=true;
   const row={name:$("#fn").value.trim(),model:$("#fm").value.trim(),category_id:$("#fc").value||null,description:$("#fd").value.trim(),
-    specs:parseSpecs($("#fs").value),price:$("#fp").value.trim()||"Price on request",images:imgs,active:$("#fa").value==="1"};
+    specs:parseSpecs($("#fs").value),price:$("#fp").value.trim()||"Price on request",images:imgs,active:$("#fa").value==="1",illustrative:$("#fil").value==="1"};
   if(!cur&&prods.some(p=>dkey(p.name,p.model)===dkey(row.name,row.model))&&!confirm("A product with the same name and model already exists. Save it anyway?")){$("#save").disabled=false;return}
   const {error}=cur?await sb.from("products").update(row).eq("id",cur.id):await sb.from("products").insert(row);
   $("#save").disabled=false;if(error)return fail(error);
@@ -340,7 +343,7 @@ $("#doimp").onclick=async()=>{
     const have=new Set(cats.map(c=>c.name.toLowerCase())),need=[...new Set(csvRows.map(r=>r.category).filter(Boolean))].filter(n=>!have.has(n.toLowerCase()));
     if(need.length){const {error}=await sb.from("categories").insert(need.map((name,i)=>({name,sort:cats.length+i})));if(error)throw error}
     await load();const id=n=>(cats.find(c=>c.name.toLowerCase()===(n||"").toLowerCase())||{}).id||null;
-    const out=csvRows.map(r=>({name:r.name,category_id:id(r.category),model:r.model||"",description:r.description||"",price:r.price||"Price on request",specs:parseSpecs(r.specs||""),images:[],active:true}));
+    const out=csvRows.map(r=>({name:r.name,category_id:id(r.category),model:r.model||"",description:r.description||"",price:r.price||"Price on request",specs:parseSpecs(r.specs||""),images:[],active:true,illustrative:/^(1|y|yes|true)$/i.test(r.illustrative||"")}));
     for(let i=0;i<out.length;i+=100){const {error}=await sb.from("products").insert(out.slice(i,i+100));if(error)throw error}
     await load();draw();say(`Imported ${out.length} products`);$("#ipre").textContent="";$("#doimp").hidden=true;$("#csv").value="";
   }catch(x){fail(x)}
@@ -368,6 +371,8 @@ async function bupd(fields,msg){
 $("#bmove").onclick=()=>{const v=$("#bcat").value;if(!v)return say("Choose a category first",true);bupd({category_id:v==="__none"?null:v},"Move to "+$("#bcat").selectedOptions[0].text)};
 $("#bshow").onclick=()=>bupd({active:true},"Show on the catalogue");
 $("#bhide").onclick=()=>bupd({active:false},"Hide from customers");
+$("#bill").onclick=()=>bupd({illustrative:true},"Mark the photo as illustration only");
+$("#bexact").onclick=()=>bupd({illustrative:false},"Mark the photo as the exact item");
 $("#bsetp").onclick=()=>{const v=$("#bprice").value.trim()||"Price on request";bupd({price:v},`Set the price to "${v}"`)};
 $("#bclr").onclick=()=>{SEL.clear();drawProds()};
 $("#bsall").onclick=()=>{LF.forEach(p=>SEL.add(p.id));drawProds()};
@@ -421,8 +426,8 @@ $("#bgo").onclick=async()=>{
 };
 
 /* ---- settings ---- */
-const DEFB={...{"facebook": "https://www.facebook.com/kitchenhubbranch", "c_hero_title": "Everything you need to build the perfect kitchen, and beyond", "c_hero_text": "Cooking essentials, bakery tools, hotel supplies and complete kitchen interiors, all in one place in Unawatuna.", "c_stats": "40 | Hotels\n30 | Bakeries\n15 | Restaurants\n60 | Kitchen interiors", "c_about": "Welcome to The Kitchen Hub, your one-stop destination for everything your kitchen needs. From everyday cooking essentials and professional bakery tools to complete kitchen interiors and premium hotel supplies, we bring quality, function and style together in one place.\nWhether you are a home baker, a seasoned chef or running a hospitality business, we help you find exactly what you need to create, cook and serve with confidence. If it is not in our collection, our team will source it for you.\nOur mission is simple: to make every kitchen smarter, more efficient and more inspiring.", "c_cover": "Commercial kitchen equipment | Ranges, fryers, ovens, chillers and more\nBakery equipment | Mixers, ovens and professional tools\nHotel and restaurant supplies | Cutlery, tableware and serving\nKitchen interiors | Complete layouts, planned and installed", "c_work_title": "Our projects", "c_work_text": "A selection of kitchens we have equipped and built. Tap a project to see more photos."},accent:"#FDB515",dim:"40",logo:"logo.png",wallpaper:"wallpaper.jpg"};
-const KEYS=["company","tagline","accent","dim","logo","wallpaper","whatsapp","email","phone","address","hours","about","map","facebook","c_hero_title","c_hero_text","c_stats","c_about","c_cover","c_work_title","c_work_text","bg_home","bg_about","bg_work","bg_offer","bg_contact"];
+const DEFB={img_note:"Photos are for illustration only. The actual item, finish and specifications may vary depending on stock. Please confirm details with us before ordering.",...{"facebook": "https://www.facebook.com/kitchenhubbranch", "c_hero_title": "Everything you need to build the perfect kitchen, and beyond", "c_hero_text": "Cooking essentials, bakery tools, hotel supplies and complete kitchen interiors, all in one place in Unawatuna.", "c_stats": "40 | Hotels\n30 | Bakeries\n15 | Restaurants\n60 | Kitchen interiors", "c_about": "Welcome to The Kitchen Hub, your one-stop destination for everything your kitchen needs. From everyday cooking essentials and professional bakery tools to complete kitchen interiors and premium hotel supplies, we bring quality, function and style together in one place.\nWhether you are a home baker, a seasoned chef or running a hospitality business, we help you find exactly what you need to create, cook and serve with confidence. If it is not in our collection, our team will source it for you.\nOur mission is simple: to make every kitchen smarter, more efficient and more inspiring.", "c_cover": "Commercial kitchen equipment | Ranges, fryers, ovens, chillers and more\nBakery equipment | Mixers, ovens and professional tools\nHotel and restaurant supplies | Cutlery, tableware and serving\nKitchen interiors | Complete layouts, planned and installed", "c_work_title": "Our projects", "c_work_text": "A selection of kitchens we have equipped and built. Tap a project to see more photos."},accent:"#FDB515",dim:"40",logo:"logo.png",wallpaper:"wallpaper.jpg"};
+const KEYS=["company","tagline","accent","dim","logo","wallpaper","whatsapp","email","phone","address","hours","about","map","facebook","img_note","c_hero_title","c_hero_text","c_stats","c_about","c_cover","c_work_title","c_work_text","bg_home","bg_about","bg_work","bg_offer","bg_contact"];
 const IMGK=["logo","wallpaper","bg_home","bg_about","bg_work","bg_offer","bg_contact"];
 let ST={},SD={};
 const val=k=>(ST[k]||"").trim()||DEFB[k]||"";
@@ -449,7 +454,7 @@ document.querySelectorAll("[data-rm]").forEach(b=>b.onclick=()=>{SD[b.dataset.rm
 document.querySelectorAll("[data-up]").forEach(i=>i.onchange=async e=>{const f=e.target.files[0];e.target.value="";if(f)await upBrand(e.target.dataset.up,f)});
 async function shrinkTo(f,max,type,q){
   const b=await createImageBitmap(f),k=Math.min(1,max/Math.max(b.width,b.height)),c=document.createElement("canvas");
-  c.width=Math.round(b.width*k);c.height=Math.round(b.height*k);c.getContext("2d").drawImage(b,0,0,c.width,c.height);
+  c.width=Math.round(b.width*k);c.height=Math.round(b.height*k);const x=c.getContext("2d");if(type==="image/jpeg"){x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height)}x.imageSmoothingQuality="high";x.drawImage(b,0,0,c.width,c.height);
   return new Promise(r=>c.toBlob(r,type,q));
 }
 async function prepLogo(f){
