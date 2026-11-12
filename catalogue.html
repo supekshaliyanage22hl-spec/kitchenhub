@@ -214,7 +214,7 @@ html,body{max-width:100%;overflow-x:clip}
  dialog{max-width:100vw}.lb{padding:14px}
  .thumbs{overflow-x:auto}
 }
-@media (max-width:360px){#grid .gg{grid-template-columns:1fr}}
+
 
 /* ===== v5: wider flipbook, 3 per row, focus mode ===== */
 #chrome{display:contents}
@@ -385,11 +385,31 @@ body.hm1 #hot .hm i{animation:none}
 .tile .ti img.fill{padding:0;object-fit:cover;mix-blend-mode:normal}
 .tile.full .tn{position:absolute;left:0;right:0;bottom:0;padding:48px 14px 14px;background:linear-gradient(to top,rgba(0,0,0,.88),rgba(0,0,0,.5) 55%,transparent);text-shadow:0 1px 8px rgba(0,0,0,.6)}
 .tile.full .tn small{color:#D5DBDF}
+/* ===== phase 1: phones. Categories wrap (no sideways scroll); products always 2 per row ===== */
+#tabmore{display:none}
+@media (max-width:899px){
+  #tabs{flex-wrap:wrap;overflow:hidden;box-sizing:border-box;max-height:78px;gap:6px;padding:8px 46px 0 10px;position:relative}
+  .list #tabs{position:sticky}
+  #tabs.open{max-height:min(60vh,440px);overflow-y:auto;padding-bottom:8px}
+  #tabs button[data-go]{height:30px;padding:0 11px;font-size:13px;gap:6px}
+  #tabs #tabmore{display:grid;position:absolute;right:8px;top:8px;width:32px;height:30px;place-items:center;padding:0;border-radius:50%;background:var(--flame);border:0;color:var(--on);font-size:15px;cursor:pointer;z-index:2}
+  #tabs.open #tabmore{rotate:180deg}
+  #tabs #tabmore[hidden]{display:none}
+}
+@media (max-width:599px){
+  #grid .gg{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  #grid .card .info{min-width:0}
+  #grid .card h3,#grid .card p,#grid .card .sp li{overflow-wrap:anywhere}
+  .tiles{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:22px}
+  .tile b{font-size:18px}.tile .tn{padding:8px 10px 10px}.tile .tl{font-size:60px}
+}
+@supports not (aspect-ratio:1/1){.tile .ti,#grid .ph{height:0;padding-bottom:75%}}
 </style>
 </head>
 <body class="splashing">
 <div id="splash" aria-live="polite"><div class="sw"><img id="slogo" alt=""><b id="sname"></b><div class="sbar"><i></i></div><p>Loading the catalogue</p></div></div>
-<noscript><style>#splash{display:none}</style></noscript>
+<noscript><style>#splash{display:none}
+</style></noscript>
 <div id="chrome"><header class="bar">
   <a id="brand" href="index.html" title="Back to the home page">The Kitchen Hub</a>
   <button id="home" type="button" class="ghost">Contents</button><button id="cbtn" type="button" class="ghost">Contact</button><a class="ghost" href="index.html">Home</a>
@@ -482,7 +502,7 @@ function build(q=""){
     pages.push({k:"cat",c,ci,n:it.length,names:it.slice(0,8).map(p=>p.name)});
     const pp=desk?6:CFG.PER_PAGE;for(let i=0;i<it.length;i+=pp)pages.push({k:"prods",ci,it:it.slice(i,i+pp)})});
   pages.push({k:"back"});
-  $("#tabs").innerHTML=pages.map(p=>p.k==="cat"?`<button type="button" data-go="${pages.indexOf(p)}" data-ci="${p.ci}" style="--acc:${ACC[p.ci%ACC.length]}">${esc(p.c.name)}<small>${p.n}</small></button>`:"").join("");
+  $("#tabs").innerHTML=pages.map(p=>p.k==="cat"?`<button type="button" data-go="${pages.indexOf(p)}" data-ci="${p.ci}" style="--acc:${ACC[p.ci%ACC.length]}">${esc(p.c.name)}<small>${p.n}</small></button>`:"").join("")+'<button type="button" id="tabmore" aria-label="Show all categories" aria-expanded="false" hidden>&#9662;</button>';tabFit();
 }
 const card=p=>`<article class="card"><div class="ph" data-open="${esc(p.id)}" tabindex="0" role="button" aria-label="View ${esc(p.name)}">${p.images&&p.images[0]?`${timg(p.images[0],p.name)}${p.images[1]?`${timg(p.images[1],"","class=\"alt2\"")}`:""}`:"No photo yet"}${p.illustrative&&p.images&&p.images[0]?'<span class="ill">Illustrative photo</span>':""}</div>
 <div class="info">${mdl(p)?`<span class="plate">${esc(mdl(p))}</span>`:""}<h3>${esc(p.name)}</h3><p>${esc(p.description)}</p>${(p.specs||[]).length?`<ul class="sp">${p.specs.slice(0,3).map(x=>`<li>${x.l?esc(x.l)+": ":""}${esc(x.v)}</li>`).join("")}</ul>`:""}
@@ -675,6 +695,12 @@ $("#fs").onchange=e=>{F.sort=e.target.value;applyF()};
 $("#fph").onchange=e=>{F.ph=e.target.checked;applyF()};
 $("#fclr").onclick=()=>{F.pw=F.sort="";F.ph=false;$("#fp").value=$("#fs").value="";$("#fph").checked=false;$("#q").value="";applyF()};
 
+
+function tabFit(){requestAnimationFrame(()=>{const t=$("#tabs"),m=$("#tabmore");if(!m)return;t.classList.remove("open");m.setAttribute("aria-expanded","false");m.hidden=!(t.scrollHeight>t.clientHeight+2)})}
+addEventListener("resize",tabFit);
+document.addEventListener("click",e=>{const t=$("#tabs");if(!t)return;
+  if(e.target.closest("#tabmore")){const o=t.classList.toggle("open");$("#tabmore").setAttribute("aria-expanded",o)}
+  else if(t.classList.contains("open")&&e.target.closest("#tabs button[data-go]"))t.classList.remove("open")});
 /* ---- sticky offset + category highlight in list view ---- */
 const setBH=()=>{const b=document.querySelector(".bar");document.documentElement.style.setProperty("--bh",(getComputedStyle(b).position==="sticky"?b.offsetHeight:0)+"px")};
 addEventListener("resize",setBH);document.fonts&&document.fonts.ready.then(setBH);
